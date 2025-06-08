@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const authJwt = require('./helper/jwt');
 require('dotenv/config');
 
 
@@ -12,6 +13,16 @@ app.options('*', cors())
 //middleware
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(authJwt().unless({ path: ['/api/user/signin', '/api/user/signup'] }));
+app.use((req, res, next) => {
+    if (['/api/user/signin', '/api/user/signup'].includes(req.path)) {
+        return next();
+    }
+    if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+});
 
 
 //Routes

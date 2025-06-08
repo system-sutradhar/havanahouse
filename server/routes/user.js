@@ -105,7 +105,11 @@ router.post(`/signup`, async (req, res) => {
             isAdmin:isAdmin
         });
 
-        const token = jwt.sign({email:result.email, id: result._id}, process.env.JSON_WEB_TOKEN_SECRET_KEY);
+        const token = jwt.sign(
+            { email: result.email, id: result._id },
+            process.env.JSON_WEB_TOKEN_SECRET_KEY,
+            { expiresIn: '1d' }
+        );
 
         res.status(200).json({
             user:result,
@@ -138,7 +142,11 @@ router.post(`/signin`, async (req, res) => {
             return res.status(400).json({error:true,msg:"Invailid credentials"})
         }
 
-        const token = jwt.sign({email:existingUser.email, id: existingUser._id}, process.env.JSON_WEB_TOKEN_SECRET_KEY);
+        const token = jwt.sign(
+            { email: existingUser.email, id: existingUser._id },
+            process.env.JSON_WEB_TOKEN_SECRET_KEY,
+            { expiresIn: '1d' }
+        );
 
 
        return res.status(200).send({
@@ -270,7 +278,11 @@ router.post(`/authWithGoogle`, async (req, res) => {
             });
 
     
-            const token = jwt.sign({email:result.email, id: result._id}, process.env.JSON_WEB_TOKEN_SECRET_KEY);
+            const token = jwt.sign(
+                { email: result.email, id: result._id },
+                process.env.JSON_WEB_TOKEN_SECRET_KEY,
+                { expiresIn: '1d' }
+            );
 
             return res.status(200).send({
                  user:result,
@@ -282,7 +294,11 @@ router.post(`/authWithGoogle`, async (req, res) => {
 
         else{
             const existingUser = await User.findOne({ email: email });
-            const token = jwt.sign({email:existingUser.email, id: existingUser._id}, process.env.JSON_WEB_TOKEN_SECRET_KEY);
+            const token = jwt.sign(
+                { email: existingUser.email, id: existingUser._id },
+                process.env.JSON_WEB_TOKEN_SECRET_KEY,
+                { expiresIn: '1d' }
+            );
 
             return res.status(200).send({
                  user:existingUser,

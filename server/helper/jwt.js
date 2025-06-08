@@ -5,9 +5,8 @@ function authJwt() {
     return jwt({
         secret: secret,
         algorithms: ["HS256"],
-    })
+        requestProperty: 'user',
+    });
 }
 
-
-
-module.exports = authJwt
+module.exports = authJwt;
