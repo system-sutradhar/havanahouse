@@ -420,6 +420,25 @@ const Sidebar = () => {
               </ul>
             </div>
           </li>
+
+          <li>
+            <NavLink
+              exact
+              activeClassName="is-active"
+              to="/appSettings"
+              onClick={() => {
+                setActiveTab(8);
+                context.setIsOpenNav(false);
+              }}
+            >
+              <Button className={`w-100 ${activeTab === 8 ? "active" : ""}`}> 
+                <span className="icon">
+                  <IoIosSettings />
+                </span>
+                App Settings
+              </Button>
+            </NavLink>
+          </li>
         </ul>
 
         <div className="logoutWrapper">
