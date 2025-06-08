@@ -105,9 +105,13 @@ router.get('/:id', async (req, res) => {
 
 
 router.post('/create', async (req, res) => {
-    
+
     let newEntry = new HomeBanner({
-        images: imagesArr,
+        url: req.body.url || imagesArr[0],
+        type: req.body.type,
+        overlayText: req.body.overlayText,
+        ctaUrl: req.body.ctaUrl,
+        position: req.body.position,
     });
 
 
@@ -153,19 +157,17 @@ router.delete('/deleteImage', async (req, res) => {
 router.delete('/:id', async (req, res) => {
 
     const item = await HomeBanner.findById(req.params.id);
-    const images = item.images;
+    const imgUrl = item.url;
 
-    for(img of images){
-        const imgUrl = img;
+    if(imgUrl){
         const urlArr = imgUrl.split('/');
         const image =  urlArr[urlArr.length-1];
-      
+
         const imageName = image.split('.')[0];
 
         cloudinary.uploader.destroy(imageName, (error,result)=>{
            // console.log(error, result);
         })
-      //  console.log(imageName)
     }
 
 
@@ -191,7 +193,11 @@ router.put('/:id', async (req, res) => {
     const slideItem = await HomeBanner.findByIdAndUpdate(
         req.params.id,
         {
-            images: req.body.images,
+            url: req.body.url,
+            type: req.body.type,
+            overlayText: req.body.overlayText,
+            ctaUrl: req.body.ctaUrl,
+            position: req.body.position,
         },
         { new: true }
     )

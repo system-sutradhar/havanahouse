@@ -1,12 +1,22 @@
 const mongoose = require('mongoose');
 
 const homeBannerSchema = mongoose.Schema({
-    images:[
-        {
-            type:String,
-            required:true
-        }
-    ]
+    url: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+    },
+    overlayText: {
+        type: String,
+    },
+    ctaUrl: {
+        type: String,
+    },
+    position: {
+        type: Number,
+    },
 })
 
 homeBannerSchema.virtual('id').get(function () {
