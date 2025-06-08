@@ -43,6 +43,8 @@ import HomeBottomBannersList from "./pages/HomeBottomBanners/bannerList";
 import AddHomeBottomBanner from "./pages/HomeBottomBanners/addHomeBottomBanner";
 import EditHomeBottomBanner from "./pages/HomeBottomBanners/editHomeBottomBanner";
 import MyAccount from "./pages/MyAccount";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const MyContext = createContext();
 
@@ -218,6 +220,8 @@ function App() {
               <Route path="/dashboard" exact={true} element={<Dashboard />} />
               <Route path="/login" exact={true} element={<Login />} />
               <Route path="/signUp" exact={true} element={<SignUp />} />
+              <Route path="/forgot-password" exact={true} element={<ForgotPassword />} />
+              <Route path="/reset-password" exact={true} element={<ResetPassword />} />
               <Route path="/products" exact={true} element={<Products />} />
               <Route
                 path="/product/details/:id"

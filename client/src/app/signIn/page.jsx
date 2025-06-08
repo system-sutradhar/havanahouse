@@ -247,7 +247,9 @@ const SignIn = () => {
               />
             </div>
 
-            <a className="border-effect cursor txt">Forgot Password?</a>
+            <Link href="/forgotPassword" className="border-effect cursor txt">
+              Forgot Password?
+            </Link>
 
             <div className="d-flex align-items-center mt-3 mb-3 ">
               <Button type="submit" className="btn-blue col btn-lg btn-big">
