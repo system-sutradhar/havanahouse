@@ -92,7 +92,9 @@ const AddHomeSlide = () => {
           (files[i].type === "image/jpeg" ||
             files[i].type === "image/jpg" ||
             files[i].type === "image/png" ||
-            files[i].type === "image/webp")
+            files[i].type === "image/webp" ||
+            files[i].type === "video/mp4" ||
+            files[i].type === "video/webm")
         ) {
           const file = files[i];
           selectedImages.push(file);
@@ -101,7 +103,7 @@ const AddHomeSlide = () => {
           context.setAlertBox({
             open: true,
             error: true,
-            msg: "Please select a valid JPG or PNG image file.",
+            msg: "Please select a valid JPG, PNG, WEBP, MP4 or WEBM file.",
           });
 
           return false;
