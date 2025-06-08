@@ -1,10 +1,10 @@
 import { useContext, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import { MyContext } from "../../App";
-import SignUpForm from "../../components/Auth/SignUpForm";
+import ForgotPasswordForm from "../../components/Auth/ForgotPasswordForm";
 import patern from "../../assets/images/pattern.webp";
 
-const SignUp = () => {
+const ForgotPassword = () => {
   const context = useContext(MyContext);
   useEffect(() => {
     context.setisHideSidebarAndHeader(true);
@@ -14,10 +14,10 @@ const SignUp = () => {
     <>
       <img src={patern} className="loginPatern" />
       <Dialog open={true} maxWidth="sm" fullWidth>
-        <SignUpForm />
+        <ForgotPasswordForm />
       </Dialog>
     </>
   );
 };
 
-export default SignUp;
+export default ForgotPassword;

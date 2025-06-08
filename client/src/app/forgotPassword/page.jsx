@@ -2,9 +2,9 @@
 import { useContext, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import { MyContext } from "@/context/ThemeContext";
-import SignUpForm from "@/Components/Auth/SignUpForm";
+import ForgotPasswordForm from "@/Components/Auth/ForgotPasswordForm";
 
-const SignUp = () => {
+const ForgotPassword = () => {
   const context = useContext(MyContext);
   useEffect(() => {
     context.setisHeaderFooterShow(false);
@@ -12,9 +12,9 @@ const SignUp = () => {
 
   return (
     <Dialog open={true} maxWidth="sm" fullWidth>
-      <SignUpForm />
+      <ForgotPasswordForm />
     </Dialog>
   );
 };
 
-export default SignUp;
+export default ForgotPassword;
