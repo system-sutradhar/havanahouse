@@ -223,6 +223,17 @@
   align-items: center;
   justify-content: center;
 }
+.action-icons .user-btn {
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .action-icons a svg {
   font-size: 25px;
@@ -230,6 +241,10 @@
 }
 
 .action-icons a:hover {
+  background-color: var(--color-hover-bg);
+  color: var(--color-accent-gold);
+}
+.action-icons .user-btn:hover {
   background-color: var(--color-hover-bg);
   color: var(--color-accent-gold);
 }
