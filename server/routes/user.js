@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const multer = require('multer');
 const fs = require("fs");
@@ -295,6 +296,50 @@ router.post(`/authWithGoogle`, async (req, res) => {
         console.log(error)
     }
 })
+
+// Forgot password - generates reset token
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: true, msg: 'User not found' });
+
+        const token = crypto.randomBytes(32).toString('hex');
+        const hashed = crypto.createHash('sha256').update(token).digest('hex');
+        user.resetPasswordToken = hashed;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1h
+        await user.save();
+
+        // Here you would send email
+        return res.status(200).json({ token, msg: 'Reset token generated' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: true, msg: 'Server error' });
+    }
+});
+
+// Reset password using token
+router.post('/reset-password', async (req, res) => {
+    const { token, password } = req.body;
+    try {
+        const hashed = crypto.createHash('sha256').update(token).digest('hex');
+        const user = await User.findOne({
+            resetPasswordToken: hashed,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+        if (!user) return res.status(400).json({ error: true, msg: 'Invalid or expired token' });
+
+        user.password = await bcrypt.hash(password, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        return res.status(200).json({ msg: 'Password reset successful' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: true, msg: 'Server error' });
+    }
+});
 
 
 router.put('/:id',async (req, res)=> {
