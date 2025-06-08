@@ -4,6 +4,7 @@ import banner2 from "../assets/images/banner2.jpg";
 import Button from "@mui/material/Button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import React, { useContext, useEffect, useState } from "react";
+import Head from "next/head";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -134,6 +135,10 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>Havana House | Home</title>
+        <meta name="description" content="Discover premium cigars and accessories at Havana House." />
+      </Head>
       <div className="marginTop"></div>
       {homeSlides?.length !== 0 ? (
         <HomeBanner data={homeSlides} />

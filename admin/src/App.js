@@ -43,6 +43,7 @@ import HomeBottomBannersList from "./pages/HomeBottomBanners/bannerList";
 import AddHomeBottomBanner from "./pages/HomeBottomBanners/addHomeBottomBanner";
 import EditHomeBottomBanner from "./pages/HomeBottomBanners/editHomeBottomBanner";
 import MyAccount from "./pages/MyAccount";
+import Notifications from "./pages/Notifications";
 
 const MyContext = createContext();
 
@@ -311,6 +312,7 @@ function App() {
                 element={<EditHomeBottomBanner />}
               />
               <Route exact={true} path="/my-account" element={<MyAccount />} />
+              <Route exact={true} path="/notifications" element={<Notifications />} />
 
             </Routes>
           </div>

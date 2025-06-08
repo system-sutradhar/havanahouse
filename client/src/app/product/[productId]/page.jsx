@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import { BsCartFill } from "react-icons/bs";
 import { useContext, useEffect, useState } from "react";
 import { FaRegHeart } from "react-icons/fa";
+import Head from "next/head";
 import { MdOutlineCompareArrows } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
 import RelatedProducts from "./RelatedProducts";
@@ -222,6 +223,10 @@ const ProductDetails = ({params}) => {
 
     return (
         <>
+        <Head>
+            <title>Product Details | Havana House</title>
+            <meta name="description" content="Explore product details at Havana House." />
+        </Head>
         {productData?.length === 0 ? (
             <div
               className="d-flex align-items-center justify-content-center"
