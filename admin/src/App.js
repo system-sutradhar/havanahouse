@@ -8,6 +8,7 @@ import Sidebar from "./components/Sidebar";
 import React, { createContext, useEffect, useState, useRef } from "react";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
 import Products from "./pages/Products";
 import Category from "./pages/Category/categoryList";
 import ProductDetails from "./pages/ProductDetails";
@@ -218,6 +219,7 @@ function App() {
               <Route path="/dashboard" exact={true} element={<Dashboard />} />
               <Route path="/login" exact={true} element={<Login />} />
               <Route path="/signUp" exact={true} element={<SignUp />} />
+              <Route path="/forgot-password" exact={true} element={<ForgotPassword />} />
               <Route path="/products" exact={true} element={<Products />} />
               <Route
                 path="/product/details/:id"
