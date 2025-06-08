@@ -1,0 +1,16 @@
+:root {
+    --color-primary-bg: #1b1a19;
+    --color-primary-text: #fff;
+    --color-secondary-bg: #2c2b2a;
+    --color-secondary-border: #4a4948;
+    --color-highlight: #d9982a;
+    --color-hover-bg: rgba(255, 255, 255, 0.08);
+    --color-icon-hover: #e2b67a;
+    --color-accent-gold: #d4af37;
+    --color-mega-bg: #f8f8f8;
+    --color-mega-text: #000;
+    --color-mega-hover: var(--color-highlight);
+  
+    --font-body: 'Arial', sans-serif;
+    --container-max-width: 1366px;
+  }

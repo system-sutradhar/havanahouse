@@ -1,0 +1,13 @@
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  @media (max-width: 768px) {
+    .logo-container {
+      justify-content: center;
+      padding: 10px 0;
+    }
+  }
+  

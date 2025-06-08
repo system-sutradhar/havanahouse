@@ -1,0 +1,11 @@
+node_modules/
+.cache/
+admin/node_modules/
+admin/.cache/
+admin/.next/
+client/node_modules/
+client/.cache/
+client/.next/
+server/node_modules/
+server/.cache/
+server/.next/

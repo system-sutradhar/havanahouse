@@ -1,0 +1,126 @@
+.header-middle-wrapper {
+    border-bottom: 1px solid #eee;
+    background: #fff;
+  }
+  
+  .top-links {
+    background: #f9f9f9;
+    text-align: right;
+    padding: 5px 20px;
+  }
+  
+  .top-links ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .top-links ul li {
+    display: inline-block;
+    margin-left: 20px;
+  }
+  
+  .top-links ul li a {
+    font-size: 13px;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .header-middle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    flex-wrap: wrap;
+  }
+  
+  .logo h2 {
+    font-weight: bold;
+    font-size: 24px;
+    margin: 0;
+    color: #924f12;
+  }
+  
+  .tagline {
+    font-size: 12px;
+    color: #b76e20;
+    display: block;
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 1px;
+  }
+  
+  .search-bar {
+    flex: 1;
+    max-width: 500px;
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    margin: 0 20px;
+  }
+  
+  .search-bar input {
+    border: none;
+    outline: none;
+    padding: 10px 15px;
+    flex: 1;
+    border-radius: 25px 0 0 25px;
+    font-size: 14px;
+  }
+  
+  .search-bar button {
+    border: none;
+    background: transparent;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .icon-links {
+    display: flex;
+    gap: 25px;
+  }
+  
+  .icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    color: #000;
+    position: relative;
+  }
+  
+  .icon-item svg {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+  
+  .cart .badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: #b58d1f;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 50%;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header-middle {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+  
+    .search-bar {
+      width: 100%;
+      margin: 10px 0;
+    }
+  
+    .icon-links {
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+  

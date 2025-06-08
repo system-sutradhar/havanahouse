@@ -1,0 +1,73 @@
+.asos-header {
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.asos-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.asos-logo img {
+  height: 40px;
+  object-fit: contain;
+}
+
+.asos-nav {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  justify-content: center;
+}
+
+.asos-nav a {
+  text-decoration: none;
+  color: #1c1c1c;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.asos-nav a:hover {
+  color: #c62828;
+}
+
+.asos-icons {
+  display: flex;
+  gap: 15px;
+  font-size: 18px;
+}
+
+.asos-icons a {
+  color: #1c1c1c;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.asos-icons a:hover {
+  color: #c62828;
+}
+
+/* Responsive (optional) */
+@media (max-width: 768px) {
+  .asos-nav {
+    display: none; /* Or convert to hamburger later */
+  }
+
+  .asos-icons {
+    gap: 10px;
+  }
+
+  .asos-logo img {
+    height: 35px;
+  }
+}
