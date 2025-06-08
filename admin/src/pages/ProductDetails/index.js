@@ -80,16 +80,16 @@ const ProductDetails = () => {
                     <h5 className="mb-0">Product View</h5>
                     <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
                         <StyledBreadcrumb
-                            component="a"
-                            href="#"
+                            component="button"
+                            onClick={(e) => e.preventDefault()}
                             label="Dashboard"
                             icon={<HomeIcon fontSize="small" />}
                         />
 
                         <StyledBreadcrumb
                             label="Products"
-                            component="a"
-                            href="#"
+                            component="button"
+                            onClick={(e) => e.preventDefault()}
                         />
                         <StyledBreadcrumb
                             label="Product View"

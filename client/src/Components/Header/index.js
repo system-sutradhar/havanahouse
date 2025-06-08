@@ -678,7 +678,12 @@ const Header = () => {
               ].map((item, i) => (
                 <li key={i} className="mobile-category-item">
                   <img src={getProductImage(item.image)} alt={item.label} width="50" height="50" loading="lazy" />
-                  <Link href="#">{item.label}</Link>
+                  <button
+                    type="button"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    {item.label}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -693,9 +698,24 @@ const Header = () => {
 
             {/* 🔸 Social Icons */}
             <div className="mobile-social-icons">
-              <a href="#" aria-label="Facebook" className="fb"></a>
-              <a href="#" aria-label="Instagram" className="ig"></a>
-              <a href="#" aria-label="Snapchat" className="snap"></a>
+              <button
+                type="button"
+                onClick={(e) => e.preventDefault()}
+                aria-label="Facebook"
+                className="fb"
+              ></button>
+              <button
+                type="button"
+                onClick={(e) => e.preventDefault()}
+                aria-label="Instagram"
+                className="ig"
+              ></button>
+              <button
+                type="button"
+                onClick={(e) => e.preventDefault()}
+                aria-label="Snapchat"
+                className="snap"
+              ></button>
             </div>
           </aside>
         </>
