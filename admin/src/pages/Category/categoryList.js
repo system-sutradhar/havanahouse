@@ -89,8 +89,8 @@ const Category = () => {
                     <div className="ml-auto d-flex align-items-center">
                         <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
                             <StyledBreadcrumb
-                                component="a"
-                                href="#"
+                                component="button"
+                                onClick={(e) => e.preventDefault()}
                                 label="Dashboard"
                                 icon={<HomeIcon fontSize="small" />}
                             />

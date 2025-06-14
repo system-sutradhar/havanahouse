@@ -546,16 +546,16 @@ const EditUpload = () => {
           <h5 className="mb-0">Product Edit</h5>
           <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
             <StyledBreadcrumb
-              component="a"
-              href="#"
+              component="button"
+              onClick={(e) => e.preventDefault()}
               label="Dashboard"
               icon={<HomeIcon fontSize="small" />}
             />
 
             <StyledBreadcrumb
-              component="a"
+              component="button"
               label="Products"
-              href="#"
+              onClick={(e) => e.preventDefault()}
               deleteIcon={<ExpandMoreIcon />}
             />
             <StyledBreadcrumb

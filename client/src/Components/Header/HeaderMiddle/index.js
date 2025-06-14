@@ -6,10 +6,10 @@ const HeaderMiddle = () => {
     <div className="header-middle-wrapper">
       <div className="top-links">
         <ul>
-          <li><a href="#">Help</a></li>
-          <li><a href="#">Shipping & Returns</a></li>
-          <li><a href="#">Store Locator</a></li>
-          <li><a href="#">Contact Us</a></li>
+          <li><button type="button" onClick={(e) => e.preventDefault()}>Help</button></li>
+          <li><button type="button" onClick={(e) => e.preventDefault()}>Shipping & Returns</button></li>
+          <li><button type="button" onClick={(e) => e.preventDefault()}>Store Locator</button></li>
+          <li><button type="button" onClick={(e) => e.preventDefault()}>Contact Us</button></li>
         </ul>
       </div>
     </div>

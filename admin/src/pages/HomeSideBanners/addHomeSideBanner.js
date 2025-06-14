@@ -266,16 +266,16 @@ const AddBanner = () => {
           <h5 className="mb-0">Add Home Side Banner</h5>
           <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
             <StyledBreadcrumb
-              component="a"
-              href="#"
+              component="button"
+              onClick={(e) => e.preventDefault()}
               label="Dashboard"
               icon={<HomeIcon fontSize="small" />}
             />
 
             <StyledBreadcrumb
-              component="a"
+              component="button"
               label="Home Banners"
-              href="#"
+              onClick={(e) => e.preventDefault()}
               deleteIcon={<ExpandMoreIcon />}
             />
             <StyledBreadcrumb
