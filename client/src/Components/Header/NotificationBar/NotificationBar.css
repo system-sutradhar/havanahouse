@@ -1,6 +1,6 @@
 .notification-bar {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--color-black);
+    color: var(--color-white);
     padding: 8px 0;
     font-size: 13px;
     font-weight: 500;

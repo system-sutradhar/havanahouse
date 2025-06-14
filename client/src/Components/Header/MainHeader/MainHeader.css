@@ -2,13 +2,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #262626;
+  background-color: var(--color-header-bg);
   padding: 10px 20px;
-  color: white;
+  color: var(--color-white);
 }
 
 .asos-logo a {
-  color: white;
+  color: var(--color-white);
   font-weight: bold;
   font-size: 1.5rem;
   text-decoration: none;
@@ -18,12 +18,12 @@
   margin: 0 10px;
   padding: 5px 10px;
   cursor: pointer;
-  color: white;
+  color: var(--color-white);
   font-weight: 600;
 }
 
 .asos-gender-toggle .active {
-  background-color: #4c4c4c;
+  background-color: var(--color-header-dark);
   border-radius: 2px;
 }
 
@@ -47,7 +47,7 @@
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: black;
+  color: var(--color-black);
 }
 
 .asos-icons {
@@ -65,29 +65,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-white);
   transition: background-color 0.2s;
 }
 
 .icon-link:hover,
 .icon-button:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--color-white);
+  color: var(--color-black);
 }
 
 .position-relative .count {
   position: absolute;
   top: -6px;
   right: -8px;
-  background: red;
-  color: white;
+  background: var(--error-color);
+  color: var(--color-white);
   font-size: 11px;
   padding: 2px 6px;
   border-radius: 50%;
 }
 
 .asos-nav {
-  background-color: #514f4f;
+  background-color: var(--color-header-medium);
 }
 
 .asos-nav ul {
@@ -100,18 +100,18 @@
 .asos-nav ul li {
   position: relative;
   padding: 12px 16px;
-  color: white;
+  color: var(--color-white);
   cursor: pointer;
 }
 
 .asos-nav ul li.sale {
-  background-color: #c1002b;
+  background-color: var(--color-sale-red);
   font-weight: bold;
 }
 
 .asos-nav ul li:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--color-white);
+  color: var(--color-black);
   font-weight: bold;
 }
 
@@ -120,7 +120,7 @@
   top: 100%;
   left: 0;
   width: 600px;
-  background: white;
+  background: var(--color-white);
   display: flex;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -135,7 +135,7 @@
 .asos-mega-menu h4 {
   margin-bottom: 10px;
   font-size: 14px;
-  color: #333;
+  color: var(--color-dark-gray);
 }
 
 .asos-mega-menu ul {
@@ -149,7 +149,7 @@
 
 /* ASOS Header NAV styles */
 .asos-nav {
-  background-color: #514f4f;
+  background-color: var(--color-header-medium);
   padding: 0;
 }
 
@@ -166,7 +166,7 @@
   position: relative;
   margin-right: 16px;
   font-size: 13px;
-  color: white;
+  color: var(--color-white);
   padding: 8px 10px;
   cursor: pointer;
   text-transform: uppercase;
@@ -175,10 +175,10 @@
 }
 
 .asos-nav li.sale {
-  background-color: #c1002b;
-  color: white;
+  background-color: var(--color-sale-red);
+  color: var(--color-white);
   font-weight: bold;
-  border-bottom: 3px solid #c1002b;
+  border-bottom: 3px solid var(--color-sale-red);
   border-radius: 2px 2px 0 0;
   margin-right: 12px;
 }
@@ -189,8 +189,8 @@
 }
 
 .asos-nav li:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--color-white);
+  color: var(--color-black);
   font-weight: bold;
   border-radius: 2px;
 }
@@ -202,8 +202,8 @@
   left: 0;
   display: flex;
   width: 600px;
-  background-color: white;
-  color: black;
+  background-color: var(--color-white);
+  color: var(--color-black);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 1000;
   padding: 20px;
@@ -241,7 +241,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-white);
   font-size: 18px;
   border-radius: 50%;
   padding: 8px;
@@ -250,16 +250,16 @@
 }
 
 .icon-link:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--color-white);
+  color: var(--color-black);
 }
 
 .cart-count {
   position: absolute;
   top: -4px;
   right: -6px;
-  background: red;
-  color: white;
+  background: var(--error-color);
+  color: var(--color-white);
   font-size: 11px;
   font-weight: bold;
   padding: 1px 5px;
@@ -271,7 +271,7 @@
 /* Full-width header background */
 .asos-header-wrapper {
   width: 100%;
-  background-color: #262626; /* or any bg you want */
+  background-color: var(--color-header-bg); /* or any bg you want */
   z-index: 999;
   position: relative;
 }
@@ -288,7 +288,7 @@
 /* Wrapper (full-width bg) */
 .asos-header-wrapper {
   width: 100%;
-  background-color: #262626;
+  background-color: var(--color-header-bg);
 }
 
 /* Inner max width container (align everything) */
@@ -312,7 +312,7 @@
 .asos-logo a {
   font-size: 20px;
   font-weight: bold;
-  color: white;
+  color: var(--color-white);
   text-decoration: none;
 }
 
@@ -320,14 +320,14 @@
 .asos-gender-toggle span {
   margin-left: 8px;
   padding: 4px 8px;
-  color: white;
+  color: var(--color-white);
   font-size: 13px;
   cursor: pointer;
   font-weight: 500;
 }
 
 .asos-gender-toggle .active {
-  background: #444;
+  background: var(--color-header-dark);
   border-radius: 2px;
 }
 
@@ -351,7 +351,7 @@
   right: 16px;
   top: 50%;
   transform: translateY(-50%);
-  color: black;
+  color: var(--color-black);
   cursor: pointer;
 }
 
@@ -366,7 +366,7 @@
   background-color: transparent;
   padding: 8px;
   border-radius: 50%;
-  color: white;
+  color: var(--color-white);
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -375,8 +375,8 @@
 }
 
 .icon-link:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--color-white);
+  color: var(--color-black);
 }
 
 .position-relative {
@@ -387,8 +387,8 @@
   position: absolute;
   top: -6px;
   right: -6px;
-  background: red;
-  color: white;
+  background: var(--error-color);
+  color: var(--color-white);
   font-size: 11px;
   font-weight: bold;
   padding: 2px 5px;
@@ -397,8 +397,8 @@
 }
 
 .notification-bar {
-  background-color: #000;
-  color: #fff;
+  background-color: var(--color-black);
+  color: var(--color-white);
   padding: 8px 0;
   font-size: 13px;
   font-weight: 500;
@@ -414,12 +414,12 @@
 }
 
 .header-middle-wrapper {
-  border-bottom: 1px solid #eee;
-  background: #fff;
+  border-bottom: 1px solid var(--color-gray-light);
+  background: var(--color-white);
 }
 
 .top-links {
-  background: #f9f9f9;
+  background: var(--color-light-gray);
   text-align: right;
   padding: 5px 20px;
 }
@@ -437,7 +437,7 @@
 
 .top-links ul li a {
   font-size: 13px;
-  color: #333;
+  color: var(--color-dark-gray);
   text-decoration: none;
 }
 
@@ -453,12 +453,12 @@
   font-weight: bold;
   font-size: 24px;
   margin: 0;
-  color: #924f12;
+  color: var(--color-brown);
 }
 
 .tagline {
   font-size: 12px;
-  color: #b76e20;
+  color: var(--color-brown-light);
   display: block;
   font-weight: 600;
   margin-top: 2px;
@@ -469,7 +469,7 @@
   flex: 1;
   max-width: 500px;
   display: flex;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-light);
   border-radius: 25px;
   margin: 0 20px;
 }
@@ -500,7 +500,7 @@
   flex-direction: column;
   align-items: center;
   font-size: 12px;
-  color: #000;
+  color: var(--color-black);
   position: relative;
 }
 
@@ -513,8 +513,8 @@
   position: absolute;
   top: -5px;
   right: -10px;
-  background: #b58d1f;
-  color: #fff;
+  background: var(--color-gold-dark);
+  color: var(--color-white);
   font-size: 10px;
   padding: 2px 5px;
   border-radius: 50%;
