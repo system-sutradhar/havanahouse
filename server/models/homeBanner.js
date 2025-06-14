@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
 const homeBannerSchema = mongoose.Schema({
-    url: {
-        type: String,
-        required: true,
-    },
+    images: [
+        {
+            type: String,
+            required: true,
+        },
+    ],
     type: {
         type: String,
     },
@@ -15,7 +17,7 @@ const homeBannerSchema = mongoose.Schema({
         type: String,
     },
     position: {
-        type: Number,
+        type: String,
     },
 })
 
