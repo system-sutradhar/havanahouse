@@ -346,7 +346,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaUser, FaHeart, FaShoppingBag, FaSearch } from "react-icons/fa";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Divider from "@mui/material/Divider";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { MyContext } from "@/context/ThemeContext";
+import { logout } from "@/utils/logout";
 import { getProductImage } from '@/utils/imageFallback';
 import "../../app/header.css";
 
@@ -359,8 +365,18 @@ const Header = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const headerRef = useRef();
   const sidebarRef = useRef();
+  const [userMenuAnchor, setUserMenuAnchor] = useState(null);
+  const openUserMenu = Boolean(userMenuAnchor);
   const context = useContext(MyContext);
   const router = useRouter();
+
+  const handleOpenUserMenu = (event) => {
+    setUserMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setUserMenuAnchor(null);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -489,9 +505,33 @@ const Header = () => {
 
           {/* Icons */}
           <div className="action-icons">
-          <Link href="/signIn" aria-label="Login">
-            <FaUser />
-          </Link>
+          {context.isLogin ? (
+            <>
+              <button onClick={handleOpenUserMenu} className="user-btn" aria-label="User menu">
+                <FaUser />
+              </button>
+              <Menu
+                anchorEl={userMenuAnchor}
+                open={openUserMenu}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={() => {router.push('/myAccount'); handleCloseUserMenu();}}>
+                  My Account
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={() => {logout(context, router); handleCloseUserMenu();}}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <Link href="/signIn" aria-label="Login">
+              <FaUser />
+            </Link>
+          )}
           <Link href="/wishlist" aria-label="Wishlist">
             <FaHeart />
           </Link>
