@@ -110,7 +110,7 @@ router.get('/:id', async (req, res) => {
 router.post('/create', async (req, res) => {
 
     let newEntry = new HomeBanner({
-        url: req.body.url || imagesArr[0],
+        images: imagesArr,
         type: req.body.type,
         overlayText: req.body.overlayText,
         ctaUrl: req.body.ctaUrl,
@@ -160,16 +160,16 @@ router.delete('/deleteImage', async (req, res) => {
 router.delete('/:id', async (req, res) => {
 
     const item = await HomeBanner.findById(req.params.id);
-    const imgUrl = item.url;
+    const images = item.images || [];
 
-    if(imgUrl){
+    for (const imgUrl of images) {
         const urlArr = imgUrl.split('/');
-        const image =  urlArr[urlArr.length-1];
+        const image = urlArr[urlArr.length - 1];
 
         const imageName = image.split('.')[0];
 
-        cloudinary.uploader.destroy(imageName, (error,result)=>{
-           // console.log(error, result);
+        cloudinary.uploader.destroy(imageName, (error, result) => {
+            // console.log(error, result);
         })
     }
 
@@ -196,7 +196,7 @@ router.put('/:id', async (req, res) => {
     const slideItem = await HomeBanner.findByIdAndUpdate(
         req.params.id,
         {
-            url: req.body.url,
+            images: req.body.images,
             type: req.body.type,
             overlayText: req.body.overlayText,
             ctaUrl: req.body.ctaUrl,
