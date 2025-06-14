@@ -19,6 +19,12 @@ const ThemeProvider = ({ children }) => {
   const [searchData, setSearchData] = useState([]);
   const [isOpenNav, setIsOpenNav] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0); // SSR safe
+  const [appSettings, setAppSettings] = useState({
+    prelogin: false,
+    postlogin: false,
+    desktop: false,
+    mobile: false,
+  });
 
   const [alertBox, setAlertBox] = useState({
     msg: "",
@@ -43,6 +49,12 @@ const ThemeProvider = ({ children }) => {
     getCountry("https://countriesnow.space/api/v0.1/countries/");
     fetchDataFromApi("/api/category").then((res) => {
       setCategoryData(res.categoryList);
+    });
+    fetchDataFromApi("/api/appSettings").then((res) => {
+      if (Array.isArray(res) && res.length > 0) {
+        const { prelogin, postlogin, desktop, mobile } = res[0];
+        setAppSettings({ prelogin, postlogin, desktop, mobile });
+      }
     });
 
     const user = JSON.parse(localStorage.getItem("user"));
@@ -161,6 +173,7 @@ const ThemeProvider = ({ children }) => {
     isOpenNav,
     setIsOpenNav,
     productData,
+    appSettings,
   };
 
   return <MyContext.Provider value={values}>{children}</MyContext.Provider>;

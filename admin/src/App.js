@@ -42,6 +42,9 @@ import EditHomeSideBanner from "./pages/HomeSideBanners/editHomeSideBanner";
 import HomeBottomBannersList from "./pages/HomeBottomBanners/bannerList";
 import AddHomeBottomBanner from "./pages/HomeBottomBanners/addHomeBottomBanner";
 import EditHomeBottomBanner from "./pages/HomeBottomBanners/editHomeBottomBanner";
+import AppSettingsList from "./pages/AppSettings/list";
+import AddAppSetting from "./pages/AppSettings/add";
+import EditAppSetting from "./pages/AppSettings/edit";
 import MyAccount from "./pages/MyAccount";
 import Notifications from "./pages/Notifications";
 
@@ -311,6 +314,9 @@ function App() {
                 exact={true}
                 element={<EditHomeBottomBanner />}
               />
+              <Route path="/appSettings" exact={true} element={<AppSettingsList />} />
+              <Route path="/appSettings/add" exact={true} element={<AddAppSetting />} />
+              <Route path="/appSettings/edit/:id" exact={true} element={<EditAppSetting />} />
               <Route exact={true} path="/my-account" element={<MyAccount />} />
               <Route exact={true} path="/notifications" element={<Notifications />} />
 
