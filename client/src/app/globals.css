@@ -1,3 +1,5 @@
+@import "./variables.css";
+
 :root {
   /* Brand Colors */
   --dark-color: #0a0a0a;          /* Near Black */
