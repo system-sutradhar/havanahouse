@@ -6,6 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import { MdClose } from "react-icons/md";
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
+import Head from "next/head";
 const Orders = () => {
 
     const [orders, setOrders] = useState([]);
@@ -48,6 +49,10 @@ const Orders = () => {
 
     return (
         <>
+            <Head>
+                <title>Orders | Havana House</title>
+                <meta name="description" content="View your orders placed at Havana House." />
+            </Head>
             <section className="section">
                 <div className='container'>
                     <h2 className='hd'>Orders</h2>
@@ -144,7 +149,7 @@ const Orders = () => {
                                             </span></td>
                                             <td>
                                                 <div className='img'>
-                                                    <img src={item?.image} />
+                                                    <img src={item?.image} alt={item?.productTitle} />
                                                 </div>
                                             </td>
                                             <td>{item?.quantity}</td>
