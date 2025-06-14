@@ -46,6 +46,7 @@ import AppSettingsList from "./pages/AppSettings/list";
 import AddAppSetting from "./pages/AppSettings/add";
 import EditAppSetting from "./pages/AppSettings/edit";
 import MyAccount from "./pages/MyAccount";
+import Notifications from "./pages/Notifications";
 
 const MyContext = createContext();
 
@@ -317,6 +318,7 @@ function App() {
               <Route path="/appSettings/add" exact={true} element={<AddAppSetting />} />
               <Route path="/appSettings/edit/:id" exact={true} element={<EditAppSetting />} />
               <Route exact={true} path="/my-account" element={<MyAccount />} />
+              <Route exact={true} path="/notifications" element={<Notifications />} />
 
             </Routes>
           </div>

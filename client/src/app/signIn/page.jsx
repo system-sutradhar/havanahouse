@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import GoogleImg from "../../assets/images/googleImg.png";
 import CircularProgress from "@mui/material/CircularProgress";
 import { postData } from "@/utils/api";
+import Head from "next/head";
 
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -187,7 +188,12 @@ const SignIn = () => {
   };
 
   return (
-    <section className="section signInPage">
+    <>
+      <Head>
+        <title>Sign In | Havana House</title>
+        <meta name="description" content="Access your Havana House account." />
+      </Head>
+      <section className="section signInPage">
       <div className="shape-bottom">
         <svg
           fill="#fff"
@@ -286,6 +292,7 @@ const SignIn = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import { IoBagCheckOutline } from "react-icons/io5";
 
 import { MyContext } from '@/context/ThemeContext';
+import Head from "next/head";
 
 import { useRouter } from 'next/navigation';
 import { fetchDataFromApi, postData,deleteData } from '@/utils/api';
@@ -207,6 +208,10 @@ const Checkout = () => {
 
     return (
     <>
+        <Head>
+            <title>Checkout | Havana House</title>
+            <meta name="description" content="Complete your purchase at Havana House." />
+        </Head>
         <section className='section'>
             <div className='container'>
                 <form className='checkoutForm' onSubmit={checkout}>

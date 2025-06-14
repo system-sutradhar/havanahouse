@@ -4,6 +4,7 @@ import Rating from '@mui/material/Rating';
 import QuantityBox from '@/Components/QuantityBox';
 import { IoIosClose } from "react-icons/io";
 import Button from '@mui/material/Button';
+import Head from "next/head";
 
 import emprtCart from '../../assets/images/emptyCart.png';
 import { MyContext } from '@/context/ThemeContext';
@@ -102,6 +103,10 @@ const Cart = () => {
 
     return (
         <>
+            <Head>
+                <title>Cart | Havana House</title>
+                <meta name="description" content="View items in your shopping cart." />
+            </Head>
 
             <section className="section cartPage">
                 <div className="container">

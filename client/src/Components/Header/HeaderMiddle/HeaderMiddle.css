@@ -1,10 +1,10 @@
 .header-middle-wrapper {
-    border-bottom: 1px solid #eee;
-    background: #fff;
+  border-bottom: 1px solid var(--color-gray-light);
+  background: var(--color-white);
   }
   
   .top-links {
-    background: #f9f9f9;
+  background: var(--color-light-gray);
     text-align: right;
     padding: 5px 20px;
   }
@@ -22,7 +22,7 @@
   
   .top-links ul li a {
     font-size: 13px;
-    color: #333;
+  color: var(--color-dark-gray);
     text-decoration: none;
   }
   
@@ -38,12 +38,12 @@
     font-weight: bold;
     font-size: 24px;
     margin: 0;
-    color: #924f12;
+  color: var(--color-brown);
   }
   
   .tagline {
     font-size: 12px;
-    color: #b76e20;
+  color: var(--color-brown-light);
     display: block;
     font-weight: 600;
     margin-top: 2px;
@@ -54,7 +54,7 @@
     flex: 1;
     max-width: 500px;
     display: flex;
-    border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-light);
     border-radius: 25px;
     margin: 0 20px;
   }
@@ -85,7 +85,7 @@
     flex-direction: column;
     align-items: center;
     font-size: 12px;
-    color: #000;
+  color: var(--color-black);
     position: relative;
   }
   
@@ -98,8 +98,8 @@
     position: absolute;
     top: -5px;
     right: -10px;
-    background: #b58d1f;
-    color: #fff;
+  background: var(--color-gold-dark);
+  color: var(--color-white);
     font-size: 10px;
     padding: 2px 5px;
     border-radius: 50%;

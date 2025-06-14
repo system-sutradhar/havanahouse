@@ -4,6 +4,7 @@ import Rating from '@mui/material/Rating';
 import { IoIosClose } from "react-icons/io";
 import Button from '@mui/material/Button';
 import Image from 'next/image';
+import Head from "next/head";
 import emprtCart from '../../assets/images/myList.png';
 import { MyContext } from '@/context/ThemeContext';
 import { useContext, useEffect, useState } from "react";
@@ -60,6 +61,10 @@ const MyList = () => {
 
     return (
         <>
+            <Head>
+                <title>My List | Havana House</title>
+                <meta name="description" content="Items saved to your wishlist." />
+            </Head>
 
             <section className="section cartPage">
                 <div className="container">
