@@ -100,20 +100,10 @@ const Sidebar = () => {
                   <NavLink
                     exact
                     activeClassName="is-active"
-                    to="/homeBannerSlide/add"
+                    to="/homeBannerSlide"
                     onClick={() => context.setIsOpenNav(false)}
                   >
-                    Add Home Banner Slide
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    exact
-                    activeClassName="is-active"
-                    to="/homeBannerSlide/list"
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Home Slides List
+                    Home Slides
                   </NavLink>
                 </li>
               </ul>
@@ -311,16 +301,6 @@ const Sidebar = () => {
                   </NavLink>
                 </li>
 
-                <li>
-                  <NavLink
-                    exact
-                    activeClassName="is-active"
-                    to="/banners/add"
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Banner Upload
-                  </NavLink>
-                </li>
               </ul>
             </div>
           </li>
@@ -356,17 +336,6 @@ const Sidebar = () => {
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Banners List
-                  </NavLink>
-                </li>
-
-                <li>
-                  <NavLink
-                    exact
-                    activeClassName="is-active"
-                    to="/homeSideBanners/add"
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Banner Upload
                   </NavLink>
                 </li>
               </ul>
@@ -407,16 +376,6 @@ const Sidebar = () => {
                   </NavLink>
                 </li>
 
-                <li>
-                  <NavLink
-                    exact
-                    activeClassName="is-active"
-                    to="/homeBottomBanners/add"
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Banner Upload
-                  </NavLink>
-                </li>
               </ul>
             </div>
           </li>

@@ -1,18 +1,26 @@
 import React, { useEffect, useState, useContext } from "react";
 import { fetchDataFromApi, deleteData, editData } from "../../utils/api";
+import logger from "../../utils/logger";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
+import AddAppSetting from "./add";
 import Switch from "@mui/material/Switch";
 import { MyContext } from "../../App";
 
 const AppSettingsList = () => {
   const [settings, setSettings] = useState([]);
+  const [showForm, setShowForm] = useState(false);
   const context = useContext(MyContext);
 
   const getData = () => {
-    fetchDataFromApi("/api/appSettings").then((res) => {
-      if (Array.isArray(res)) setSettings(res);
-    });
+    fetchDataFromApi("/api/appSettings")
+      .then((res) => {
+        if (Array.isArray(res)) setSettings(res);
+      })
+      .catch((err) => {
+        logger.error(err);
+        context.setAlertBox({ open: true, error: true, msg: "Failed to load" });
+      });
   };
 
   useEffect(() => {
@@ -23,14 +31,18 @@ const AppSettingsList = () => {
     const item = settings.find((s) => s.id === id);
     if (!item) return;
     const updated = { ...item, [field]: !current };
-    editData(`/api/appSettings/${id}`, updated).then(() => getData());
+    editData(`/api/appSettings/${id}`, updated)
+      .then(() => getData())
+      .catch((err) => logger.error(err));
   };
 
   const deleteItem = (id) => {
-    deleteData(`/api/appSettings/${id}`).then(() => {
-      context.setAlertBox({ open: true, error: false, msg: "Deleted!" });
-      getData();
-    });
+    deleteData(`/api/appSettings/${id}`)
+      .then(() => {
+        context.setAlertBox({ open: true, error: false, msg: "Deleted!" });
+        getData();
+      })
+      .catch((err) => logger.error(err));
   };
 
   return (
@@ -38,11 +50,18 @@ const AppSettingsList = () => {
       <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
         <h5 className="mb-0">App Settings</h5>
         <div className="ml-auto">
-          <Link to="/appSettings/add">
-            <Button variant="contained">Add Setting</Button>
-          </Link>
+          <Button variant="contained" onClick={() => setShowForm(!showForm)}>
+            {showForm ? "Close" : "Add Setting"}
+          </Button>
         </div>
       </div>
+
+      {showForm && (
+        <div className="card shadow border-0 p-3 mt-4">
+          <AddAppSetting onSuccess={() => { setShowForm(false); getData(); }} />
+        </div>
+      )}
+
       <div className="card shadow border-0 p-3 mt-4">
         <div className="table-responsive mt-3">
           <table className="table table-bordered table-striped">
@@ -102,3 +121,4 @@ const AppSettingsList = () => {
 };
 
 export default AppSettingsList;
+

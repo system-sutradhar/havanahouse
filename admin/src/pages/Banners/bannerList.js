@@ -18,6 +18,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
+import AddBanner from "./addHomeBanner";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -44,34 +45,34 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 
 const BannersList = () => {
   const [slideList, setSlideList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   const context = useContext(MyContext);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  const loadSlides = () => {
     context.setProgress(20);
     fetchDataFromApi("/api/banners").then((res) => {
       setSlideList(res);
       context.setProgress(100);
     });
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    loadSlides();
   }, []);
 
   const deleteSlide = (id) => {
     context.setProgress(30);
-    deleteData(`/api/banners/${id}`).then((res) => {
+    deleteData(`/api/banners/${id}`).then(() => {
       context.setProgress(100);
-      context.setProgress({
+      context.setAlertBox({
         open: true,
         error: false,
         msg: "Banner Deleted!",
       });
-      fetchDataFromApi("/api/banners").then((res) => {
-        setSlideList(res);
-        context.setProgress(100);
-
-      });
+      loadSlides();
     });
-   
   };
 
   return (
@@ -98,13 +99,20 @@ const BannersList = () => {
               />
             </Breadcrumbs>
 
-            <Link to="/banners/add">
-              <Button className="btn-blue  ml-3 pl-3 pr-3">
-                Add Home Banner
-              </Button>
-            </Link>
+            <Button
+              className="btn-blue ml-3 pl-3 pr-3"
+              onClick={() => setShowForm(!showForm)}
+            >
+              {showForm ? "Close" : "Add Home Banner"}
+            </Button>
           </div>
         </div>
+
+        {showForm && (
+          <div className="card shadow border-0 p-3 mt-4">
+            <AddBanner onSuccess={() => { setShowForm(false); loadSlides(); }} />
+          </div>
+        )}
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3">

@@ -7,6 +7,7 @@ import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
 
 import { Link } from "react-router-dom";
+import AddHomeSlide from "./addHomeSlide";
 
 import { emphasize, styled } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -44,32 +45,34 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 
 const HomeSlidesList = () => {
   const [slideList, setSlideList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   const context = useContext(MyContext);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  const loadSlides = () => {
     context.setProgress(20);
     fetchDataFromApi("/api/homeBanner").then((res) => {
       setSlideList(res);
       context.setProgress(100);
     });
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    loadSlides();
   }, []);
 
   const deleteSlide = (id) => {
     context.setProgress(30);
-      deleteData(`/api/homeBanner/${id}`).then((res) => {
-        context.setProgress(100);
-        fetchDataFromApi("/api/homeBanner").then((res) => {
-          setSlideList(res);
-          context.setProgress(100);
-          context.setProgress({
-            open: true,
-            error: false,
-            msg: "Slide Deleted!",
-          });
-        });
+    deleteData(`/api/homeBanner/${id}`).then(() => {
+      context.setProgress(100);
+      loadSlides();
+      context.setProgress({
+        open: true,
+        error: false,
+        msg: "Slide Deleted!",
       });
+    });
   };
 
   return (
@@ -96,13 +99,20 @@ const HomeSlidesList = () => {
               />
             </Breadcrumbs>
 
-            <Link to="/homeBannerSlide/add">
-              <Button className="btn-blue  ml-3 pl-3 pr-3">
-                Add Home Slide
-              </Button>
-            </Link>
+            <Button
+              className="btn-blue  ml-3 pl-3 pr-3"
+              onClick={() => setShowForm(!showForm)}
+            >
+              {showForm ? "Close" : "Add Home Slide"}
+            </Button>
           </div>
         </div>
+
+        {showForm && (
+          <div className="card shadow border-0 p-3 mt-4">
+            <AddHomeSlide onSuccess={() => { setShowForm(false); loadSlides(); }} />
+          </div>
+        )}
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3">

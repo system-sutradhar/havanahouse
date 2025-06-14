@@ -52,6 +52,9 @@ const EditHomeSlide = () => {
   const [uploading, setUploading] = useState(false);
   const [formFields, setFormFields] = useState({
     images: [],
+    overlayText: "",
+    ctaUrl: "",
+    position: "center",
   });
 
   const [previews, setPreviews] = useState([]);
@@ -77,14 +80,27 @@ const EditHomeSlide = () => {
     });
 
     fetchDataFromApi(`/api/homeBanner/${id}`).then((res) => {
-      // setcategory(res);
       setPreviews(res.images);
+      setFormFields({
+        images: res.images || [],
+        overlayText: res.overlayText || "",
+        ctaUrl: res.ctaUrl || "",
+        position: res.position || "center",
+      });
       context.setProgress(100);
     });
   }, []);
 
   let img_arr = [];
   let uniqueArray = [];
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormFields({
+      ...formFields,
+      [name]: value,
+    });
+  };
 
   const onChangeFile = async (e, apiEndPoint) => {
     try {
@@ -188,12 +204,7 @@ const EditHomeSlide = () => {
 
     formFields.images = appendedArray;
 
-    console.log(formdata);
-    if (
-      formFields.name !== "" &&
-      formFields.color !== "" &&
-      previews.length !== 0
-    ) {
+    if (previews.length !== 0) {
       setIsLoading(true);
 
       editData(`/api/homeBanner/${id}`, formFields).then((res) => {
@@ -203,7 +214,7 @@ const EditHomeSlide = () => {
 
         deleteData("/api/imageUpload/deleteAllImages");
 
-        history("/homeBannerSlide/list");
+        history("/homeBannerSlide");
       });
     } else {
       context.setAlertBox({
@@ -241,6 +252,53 @@ const EditHomeSlide = () => {
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
+                <div className="row">
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <h6>OVERLAY TEXT</h6>
+                      <input
+                        type="text"
+                        name="overlayText"
+                        className="form-control"
+                        value={formFields.overlayText}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <h6>CTA URL</h6>
+                      <input
+                        type="text"
+                        name="ctaUrl"
+                        className="form-control"
+                        value={formFields.ctaUrl}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <h6>POSITION</h6>
+                      <Select
+                        value={formFields.position}
+                        name="position"
+                        onChange={handleChange}
+                        className="w-100"
+                      >
+                        <MenuItem value="top-left">Top Left</MenuItem>
+                        <MenuItem value="top-center">Top Center</MenuItem>
+                        <MenuItem value="top-right">Top Right</MenuItem>
+                        <MenuItem value="center-left">Center Left</MenuItem>
+                        <MenuItem value="center">Center</MenuItem>
+                        <MenuItem value="center-right">Center Right</MenuItem>
+                        <MenuItem value="bottom-left">Bottom Left</MenuItem>
+                        <MenuItem value="bottom-center">Bottom Center</MenuItem>
+                        <MenuItem value="bottom-right">Bottom Right</MenuItem>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
                 <div className="imagesUploadSec">
                   <h5 class="mb-4">Media And Published</h5>
 
@@ -256,6 +314,23 @@ const EditHomeSlide = () => {
                               <IoCloseSharp />
                             </span>
                             <div className="box">
+                              <div
+                                className={`overlayPreview position-${formFields.position}`}
+                              >
+                                {formFields.overlayText && (
+                                  <span>{formFields.overlayText}</span>
+                                )}
+                                {formFields.ctaUrl && (
+                                  <a
+                                    href={formFields.ctaUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="cta"
+                                  >
+                                    Visit
+                                  </a>
+                                )}
+                              </div>
                               <LazyLoadImage
                                 alt={"image"}
                                 effect="blur"

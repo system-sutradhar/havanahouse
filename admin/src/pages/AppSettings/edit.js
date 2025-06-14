@@ -5,6 +5,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { fetchDataFromApi, editData } from "../../utils/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { MyContext } from "../../App";
+import logger from "../../utils/logger";
 
 const EditAppSetting = () => {
   const { id } = useParams();
@@ -20,81 +21,108 @@ const EditAppSetting = () => {
   const history = useNavigate();
 
   useEffect(() => {
-    fetchDataFromApi(`/api/appSettings/${id}`).then((res) => {
-      if (res) setFormFields(res);
-    });
+    let isMounted = true;
+    fetchDataFromApi(`/api/appSettings/${id}`)
+      .then((res) => {
+        if (isMounted && res) setFormFields(res);
+      })
+      .catch((err) => logger.error(err));
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
-  const submitForm = () => {
-    editData(`/api/appSettings/${id}`, formFields).then(() => {
-      context.setAlertBox({ open: true, error: false, msg: "Updated!" });
-      history("/appSettings");
-    });
+  const submitForm = (e) => {
+    e.preventDefault();
+    editData(`/api/appSettings/${id}`, formFields)
+      .then(() => {
+        context.setAlertBox({ open: true, error: false, msg: "Updated!" });
+        history("/appSettings");
+      })
+      .catch((err) => {
+        logger.error(err);
+        context.setAlertBox({ open: true, error: true, msg: "Failed to update" });
+      });
   };
 
   return (
     <div className="right-content w-100">
-      <h5 className="mb-4">Edit App Setting</h5>
-      <div className="form-group mb-3">
-        <label>Name</label>
-        <input
-          type="text"
-          className="form-control"
-          value={formFields.name}
-          onChange={(e) => setFormFields({ ...formFields, name: e.target.value })}
-        />
+      <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
+        <h5 className="mb-0">Edit App Setting</h5>
       </div>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={formFields.prelogin}
-            onChange={(e) =>
-              setFormFields({ ...formFields, prelogin: e.target.checked })
-            }
-          />
-        }
-        label="Pre Login"
-        className="form-check"
-      />
-      <FormControlLabel
-        control={
-          <Switch
-            checked={formFields.postlogin}
-            onChange={(e) =>
-              setFormFields({ ...formFields, postlogin: e.target.checked })
-            }
-          />
-        }
-        label="Post Login"
-        className="form-check"
-      />
-      <FormControlLabel
-        control={
-          <Switch
-            checked={formFields.desktop}
-            onChange={(e) =>
-              setFormFields({ ...formFields, desktop: e.target.checked })
-            }
-          />
-        }
-        label="Desktop"
-        className="form-check"
-      />
-      <FormControlLabel
-        control={
-          <Switch
-            checked={formFields.mobile}
-            onChange={(e) =>
-              setFormFields({ ...formFields, mobile: e.target.checked })
-            }
-          />
-        }
-        label="Mobile"
-        className="form-check mb-4"
-      />
-      <Button variant="contained" onClick={submitForm}>
-        Update
-      </Button>
+      <form className="form" onSubmit={submitForm}>
+        <div className="card p-4 mt-0">
+          <div className="form-group">
+            <h6>NAME</h6>
+            <input
+              type="text"
+              value={formFields.name}
+              onChange={(e) =>
+                setFormFields({ ...formFields, name: e.target.value })
+              }
+            />
+          </div>
+          <div className="form-group">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formFields.prelogin}
+                  onChange={(e) =>
+                    setFormFields({ ...formFields, prelogin: e.target.checked })
+                  }
+                />
+              }
+              label="Pre Login"
+              className="form-check"
+            />
+          </div>
+          <div className="form-group">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formFields.postlogin}
+                  onChange={(e) =>
+                    setFormFields({ ...formFields, postlogin: e.target.checked })
+                  }
+                />
+              }
+              label="Post Login"
+              className="form-check"
+            />
+          </div>
+          <div className="form-group">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formFields.desktop}
+                  onChange={(e) =>
+                    setFormFields({ ...formFields, desktop: e.target.checked })
+                  }
+                />
+              }
+              label="Desktop"
+              className="form-check"
+            />
+          </div>
+          <div className="form-group">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formFields.mobile}
+                  onChange={(e) =>
+                    setFormFields({ ...formFields, mobile: e.target.checked })
+                  }
+                />
+              }
+              label="Mobile"
+              className="form-check"
+            />
+          </div>
+          <Button variant="contained" type="submit" className="mt-2">
+            Update
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

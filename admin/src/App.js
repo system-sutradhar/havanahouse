@@ -21,7 +21,6 @@ import AddProductRAMS from "./pages/Products/addProductRAMS";
 import ProductWeight from "./pages/Products/addProductWeight";
 import ProductSize from "./pages/Products/addProductSize";
 import Orders from "./pages/Orders";
-import AddHomeBannerSlide from "./pages/HomeBanner/addHomeSlide";
 import HomeBannerSlideList from "./pages/HomeBanner/homeSlideList";
 import EditHomeBannerSlide from "./pages/HomeBanner/editSlide";
 import Snackbar from "@mui/material/Snackbar";
@@ -31,19 +30,16 @@ import LoadingBar from "react-top-loading-bar";
 import { fetchDataFromApi } from "./utils/api";
 
 import axios from "axios";
+import logger from "./utils/logger";
 import BannersList from "./pages/Banners/bannerList";
-import AddBanner from "./pages/Banners/addHomeBanner";
 import EditBanner from "./pages/Banners/editHomeBanner";
 
 import HomeSideBannersList from "./pages/HomeSideBanners/bannerList";
-import AddHomeSideBanner from "./pages/HomeSideBanners/addHomeSideBanner";
 import EditHomeSideBanner from "./pages/HomeSideBanners/editHomeSideBanner";
 
 import HomeBottomBannersList from "./pages/HomeBottomBanners/bannerList";
-import AddHomeBottomBanner from "./pages/HomeBottomBanners/addHomeBottomBanner";
 import EditHomeBottomBanner from "./pages/HomeBottomBanners/editHomeBottomBanner";
 import AppSettingsList from "./pages/AppSettings/list";
-import AddAppSetting from "./pages/AppSettings/add";
 import EditAppSetting from "./pages/AppSettings/edit";
 import MyAccount from "./pages/MyAccount";
 import Notifications from "./pages/Notifications";
@@ -93,26 +89,40 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
-
-    if (token !== "" && token !== undefined && token !== null) {
+    if (token) {
       setIsLogin(true);
-
       const userData = JSON.parse(localStorage.getItem("user"));
       setUser(userData);
     } else {
       setIsLogin(false);
     }
-  }, [isLogin, localStorage.getItem("user")]);
+  }, [isLogin]);
 
   useEffect(() => {
-    getCountry("https://countriesnow.space/api/v0.1/countries/");
+    const controller = new AbortController();
+    getCountry(
+      "https://countriesnow.space/api/v0.1/countries/",
+      controller.signal
+    );
+    return () => controller.abort();
   }, []);
 
-  const getCountry = async (url) => {
-    const responsive = await axios.get(url).then((res) => {
+  const getCountry = async (url, signal) => {
+    try {
+      const res = await axios.get(url, { signal });
       setCountryList(res.data.data);
-    });
+    } catch (err) {
+      if (err.name !== "CanceledError") {
+        logger.error(err);
+      }
+    }
   };
 
   const handleClose = (event, reason) => {
@@ -180,6 +190,7 @@ function App() {
           open={alertBox.open}
           autoHideDuration={6000}
           onClose={handleClose}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert
             onClose={handleClose}
@@ -276,12 +287,7 @@ function App() {
               />
               <Route path="/orders/" exact={true} element={<Orders />} />
               <Route
-                path="/homeBannerSlide/add"
-                exact={true}
-                element={<AddHomeBannerSlide />}
-              />
-              <Route
-                path="/homeBannerSlide/list"
+                path="/homeBannerSlide"
                 exact={true}
                 element={<HomeBannerSlideList />}
               />
@@ -292,7 +298,6 @@ function App() {
               />
 
               <Route path="/banners" exact={true} element={<BannersList />} />
-              <Route path="/banners/add" exact={true} element={<AddBanner />} />
               <Route
                 path="/banners/edit/:id"
                 exact={true}
@@ -300,7 +305,6 @@ function App() {
               />
 
               <Route path="/homeSideBanners" exact={true} element={<HomeSideBannersList />} />
-              <Route path="/homeSideBanners/add" exact={true} element={<AddHomeSideBanner />} />
               <Route
                 path="/homeSideBanners/edit/:id"
                 exact={true}
@@ -308,14 +312,12 @@ function App() {
               />
 
               <Route path="/homeBottomBanners" exact={true} element={<HomeBottomBannersList />} />
-              <Route path="/homeBottomBanners/add" exact={true} element={<AddHomeBottomBanner />} />
               <Route
                 path="/homeBottomBanners/edit/:id"
                 exact={true}
                 element={<EditHomeBottomBanner />}
               />
               <Route path="/appSettings" exact={true} element={<AppSettingsList />} />
-              <Route path="/appSettings/add" exact={true} element={<AddAppSetting />} />
               <Route path="/appSettings/edit/:id" exact={true} element={<EditAppSetting />} />
               <Route exact={true} path="/my-account" element={<MyAccount />} />
               <Route exact={true} path="/notifications" element={<Notifications />} />
@@ -330,3 +332,4 @@ function App() {
 
 export default App;
 export { MyContext };
+

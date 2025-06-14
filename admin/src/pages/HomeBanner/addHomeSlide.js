@@ -17,7 +17,6 @@ import {
   postData,
   uploadImage,
 } from "../../utils/api";
-import { useNavigate } from "react-router-dom";
 import { FaRegImages } from "react-icons/fa";
 import { MyContext } from "../../App";
 
@@ -48,7 +47,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 });
 
-const AddHomeSlide = () => {
+const AddHomeSlide = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formFields, setFormFields] = useState({
@@ -61,8 +60,6 @@ const AddHomeSlide = () => {
   const [previews, setPreviews] = useState([]);
 
   const formdata = new FormData();
-
-  const history = useNavigate();
 
   const context = useContext(MyContext);
 
@@ -205,7 +202,7 @@ const AddHomeSlide = () => {
 
         deleteData("/api/imageUpload/deleteAllImages");
 
-        history("/homeBannerSlide/list");
+        if (onSuccess) onSuccess();
       });
     } else {
       context.setAlertBox({

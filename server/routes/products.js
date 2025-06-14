@@ -22,8 +22,6 @@ cloudinary.config({
   secure: true,
 });
 
-var imagesArr = [];
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
@@ -38,7 +36,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post(`/upload`, upload.array("images"), async (req, res) => {
-  imagesArr = [];
+  let imagesArr = [];
 
   try {
     for (let i = 0; i < req.files?.length; i++) {
@@ -475,13 +473,10 @@ router.post(`/create`, async (req, res) => {
     });
   }
 
-  imagesArr = [];
-
   res.status(201).json(product);
 });
 
 router.get("/:id", async (req, res) => {
-  productEditId = req.params.id;
 
   const product = await Product.findById(req.params.id).populate("category");
 
@@ -595,8 +590,6 @@ router.put("/:id", async (req, res) => {
       status: false,
     });
   }
-
-  imagesArr = [];
 
   res.status(200).json({
     message: "the product is updated!",
