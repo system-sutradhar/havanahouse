@@ -420,6 +420,16 @@ const Sidebar = () => {
               </ul>
             </div>
           </li>
+          <li>
+            <NavLink exact activeClassName="is-active" to="/notifications">
+              <Button className="w-100" onClick={() => context.setIsOpenNav(false)}>
+                <span className="icon">
+                  <FaBell />
+                </span>
+                Notifications
+              </Button>
+            </NavLink>
+          </li>
         </ul>
 
         <div className="logoutWrapper">

@@ -6,6 +6,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/navigation";
+import Head from "next/head";
 import { IoMdCloudUpload } from "react-icons/io";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -320,6 +321,10 @@ const MyAccount = () => {
 
   return (
   <>
+    <Head>
+      <title>My Account | Havana House</title>
+      <meta name="description" content="Manage your Havana House account." />
+    </Head>
   <div className="marginTop"></div>
     <section className="section myAccountPage">
       <div className="container">
@@ -347,7 +352,7 @@ const MyAccount = () => {
                       <>
                         {previews?.length !== 0 ? (
                           previews?.map((img, index) => {
-                            return <img src={img} key={index} />;
+                            return <img src={img} alt="preview" key={index} />;
                           })
                         ) : (
                           <Image src={NoUserImg} width={60} height={60} className="noUserImg" alt="image" />

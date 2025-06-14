@@ -28,13 +28,31 @@ const HomeBanner = ({ data = [] }) => {
         {data.map((item, index) => (
           <SwiperSlide key={index}>
             <div className="banner-slide">
-              <Image
-                src={item.images[0]}
-                alt={item.alt || `Banner ${index + 1}`}
-                fill
-                priority={index === 0}
-                sizes="100vw"
-              />
+              {item.type === "video" ? (
+                <video
+                  src={item.images[0]}
+                  className="banner-video"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              ) : (
+                <Image
+                  src={item.images[0]}
+                  alt={item.alt || `Banner ${index + 1}`}
+                  fill
+                  priority={index === 0}
+                  sizes="100vw"
+                  className="banner-img"
+                />
+              )}
+              {item?.cta && (
+                <div
+                  className={`banner-cta ${item.position || ""}`.trim()}
+                  dangerouslySetInnerHTML={{ __html: item.cta }}
+                />
+              )}
             </div>
           </SwiperSlide>
         ))}

@@ -355,6 +355,7 @@ const Header = () => {
   const [searchInput, setSearchInput] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(true);
+  const [notificationMessage, setNotificationMessage] = useState("");
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const headerRef = useRef();
   const sidebarRef = useRef();
@@ -389,6 +390,13 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/notification`)
+      .then((res) => res.json())
+      .then((data) => setNotificationMessage(data.message))
+      .catch((err) => console.error("Failed to load notification", err));
+  }, []);
+
   const searchProducts = () => {
     if (searchInput.trim()) {
       context.setIsLoading(true);
@@ -405,10 +413,10 @@ const Header = () => {
   return (
     <header ref={headerRef} className="hh-header">
       {/* Notification Bar */}
-      {showNotification && (
+      {showNotification && notificationMessage && (
         <div className="top-notification" role="region" aria-label="site-wide announcement">
           <div className="container-1366 notification-content">
-            <p>Free shipping on orders above £50 | Enjoy premium cigars</p>
+            <p>{notificationMessage}</p>
             <button
               className="close-btn"
               onClick={() => setShowNotification(false)}

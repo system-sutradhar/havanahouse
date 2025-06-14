@@ -6,6 +6,7 @@ import { CgMenuGridR } from "react-icons/cg";
 import { HiViewGrid } from "react-icons/hi";
 import { TfiLayoutGrid4Alt } from "react-icons/tfi";
 import { FaAngleDown } from "react-icons/fa6";
+import Head from "next/head";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useContext, useEffect, useState } from "react";
@@ -81,6 +82,10 @@ const SearchPage = () => {
 
     return (
         <>
+            <Head>
+                <title>Search | Havana House</title>
+                <meta name="description" content="Search results on Havana House." />
+            </Head>
             <section className="product_Listing_Page">
                 <div className="container">
                     <div className="productListing d-flex">

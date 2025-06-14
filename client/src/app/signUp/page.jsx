@@ -9,6 +9,7 @@ import GoogleImg from "../../assets/images/googleImg.png";
 import { postData } from "@/utils/api";
 import { useRouter } from 'next/navigation';
 import CircularProgress from "@mui/material/CircularProgress";
+import Head from "next/head";
 
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -199,7 +200,12 @@ const SignUp = () => {
   };
 
   return (
-    <section className="section signInPage signUpPage">
+    <>
+      <Head>
+        <title>Sign Up | Havana House</title>
+        <meta name="description" content="Create your Havana House account." />
+      </Head>
+      <section className="section signInPage signUpPage">
       <div className="shape-bottom">
         {" "}
         <svg
@@ -327,6 +333,7 @@ const SignUp = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 
