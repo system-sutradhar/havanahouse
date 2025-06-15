@@ -7,6 +7,8 @@ import Chip from "@mui/material/Chip";
 import { useContext, useEffect, useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import {
   deleteData,
   deleteImages,
