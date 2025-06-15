@@ -54,16 +54,16 @@ const EditBanner = () => {
   const [uploading, setUploading] = useState(false);
   const [formFields, setFormFields] = useState({
     images: [],
-    catName: null,
-    catId: null,
-    subCat: null,
-    subCatId: null,
-    subCatName: null,
+    catName: "",
+    catId: "",
+    subCat: "",
+    subCatId: "",
+    subCatName: "",
   });
 
   const [previews, setPreviews] = useState([]);
-  const [categoryVal, setcategoryVal] = useState(null);
-  const [subCatVal, setSubCatVal] = useState(null);
+  const [categoryVal, setcategoryVal] = useState("");
+  const [subCatVal, setSubCatVal] = useState("");
   const [subCatData, setSubCatData] = useState([]);
 
   let { id } = useParams();
@@ -211,10 +211,13 @@ const EditBanner = () => {
   };
 
   const handleChangeCategory = (event) => {
-    setcategoryVal(event.target.value);
-    setFormFields(() => ({
-      ...formFields,
-      category: event.target.value,
+    const val = event.target.value;
+    setcategoryVal(val);
+    setFormFields((prev) => ({
+      ...prev,
+      category: val,
+      catName: val === "" ? "" : prev.catName,
+      catId: val === "" ? "" : prev.catId,
     }));
   };
 
@@ -233,7 +236,11 @@ const EditBanner = () => {
   };
 
   const handleChangeSubCategory = (event) => {
-    setSubCatVal(event.target.value);
+    const val = event.target.value;
+    setSubCatVal(val);
+    if (val === "") {
+      setFormFields((prev) => ({ ...prev, subCat: "", subCatId: "", subCatName: "" }));
+    }
   };
 
   const editSlide = (e) => {
@@ -313,7 +320,7 @@ const EditBanner = () => {
                         className="w-100"
                       >
                         <MenuItem value="">
-                          <em value={null}>None</em>
+                          <em>None</em>
                         </MenuItem>
                         {context.catData?.categoryList?.length !== 0 &&
                           context.catData?.categoryList?.map((cat, index) => {
@@ -343,7 +350,7 @@ const EditBanner = () => {
                         className="w-100"
                       >
                         <MenuItem value="">
-                          <em value={null}>None</em>
+                          <em>None</em>
                         </MenuItem>
                         {subCatData?.length !== 0 &&
                           subCatData?.map((subCat, index) => {
