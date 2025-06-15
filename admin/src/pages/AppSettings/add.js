@@ -51,6 +51,7 @@ const AddAppSetting = ({ onSuccess }) => {
               onChange={(e) =>
                 setFormFields({ ...formFields, name: e.target.value })
               }
+              required
             />
           </div>
           <div className="form-group">

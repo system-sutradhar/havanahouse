@@ -228,6 +228,7 @@ const AddCategory = ({ onSuccess }) => {
                     name="name"
                     value={formFields.name}
                     onChange={changeInput}
+                    required
                   />
                 </div>
 
@@ -238,6 +239,7 @@ const AddCategory = ({ onSuccess }) => {
                     name="color"
                     value={formFields.color}
                     onChange={changeInput}
+                    required
                   />
                 </div>
 

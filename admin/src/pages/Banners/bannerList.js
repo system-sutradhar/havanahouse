@@ -120,6 +120,8 @@ const BannersList = () => {
               <thead className="thead-dark">
                 <tr>
                   <th style={{ width: "200px" }}>IMAGE</th>
+                  <th>CATEGORY</th>
+                  <th>SUB CATEGORY</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
@@ -149,7 +151,8 @@ const BannersList = () => {
                             </div>
                           </div>
                         </td>
-
+                        <td>{item.catName}</td>
+                        <td>{item.subCatName}</td>
                         <td>
                           <div className="actions d-flex align-items-center">
                             <Link to={`/banners/edit/${item.id}`}>

@@ -230,6 +230,7 @@ const AddHomeSlide = ({ onSuccess, onClose , formId = "add-slide-form", hideActi
                         className="form-control"
                         value={formFields.overlayText}
                         onChange={handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -242,6 +243,7 @@ const AddHomeSlide = ({ onSuccess, onClose , formId = "add-slide-form", hideActi
                         className="form-control"
                         value={formFields.ctaUrl}
                         onChange={handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -253,6 +255,7 @@ const AddHomeSlide = ({ onSuccess, onClose , formId = "add-slide-form", hideActi
                         name="position"
                         onChange={handleChange}
                         className="w-100"
+                        required
                       >
                         <MenuItem value="top-left">Top Left</MenuItem>
                         <MenuItem value="top-center">Top Center</MenuItem>

@@ -147,6 +147,9 @@ const HomeSlidesList = () => {
               <thead className="thead-dark">
                 <tr>
                   <th style={{ width: "200px" }}>IMAGE</th>
+                  <th>OVERLAY TEXT</th>
+                  <th>CTA URL</th>
+                  <th>POSITION</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
@@ -177,6 +180,9 @@ const HomeSlidesList = () => {
                           </div>
                         </td>
 
+                        <td>{item.overlayText}</td>
+                        <td>{item.ctaUrl}</td>
+                        <td className="text-capitalize">{item.position}</td>
                         <td>
                           <div className="actions d-flex align-items-center">
                             <Link to={`/homeBannerSlide/edit/${item.id}`}>
