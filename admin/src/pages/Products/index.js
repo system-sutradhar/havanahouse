@@ -18,6 +18,8 @@ import { MyContext } from "../../App";
 
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import AddProduct from "./addProduct";
 
 import { emphasize, styled } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -69,18 +71,25 @@ const Products = () => {
   const context = useContext(MyContext);
 
   const [productList, setProductList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   const ITEM_HEIGHT = 48;
+
+  const loadProducts = (pageVal = 1) => {
+    const query =
+      categoryVal !== "all"
+        ? `/api/products/catId?catId=${categoryVal}&page=${pageVal}&perPage=${perPage}`
+        : `/api/products?page=${pageVal}&perPage=${perPage}`;
+    fetchDataFromApi(query).then((res) => {
+      setProductList(res);
+      context.setProgress(100);
+    });
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
     context.setProgress(40);
-    fetchDataFromApi(`/api/products?page=1&perPage=${perPage}`).then(
-      (res) => {
-        setProductList(res);
-        context.setProgress(100);
-      }
-    );
+    loadProducts(1);
 
     fetchDataFromApi("/api/products/get/count").then((res) => {
       setTotalProducts(res.productsCount);
@@ -106,11 +115,7 @@ const Products = () => {
         msg: "Product Deleted!",
       });
 
-      fetchDataFromApi(
-        `/api/products?page=${page}&perPage=${perPage}`
-      ).then((res) => {
-        setProductList(res);
-      });
+      loadProducts(page);
       context.fetchCategory();
       setIsLoadingBar(false);
     });
@@ -118,48 +123,17 @@ const Products = () => {
 
   const handleChange = (event, value) => {
     context.setProgress(40);
-    if(categoryVal!=="all"){
-      fetchDataFromApi(`/api/products/catId?catId=${categoryVal}&page=${value}&perPage=${perPage}`).then((res) => {
-        setProductList(res);
-        context.setProgress(100);
-      });
-    }
-else{
-  fetchDataFromApi(`/api/products?page=${value}&perPage=${perPage}`).then((res) => {
-    setProductList(res);
-    context.setProgress(100);
-  });
-}
+    loadProducts(value);
   };
 
   const showPerPage = (e) => {
     setshowBy(e.target.value);
-    fetchDataFromApi(
-      `/api/products?page=${1}&perPage=${e.target.value}`
-    ).then((res) => {
-      setProductList(res);
-      context.setProgress(100);
-    });
+    loadProducts(1);
   };
 
   const handleChangeCategory = (event) => {
-    if (event.target.value !== "all") {
-      setcategoryVal(event.target.value);
-      fetchDataFromApi(`/api/products/catId?catId=${event.target.value}&page=${1}&perPage=${perPage}`).then(
-        (res) => {
-          setProductList(res);
-          context.setProgress(100);
-        }
-      );
-    }
-    if (event.target.value === "all") {
-      setcategoryVal("all");
-      setcategoryVal(event.target.value);
-      fetchDataFromApi(`/api/products?page=${1}&perPage=${perPage}`).then((res) => {
-        setProductList(res);
-        context.setProgress(100);
-      });
-    }
+    setcategoryVal(event.target.value);
+    loadProducts(1);
   };
 
 
@@ -201,9 +175,6 @@ else{
               />
             </Breadcrumbs>
 
-            <Link to="/product/upload">
-              <Button className="btn-blue  ml-3 pl-3 pr-3">Add Product</Button>
-            </Link>
           </div>
         </div>
 
@@ -234,9 +205,37 @@ else{
         </div>
 
         <div className="card shadow border-0 p-3 mt-4">
-          <h3 className="hd">Best Selling Products</h3>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <h3 className="hd mb-0">Best Selling Products</h3>
+            <Box>
+              {!showForm && (
+                <Button
+                  variant="contained"
+                  className="ml-2"
+                  onClick={() => setShowForm(true)}
+                >
+                  Add Product
+                </Button>
+              )}
+              {showForm && (
+                <Button
+                  variant="outlined"
+                  className="ml-2"
+                  onClick={() => setShowForm(false)}
+                >
+                  Close
+                </Button>
+              )}
+          </Box>
+        </Box>
 
-          <div className="row cardFilters mt-3">
+        {showForm && (
+          <Box mt={3}>
+            <AddProduct onSuccess={() => { setShowForm(false); loadProducts(); }} />
+          </Box>
+        )}
+
+        <div className="row cardFilters mt-3">
             <div className="col-md-3">
               <h4>SHOW BY</h4>
               <FormControl size="small" className="w-100">

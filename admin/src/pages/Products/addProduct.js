@@ -62,7 +62,7 @@ const MenuProps = {
   },
 };
 
-const ProductUpload = () => {
+const ProductUpload = ({ onSuccess }) => {
   const [categoryVal, setcategoryVal] = useState("");
   const [subCatVal, setSubCatVal] = useState("");
 
@@ -502,8 +502,11 @@ const ProductUpload = () => {
 
       setIsLoading(false);
       deleteData("/api/imageUpload/deleteAllImages");
-
-      history("/products");
+      if (typeof onSuccess === "function") {
+        onSuccess();
+      } else {
+        history("/products");
+      }
     });
   };
 
