@@ -373,14 +373,22 @@ const Sidebar = () => {
                 context.setIsOpenNav(false);
               }}
             >
-              <Button className={`w-100 ${activeTab === 8 ? "active" : ""}`}> 
+              <Button className={`w-100 ${activeTab === 8 ? "active" : ""}`}>
                 <span className="icon">
                   <IoIosSettings />
                 </span>
                 App Settings
+              </Button>
+            </NavLink>
+          </li>
           <li>
-            <NavLink exact activeClassName="is-active" to="/notifications">
-              <Button className="w-100" onClick={() => context.setIsOpenNav(false)}>
+            <NavLink
+              exact
+              activeClassName="is-active"
+              to="/notifications"
+              onClick={() => context.setIsOpenNav(false)}
+            >
+              <Button className="w-100">
                 <span className="icon">
                   <FaBell />
                 </span>
