@@ -258,31 +258,7 @@ const AddBanner = ({ onSuccess }) => {
 
   return (
     <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-          <h5 className="mb-0">Add Home Side Banner</h5>
-          <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-            <StyledBreadcrumb
-              component="a"
-              href="#"
-              label="Dashboard"
-              icon={<HomeIcon fontSize="small" />}
-            />
-
-            <StyledBreadcrumb
-              component="a"
-              label="Home Banners"
-              href="#"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-            <StyledBreadcrumb
-              label="Add Home Banner"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-          </Breadcrumbs>
-        </div>
-
-        <form className="form" onSubmit={addHomeBanner}>
+      <form className="form" onSubmit={addHomeBanner}>
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
@@ -419,7 +395,6 @@ const AddBanner = ({ onSuccess }) => {
             </div>
           </div>
         </form>
-      </div>
     </>
   );
 };

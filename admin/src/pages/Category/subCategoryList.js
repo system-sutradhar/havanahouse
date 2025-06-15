@@ -19,6 +19,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { IoCloseSharp } from "react-icons/io5";
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
+import AddSubCat from "./addSubCat";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -45,30 +46,32 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 
 const SubCategory = () => {
   const [catData, setCatData] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   const context = useContext(MyContext);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  const loadCategories = () => {
     context.setProgress(20);
     fetchDataFromApi("/api/category").then((res) => {
       setCatData(res);
       context.setProgress(100);
     });
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    loadCategories();
   }, []);
 
   const deleteCat = (id) => {
     context.setProgress(30);
     deleteData(`/api/category/${id}`).then((res) => {
       context.setProgress(100);
-      fetchDataFromApi("/api/category").then((res) => {
-        setCatData(res);
-        context.setProgress(100);
-        context.setProgress({
-          open: true,
-          error: false,
-          msg: "Category Deleted!",
-        });
+      loadCategories();
+      context.setProgress({
+        open: true,
+        error: false,
+        msg: "Category Deleted!",
       });
     });
   };
@@ -77,14 +80,11 @@ const SubCategory = () => {
     context.setProgress(30);
       deleteData(`/api/category/${id}`).then((res) => {
         context.setProgress(100);
-        fetchDataFromApi("/api/category").then((res) => {
-          setCatData(res);
-          context.setProgress(100);
-          context.setProgress({
-            open: true,
-            error: false,
-            msg: "Category Deleted!",
-          });
+        loadCategories();
+        context.setProgress({
+          open: true,
+          error: false,
+          msg: "Category Deleted!",
         });
       });
   };
@@ -113,13 +113,17 @@ const SubCategory = () => {
               />
             </Breadcrumbs>
 
-            <Link to="/subCategory/add">
-              <Button className="btn-blue  ml-3 pl-3 pr-3">
-                Add Sub Category
-              </Button>
-            </Link>
+            <Button className="btn-blue  ml-3 pl-3 pr-3" onClick={() => setShowForm(!showForm)}>
+              {showForm ? "Close" : "Add Sub Category"}
+            </Button>
           </div>
         </div>
+
+        {showForm && (
+          <div className="card shadow border-0 p-3 mt-4">
+            <AddSubCat onSuccess={() => { setShowForm(false); loadCategories(); }} />
+          </div>
+        )}
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3">

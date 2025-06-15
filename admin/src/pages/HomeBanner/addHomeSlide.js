@@ -216,31 +216,7 @@ const AddHomeSlide = ({ onSuccess }) => {
 
   return (
     <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-          <h5 className="mb-0">Add Home Slide</h5>
-          <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-            <StyledBreadcrumb
-              component="a"
-              href="#"
-              label="Dashboard"
-              icon={<HomeIcon fontSize="small" />}
-            />
-
-            <StyledBreadcrumb
-              component="a"
-              label="Home Slide"
-              href="#"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-            <StyledBreadcrumb
-              label="Add Home Slide"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-          </Breadcrumbs>
-        </div>
-
-        <form className="form" onSubmit={addHomeSlide}>
+      <form className="form" onSubmit={addHomeSlide}>
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
@@ -377,7 +353,6 @@ const AddHomeSlide = ({ onSuccess }) => {
             </div>
           </div>
         </form>
-      </div>
     </>
   );
 };

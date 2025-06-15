@@ -8,6 +8,7 @@ import logger from "../../utils/logger";
 const Notifications = () => {
   const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
   const context = useContext(MyContext);
 
   const load = () => {
@@ -77,8 +78,14 @@ const Notifications = () => {
     <div className="right-content w-100">
       <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
         <h5 className="mb-0">Notifications</h5>
+        <div className="ml-auto">
+          <Button variant="contained" onClick={() => setShowForm(!showForm)}>
+            {showForm ? "Close" : "Add Notification"}
+          </Button>
+        </div>
       </div>
 
+      {showForm && (
       <form className="form" onSubmit={addNotification}>
         <div className="card shadow border-0 p-3 mt-4">
           <div className="d-flex mb-3">
@@ -129,6 +136,7 @@ const Notifications = () => {
         </div>
         </div>
       </form>
+      )}
     </div>
   );
 };

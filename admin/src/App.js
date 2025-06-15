@@ -251,11 +251,6 @@ function App() {
               />
               <Route path="/category" exact={true} element={<Category />} />
               <Route
-                path="/category/add"
-                exact={true}
-                element={<CategoryAdd />}
-              />
-              <Route
                 path="/category/edit/:id"
                 exact={true}
                 element={<EditCategory />}
@@ -264,11 +259,6 @@ function App() {
                 path="/subCategory/"
                 exact={true}
                 element={<SubCatList />}
-              />
-              <Route
-                path="/subCategory/add"
-                exact={true}
-                element={<SubCatAdd />}
               />
               <Route
                 path="/productRAMS/add"

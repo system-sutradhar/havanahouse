@@ -143,26 +143,10 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/category/add"
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Add a category
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     to="/subCategory"
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Sub Category List
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/subCategory/add"
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Add a sub category
                   </Link>
                 </li>
               </ul>

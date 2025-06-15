@@ -18,6 +18,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
+import AddCategory from "./addCategory";
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -47,16 +48,20 @@ const Category = () => {
 
     const [catData, setCatData] = useState([]);
     const [isLoadingBar, setIsLoadingBar] = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const context = useContext(MyContext);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
+    const loadCategories = () => {
         context.setProgress(20)
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
             context.setProgress(100);
         })
+    }
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        loadCategories();
     }, []);
 
     const deleteCat = (id) => {
@@ -65,16 +70,13 @@ const Category = () => {
         context.setProgress(30);
         deleteData(`/api/category/${id}`).then(res => {
             context.setProgress(100);
-            fetchDataFromApi('/api/category').then((res) => {
-                setCatData(res);
-                context.setProgress(100);
-                context.setProgress({
-                    open: true,
-                    error: false,
-                    msg: "Category Deleted!"
-                })
-                setIsLoadingBar(false);
+            loadCategories();
+            context.setProgress({
+                open: true,
+                error: false,
+                msg: "Category Deleted!"
             })
+            setIsLoadingBar(false);
         })
     }
 
@@ -102,11 +104,19 @@ const Category = () => {
                             />
                         </Breadcrumbs>
 
-                        <Link to="/category/add"><Button className="btn-blue  ml-3 pl-3 pr-3">Add Category</Button></Link>
+                        <Button className="btn-blue  ml-3 pl-3 pr-3" onClick={() => setShowForm(!showForm)}>
+                            {showForm ? "Close" : "Add Category"}
+                        </Button>
 
 
                     </div>
                 </div>
+
+                {showForm && (
+                    <div className="card shadow border-0 p-3 mt-4">
+                        <AddCategory onSuccess={() => { setShowForm(false); loadCategories(); }} />
+                    </div>
+                )}
 
                 <div className="card shadow border-0 p-3 mt-4">
                     <div className="table-responsive mt-3">
