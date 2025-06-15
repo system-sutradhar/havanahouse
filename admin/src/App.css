@@ -31,7 +31,7 @@ body{
 }
 body.dark {
   background: var(--body-dark-bg) !important;
-  --text-color: rgba(255, 255, 255, 0.7);
+  --text-color: rgba(255, 255, 255, 0.87);
   --table-header-bg: #1e2a48;
   --table-row-bg: #162038;
 }
@@ -161,7 +161,7 @@ body.dark .searchBox input,body.dark .searchBox input::-webkit-input-placeholder
 
 .myAcc .userInfo{padding-left: 10px;}
 .myAcc .userInfo h4{font-size: 15px; line-height: 15px; font-weight: 600; margin-bottom: 0px; color: var(--icon-color);}
-.myAcc .userInfo p{margin-top: 0px; font-size: 12px; color: #000; opacity: 0.7;}
+.myAcc .userInfo p{margin-top: 0px; font-size: 12px; color: var(--text-color); opacity: 0.7;}
 
 body.dark .myAcc .userInfo *{color: rgba(255,255,255,0.8) !important;}
 body.dark .css-1t1j96h-MuiPaper-root-MuiDialog-paper{background-color: var(--dark-secondary-bg) !important;}
@@ -171,7 +171,7 @@ body.dark .MuiPaper-elevation li *,body.dark .MuiPaper-elevation li{color: rgba(
 
 #account-menu li{font-size: 14px !important; padding: 12px 15px !important;}
 #account-menu li svg{font-size: 20px !important;}
-#account-menu li a{color: #000 !important; text-decoration: none !important; display: flex; align-items: center; width: 100% !important;}
+#account-menu li a{color: var(--text-color) !important; text-decoration: none !important; display: flex; align-items: center; width: 100% !important;}
 
 #notifications .MuiPaper-elevation{right: 240px !important; width: 300px !important; left: auto !important; top: 70px !important;}
 
@@ -179,7 +179,7 @@ body.dark .MuiPaper-elevation li *,body.dark .MuiPaper-elevation li{color: rgba(
 .dropdown_list .head h4{font-size: 17px; font-weight: 600;}
 body.dark .dropdown_list .head h4{color: rgba(255,255,255,0.9) !important;}
 .dropdown_list li.MuiButtonBase-root{background: #ebf6ff !important;
-     color: #000 !important; padding: 10px 15px !important;}
+     color: var(--text-color) !important; padding: 10px 15px !important;}
 
      body.dark .dropdown_list li.MuiButtonBase-root{background-color: var(--dark-secondary-bg) !important; background: var(--dark-secondary-bg) !important;}
 
