@@ -47,7 +47,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 });
 
-const AddHomeSlide = ({ onSuccess, onClose }) => {
+const AddHomeSlide = ({ onSuccess, onClose , formId = "add-slide-form", hideActions = false}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formFields, setFormFields] = useState({
@@ -216,7 +216,7 @@ const AddHomeSlide = ({ onSuccess, onClose }) => {
 
   return (
     <>
-      <form className="form" onSubmit={addHomeSlide}>
+      <form id={formId} className="form" onSubmit={addHomeSlide}>
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
@@ -336,7 +336,7 @@ const AddHomeSlide = ({ onSuccess, onClose }) => {
                   </div>
 
                   <br />
-
+{!hideActions && (
                   <Stack
                     direction={{ xs: "column", sm: "row" }}
                     spacing={2}
@@ -364,6 +364,7 @@ const AddHomeSlide = ({ onSuccess, onClose }) => {
                       Close
                     </Button>
                   </Stack>
+)}
                 </div>
               </div>
             </div>

@@ -1,8 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
 
 import { FaPencilAlt } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdClose } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
 
@@ -45,7 +50,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 
 const HomeSlidesList = () => {
   const [slideList, setSlideList] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const context = useContext(MyContext);
 
@@ -101,24 +106,40 @@ const HomeSlidesList = () => {
 
             <Button
               className="btn-blue  ml-3 pl-3 pr-3"
-              onClick={() => setShowForm(!showForm)}
+              onClick={() => setOpenModal(true)}
             >
-              {showForm ? "Close" : "Add Home Slide"}
+              Add Home Slide
             </Button>
           </div>
         </div>
 
-        {showForm && (
-          <div className="card shadow border-0 p-3 mt-4">
+        <Dialog open={openModal} onClose={() => setOpenModal(false)} className="editModal" fullWidth maxWidth="md">
+          <DialogTitle className="d-flex justify-content-between align-items-center">
+            Add Home Slide
+            <IconButton onClick={() => setOpenModal(false)}>
+              <MdClose />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent dividers>
             <AddHomeSlide
               onSuccess={() => {
-                setShowForm(false);
+                setOpenModal(false);
                 loadSlides();
               }}
-              onClose={() => setShowForm(false)}
+              onClose={() => setOpenModal(false)}
+              formId="add-slide-form"
+              hideActions
             />
-          </div>
-        )}
+          </DialogContent>
+          <DialogActions>
+            <Button variant="outlined" onClick={() => setOpenModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="contained" form="add-slide-form" type="submit" className="btn-blue">
+              Publish
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3">
