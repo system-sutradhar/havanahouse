@@ -229,88 +229,88 @@ function App() {
             }`}
           >
             <Routes>
-              <Route path="/" exact={true} element={<Dashboard />} />
-              <Route path="/dashboard" exact={true} element={<Dashboard />} />
-              <Route path="/login" exact={true} element={<Login />} />
-              <Route path="/signUp" exact={true} element={<SignUp />} />
-              <Route path="/products" exact={true} element={<Products />} />
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signUp" element={<SignUp />} />
+              <Route path="/products" element={<Products />} />
               <Route
                 path="/product/details/:id"
-                exact={true}
+               
                 element={<ProductDetails />}
               />
               <Route
                 path="/product/upload"
-                exact={true}
+               
                 element={<ProductUpload />}
               />
               <Route
                 path="/product/edit/:id"
-                exact={true}
+               
                 element={<EditProduct />}
               />
-              <Route path="/category" exact={true} element={<Category />} />
+              <Route path="/category" element={<Category />} />
               <Route
                 path="/category/edit/:id"
-                exact={true}
+               
                 element={<EditCategory />}
               />
               <Route
                 path="/subCategory/"
-                exact={true}
+               
                 element={<SubCatList />}
               />
               <Route
                 path="/productRAMS/add"
-                exact={true}
+               
                 element={<AddProductRAMS />}
               />
               <Route
                 path="/productWEIGHT/add"
-                exact={true}
+               
                 element={<ProductWeight />}
               />
               <Route
                 path="/productSIZE/add"
-                exact={true}
+               
                 element={<ProductSize />}
               />
-              <Route path="/orders/" exact={true} element={<Orders />} />
+              <Route path="/orders/" element={<Orders />} />
               <Route
                 path="/homeBannerSlide"
-                exact={true}
+               
                 element={<HomeBannerSlideList />}
               />
               <Route
                 path="/homeBannerSlide/edit/:id"
-                exact={true}
+               
                 element={<EditHomeBannerSlide />}
               />
 
-              <Route path="/banners" exact={true} element={<BannersList />} />
+              <Route path="/banners" element={<BannersList />} />
               <Route
                 path="/banners/edit/:id"
-                exact={true}
+               
                 element={<EditBanner />}
               />
 
-              <Route path="/homeSideBanners" exact={true} element={<HomeSideBannersList />} />
+              <Route path="/homeSideBanners" element={<HomeSideBannersList />} />
               <Route
                 path="/homeSideBanners/edit/:id"
-                exact={true}
+               
                 element={<EditHomeSideBanner />}
               />
 
-              <Route path="/homeBottomBanners" exact={true} element={<HomeBottomBannersList />} />
+              <Route path="/homeBottomBanners" element={<HomeBottomBannersList />} />
               <Route
                 path="/homeBottomBanners/edit/:id"
-                exact={true}
+               
                 element={<EditHomeBottomBanner />}
               />
-              <Route path="/appSettings" exact={true} element={<AppSettingsList />} />
-              <Route path="/appSettings/edit/:id" exact={true} element={<EditAppSetting />} />
-              <Route exact={true} path="/my-account" element={<MyAccount />} />
-              <Route exact={true} path="/notifications" element={<Notifications />} />
+              <Route path="/appSettings" element={<AppSettingsList />} />
+              <Route path="/appSettings/edit/:id" element={<EditAppSetting />} />
+              <Route path="/my-account" element={<MyAccount />} />
+              <Route path="/notifications" element={<Notifications />} />
 
             </Routes>
           </div>

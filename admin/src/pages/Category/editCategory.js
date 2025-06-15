@@ -81,12 +81,16 @@ const EditCategory = () => {
     });
 
     fetchDataFromApi(`/api/category/${id}`).then((res) => {
-      setcategory(res?.categoryData[0]);
-      setPreviews(res?.categoryData[0]?.images);
-      setFormFields({
-        name: res?.categoryData[0]?.name,
-        color: res?.categoryData[0]?.color,
-      });
+      const data = res?.categoryData;
+      if (data && data.length > 0) {
+        const cat = data[0];
+        setcategory(cat);
+        setPreviews(cat.images || []);
+        setFormFields({
+          name: cat.name || "",
+          color: cat.color || "",
+        });
+      }
       context.setProgress(100);
     });
   }, []);
@@ -283,7 +287,7 @@ const EditCategory = () => {
                 </div>
 
                 <div className="imagesUploadSec">
-                  <h5 class="mb-4">Media And Published</h5>
+                  <h5 className="mb-4">Media And Published</h5>
 
                   <div className="imgUploadBox d-flex align-items-center">
                     {previews?.length !== 0 &&

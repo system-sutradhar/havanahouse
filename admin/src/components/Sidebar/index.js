@@ -57,7 +57,7 @@ const Sidebar = () => {
       <div className="sidebar">
         <ul>
           <li>
-            <NavLink exact activeClassName="is-active" to="/">
+            <NavLink to="/" end className={({ isActive }) => (isActive ? "is-active" : "")}>
               <Button
                 className={`w-100 ${activeTab === 0 ? "active" : ""}`}
                 onClick={() => {
@@ -98,9 +98,9 @@ const Sidebar = () => {
               <ul className="submenu">
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/homeBannerSlide"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Home Slides
@@ -178,9 +178,9 @@ const Sidebar = () => {
               <ul className="submenu">
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/products"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Product List
@@ -189,9 +189,9 @@ const Sidebar = () => {
 
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/product/upload"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Product Upload
@@ -199,9 +199,9 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/productRAMS/add"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Add Product RAMS
@@ -209,9 +209,9 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/productWEIGHT/add"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Add Product WEIGHT
@@ -219,9 +219,9 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/productSIZE/add"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Add Product SIZE
@@ -232,7 +232,7 @@ const Sidebar = () => {
           </li>
 
           <li>
-            <NavLink exact activeClassName="is-active" to="/orders">
+            <NavLink to="/orders" end className={({ isActive }) => (isActive ? "is-active" : "")}>
               <Button
                 className={`w-100 ${
                   activeTab === 4 && isToggleSubmenu === true ? "active" : ""
@@ -276,9 +276,9 @@ const Sidebar = () => {
               <ul className="submenu">
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/banners"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Banners List
@@ -314,9 +314,9 @@ const Sidebar = () => {
               <ul className="submenu">
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/homeSideBanners"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Banners List
@@ -351,9 +351,9 @@ const Sidebar = () => {
               <ul className="submenu">
                 <li>
                   <NavLink
-                    exact
-                    activeClassName="is-active"
                     to="/homeBottomBanners"
+                    end
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Banners List
@@ -365,9 +365,9 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink
-              exact
-              activeClassName="is-active"
               to="/appSettings"
+              end
+              className={({ isActive }) => (isActive ? "is-active" : "")}
               onClick={() => {
                 setActiveTab(8);
                 context.setIsOpenNav(false);
@@ -383,9 +383,9 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink
-              exact
-              activeClassName="is-active"
               to="/notifications"
+              end
+              className={({ isActive }) => (isActive ? "is-active" : "")}
               onClick={() => context.setIsOpenNav(false)}
             >
               <Button className="w-100">

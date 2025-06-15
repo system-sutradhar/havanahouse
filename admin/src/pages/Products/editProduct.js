@@ -841,7 +841,7 @@ const EditUpload = () => {
 
           <div className="card p-4 mt-0">
             <div className="imagesUploadSec">
-              <h5 class="mb-4">Media And Published</h5>
+              <h5 className="mb-4">Media And Published</h5>
 
               <div className="imgUploadBox d-flex align-items-center">
                 {previews?.length !== 0 &&

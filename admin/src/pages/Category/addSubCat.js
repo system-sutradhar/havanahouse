@@ -89,32 +89,33 @@ const AddSubCat = ({ onSuccess }) => {
     }
 
 
-    const addSubCategory = (e) => {
+    const addSubCategory = async (e) => {
         e.preventDefault();
 
-        console.log(formFields)
+        formFields.slug = formFields.name;
 
-        formFields.slug = formFields.name
-
-        if (formFields.name !== "" && formFields.parentId!=="") {
-            setIsLoading(true);
-
-            postData(`/api/category/create`, formFields).then((res) => {
+        if (formFields.name !== "" && formFields.parentId !== "") {
+            try {
+                setIsLoading(true);
+                await postData(`/api/category/create`, formFields);
                 setIsLoading(false);
                 context.fetchCategory();
                 deleteData("/api/imageUpload/deleteAllImages");
                 if (onSuccess) onSuccess();
-            });
-
-        }
-
-        else {
+            } catch (err) {
+                setIsLoading(false);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: 'Failed to add sub category',
+                });
+            }
+        } else {
             context.setAlertBox({
                 open: true,
                 error: true,
                 msg: 'Please fill all the details'
             });
-            return false;
         }
 
     }
