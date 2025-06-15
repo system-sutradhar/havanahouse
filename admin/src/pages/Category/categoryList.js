@@ -19,6 +19,8 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import AddCategory from "./addCategory";
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -84,32 +86,29 @@ const Category = () => {
 
     return (
         <>
-            <div className="right-content w-100">
-                <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-                    <h5 className="mb-0">Category List</h5>
+            <Container className="right-content" maxWidth={false}>
+                <div className="card shadow border-0 w-100 p-4">
+                    <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+                        <h5 className="mb-0">Category List</h5>
+                        <Box display="flex" alignItems="center">
+                            <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs_">
+                                <StyledBreadcrumb
+                                    component="a"
+                                    href="#"
+                                    label="Dashboard"
+                                    icon={<HomeIcon fontSize="small" />}
+                                />
 
-                    <div className="ml-auto d-flex align-items-center">
-                        <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-                            <StyledBreadcrumb
-                                component="a"
-                                href="#"
-                                label="Dashboard"
-                                icon={<HomeIcon fontSize="small" />}
-                            />
-
-                            <StyledBreadcrumb
-                                label="Category"
-                                deleteIcon={<ExpandMoreIcon />}
-
-                            />
-                        </Breadcrumbs>
-
-                        <Button className="btn-blue  ml-3 pl-3 pr-3" onClick={() => setShowForm(!showForm)}>
-                            {showForm ? "Close" : "Add Category"}
-                        </Button>
-
-
-                    </div>
+                                <StyledBreadcrumb
+                                    label="Category"
+                                    deleteIcon={<ExpandMoreIcon />}
+                                />
+                            </Breadcrumbs>
+                            <Button className="btn-blue  ml-3 pl-3 pr-3" onClick={() => setShowForm(!showForm)}>
+                                {showForm ? "Close" : "Add Category"}
+                            </Button>
+                        </Box>
+                    </Box>
                 </div>
 
                 {showForm && (
@@ -178,9 +177,9 @@ const Category = () => {
                     </div>
 
 
-                </div>
             </div>
-
+        </div>
+        </Container>
 
         </>
     )

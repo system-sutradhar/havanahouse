@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 import { MyContext } from "../../App";
 import { fetchDataFromApi, postData, editData, deleteData } from "../../utils/api";
 import logger from "../../utils/logger";
@@ -75,14 +77,14 @@ const Notifications = () => {
   };
 
   return (
-    <div className="right-content w-100">
-      <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-        <h5 className="mb-0">Notifications</h5>
-        <div className="ml-auto">
+    <Container className="right-content" maxWidth={false}>
+      <div className="card shadow border-0 w-100 p-4">
+        <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+          <h5 className="mb-0">Notifications</h5>
           <Button variant="contained" onClick={() => setShowForm(!showForm)}>
             {showForm ? "Close" : "Add Notification"}
           </Button>
-        </div>
+        </Box>
       </div>
 
       {showForm && (
@@ -137,7 +139,7 @@ const Notifications = () => {
         </div>
       </form>
       )}
-    </div>
+    </Container>
   );
 };
 

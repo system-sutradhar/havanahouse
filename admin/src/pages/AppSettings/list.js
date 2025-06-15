@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import AddAppSetting from "./add";
 import Switch from "@mui/material/Switch";
 import { MyContext } from "../../App";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 
 const AppSettingsList = () => {
   const [settings, setSettings] = useState([]);
@@ -46,14 +48,14 @@ const AppSettingsList = () => {
   };
 
   return (
-    <div className="right-content w-100">
-      <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-        <h5 className="mb-0">App Settings</h5>
-        <div className="ml-auto">
+    <Container className="right-content" maxWidth={false}>
+      <div className="card shadow border-0 w-100 p-4">
+        <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+          <h5 className="mb-0">App Settings</h5>
           <Button variant="contained" onClick={() => setShowForm(!showForm)}>
             {showForm ? "Close" : "Add Setting"}
           </Button>
-        </div>
+        </Box>
       </div>
 
       {showForm && (
@@ -116,7 +118,7 @@ const AppSettingsList = () => {
           </table>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
