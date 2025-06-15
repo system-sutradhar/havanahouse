@@ -19,6 +19,10 @@ import { MyContext } from "../../App";
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import AddProduct from "./addProduct";
 
 import { emphasize, styled } from "@mui/material/styles";
@@ -72,6 +76,9 @@ const Products = () => {
 
   const [productList, setProductList] = useState([]);
   const [showForm, setShowForm] = useState(false);
+
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   const ITEM_HEIGHT = 48;
 
@@ -235,45 +242,50 @@ const Products = () => {
           </Box>
         )}
 
-        <div className="row cardFilters mt-3">
-            <div className="col-md-3">
-              <h4>SHOW BY</h4>
-              <FormControl size="small" className="w-100">
-                <Select
-                  value={showBy}
-                  onChange={showPerPage}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                  labelId="demo-select-small-label"
-                  className="w-100"
-                >
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={30}>30</MenuItem>
-                  <MenuItem value={40}>40</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
-                  <MenuItem value={60}>60</MenuItem>
-                  <MenuItem value={70}>70</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+        <Grid container spacing={2} className="cardFilters mt-3">
+          <Grid item xs={12} md={3}>
+            <h4>SHOW BY</h4>
+            <FormControl size="small" className="w-100">
+              <Select
+                value={showBy}
+                onChange={showPerPage}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                labelId="demo-select-small-label"
+                className="w-100"
+              >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+                <MenuItem value={40}>40</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={60}>60</MenuItem>
+                <MenuItem value={70}>70</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
 
-            <div className="col-md-3">
-              <h4>CATEGORY BY</h4>
-              <FormControl size="small" className="w-100">
-                <Select
-                  value={categoryVal}
-                  onChange={handleChangeCategory}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                  className="w-100"
-                >
-                  <MenuItem value="all" >
-                    <em>All</em>
-                  </MenuItem>
-                  {context.catData?.categoryList?.length !== 0 &&
-                    context.catData?.categoryList?.map((cat, index) => {
-                      return (
+          <Grid item xs={12} md={9}>
+            <Stack
+              direction={isSmall ? "column" : "row"}
+              spacing={2}
+              alignItems={isSmall ? "stretch" : "flex-end"}
+            >
+              <Box flex={1}>
+                <h4>CATEGORY BY</h4>
+                <FormControl size="small" className="w-100">
+                  <Select
+                    value={categoryVal}
+                    onChange={handleChangeCategory}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Without label" }}
+                    className="w-100"
+                  >
+                    <MenuItem value="all">
+                      <em>All</em>
+                    </MenuItem>
+                    {context.catData?.categoryList?.length !== 0 &&
+                      context.catData?.categoryList?.map((cat, index) => (
                         <MenuItem
                           className="text-capitalize"
                           value={cat._id}
@@ -281,20 +293,19 @@ const Products = () => {
                         >
                           {cat.name}
                         </MenuItem>
-                      );
-                    })}
-                </Select>
-              </FormControl>
-            </div>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Box>
 
-            <div className="col-md-6 d-flex justify-content-end">
-              <div className="searchWrap d-flex">
-                <SearchBox searchProducts={searchProducts}/>
-              </div>
-            </div>
-
-            
-          </div>
+              <Box flex={1} sx={{ display: "flex", justifyContent: isSmall ? "flex-start" : "flex-end" }}>
+                <div className="searchWrap d-flex" style={{ width: "100%" }}>
+                  <SearchBox searchProducts={searchProducts} />
+                </div>
+              </Box>
+            </Stack>
+          </Grid>
+        </Grid>
 
           <div className="table-responsive mt-3">
             <table className="table table-bordered table-striped v-align">
