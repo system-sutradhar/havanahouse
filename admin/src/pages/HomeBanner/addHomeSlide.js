@@ -7,6 +7,7 @@ import Chip from "@mui/material/Chip";
 import { useContext, useEffect, useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import { MenuItem, Select } from "@mui/material";
 import {
   deleteData,
@@ -46,7 +47,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 });
 
-const AddHomeSlide = ({ onSuccess }) => {
+const AddHomeSlide = ({ onSuccess, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formFields, setFormFields] = useState({
@@ -336,17 +337,33 @@ const AddHomeSlide = ({ onSuccess }) => {
 
                   <br />
 
-                  <Button
-                    type="submit"
-                    className="btn-blue btn-lg btn-big w-100"
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    className="mt-2"
                   >
-                    <FaCloudUploadAlt /> &nbsp;{" "}
-                    {isLoading === true ? (
-                      <CircularProgress color="inherit" className="loader" />
-                    ) : (
-                      "PUBLISH AND VIEW"
-                    )}{" "}
-                  </Button>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      className="btn-blue btn-lg btn-big"
+                      fullWidth
+                    >
+                      <FaCloudUploadAlt /> &nbsp;
+                      {isLoading === true ? (
+                        <CircularProgress color="inherit" className="loader" />
+                      ) : (
+                        "PUBLISH AND VIEW"
+                      )}
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={onClose}
+                      className="btn-blue btn-lg btn-big"
+                      fullWidth
+                    >
+                      Close
+                    </Button>
+                  </Stack>
                 </div>
               </div>
             </div>

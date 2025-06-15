@@ -7,6 +7,7 @@ import Chip from "@mui/material/Chip";
 import { useContext, useEffect, useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import { MenuItem, Select } from "@mui/material";
 import {
   deleteData,
@@ -370,17 +371,33 @@ const EditHomeSlide = () => {
 
                   <br />
 
-                  <Button
-                    type="submit"
-                    className="btn-blue btn-lg btn-big w-100"
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    className="mt-2"
                   >
-                    <FaCloudUploadAlt /> &nbsp;{" "}
-                    {isLoading === true ? (
-                      <CircularProgress color="inherit" className="loader" />
-                    ) : (
-                      "PUBLISH AND VIEW"
-                    )}{" "}
-                  </Button>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      className="btn-blue btn-lg btn-big"
+                      fullWidth
+                    >
+                      <FaCloudUploadAlt /> &nbsp;
+                      {isLoading === true ? (
+                        <CircularProgress color="inherit" className="loader" />
+                      ) : (
+                        "PUBLISH AND VIEW"
+                      )}
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => history(-1)}
+                      className="btn-blue btn-lg btn-big"
+                      fullWidth
+                    >
+                      Close
+                    </Button>
+                  </Stack>
                 </div>
               </div>
             </div>

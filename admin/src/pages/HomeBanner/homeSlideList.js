@@ -110,7 +110,13 @@ const HomeSlidesList = () => {
 
         {showForm && (
           <div className="card shadow border-0 p-3 mt-4">
-            <AddHomeSlide onSuccess={() => { setShowForm(false); loadSlides(); }} />
+            <AddHomeSlide
+              onSuccess={() => {
+                setShowForm(false);
+                loadSlides();
+              }}
+              onClose={() => setShowForm(false)}
+            />
           </div>
         )}
 
