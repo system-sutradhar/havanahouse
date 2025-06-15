@@ -36,6 +36,8 @@ import Checkbox from "@mui/material/Checkbox";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import Alert from "@mui/material/Alert";
+import Skeleton from "@mui/material/Skeleton";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -76,39 +78,56 @@ const Products = () => {
 
   const [productList, setProductList] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   const ITEM_HEIGHT = 48;
 
-  const loadProducts = (pageVal = 1) => {
+  const loadProducts = async (pageVal = 1) => {
+    setLoading(true);
     const query =
       categoryVal !== "all"
         ? `/api/products/catId?catId=${categoryVal}&page=${pageVal}&perPage=${perPage}`
         : `/api/products?page=${pageVal}&perPage=${perPage}`;
-    fetchDataFromApi(query).then((res) => {
-      setProductList(res);
+    try {
+      const res = await fetchDataFromApi(query);
+      if (res?.products) {
+        setProductList(res);
+        setError(null);
+      } else {
+        throw new Error("Invalid response");
+      }
+    } catch (err) {
+      setError("Failed to load products");
+    } finally {
+      setLoading(false);
       context.setProgress(100);
-    });
+    }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    context.setProgress(40);
-    loadProducts(1);
+    const fetchInitial = async () => {
+      context.setProgress(40);
+      try {
+        await loadProducts(1);
 
-    fetchDataFromApi("/api/products/get/count").then((res) => {
-      setTotalProducts(res.productsCount);
-    });
+        const count = await fetchDataFromApi("/api/products/get/count");
+        setTotalProducts(count.productsCount);
 
-    fetchDataFromApi("/api/category/get/count").then((res) => {
-      setTotalCategory(res.categoryCount);
-    });
+        const catCount = await fetchDataFromApi("/api/category/get/count");
+        setTotalCategory(catCount.categoryCount);
 
-    fetchDataFromApi("/api/category/subCat/get/count").then((res) => {
-      setTotalSubCategory(res.categoryCount);
-    });
+        const subCount = await fetchDataFromApi("/api/category/subCat/get/count");
+        setTotalSubCategory(subCount.categoryCount);
+      } catch (err) {
+        setError("Failed to load products");
+      }
+    };
+    fetchInitial();
   }, []);
 
   const deleteProduct = (id) => {
@@ -307,6 +326,23 @@ const Products = () => {
           </Grid>
         </Grid>
 
+        {error && (
+          <Alert
+            severity="error"
+            action={
+              <Button color="inherit" size="small" onClick={() => loadProducts(page)}>
+                Retry
+              </Button>
+            }
+            sx={{ mb: 2 }}
+          >
+            {error}
+          </Alert>
+        )}
+
+        {loading ? (
+          <Skeleton variant="rectangular" width="100%" height={200} />
+        ) : (
           <div className="table-responsive mt-3">
             <table className="table table-bordered table-striped v-align">
               <thead className="thead-dark">
@@ -406,8 +442,9 @@ const Products = () => {
                   onChange={handleChange}
                 />
               </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>
