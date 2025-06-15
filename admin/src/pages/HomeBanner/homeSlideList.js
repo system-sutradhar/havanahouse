@@ -128,7 +128,7 @@ const HomeSlidesList = () => {
                 {slideList?.length !== 0 &&
                   slideList?.map((item, index) => {
                     return (
-                      <tr>
+                      <tr key={item.id ?? index}>
                         <td>
                           <div
                             className="d-flex align-items-center "
