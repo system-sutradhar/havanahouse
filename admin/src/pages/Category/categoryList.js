@@ -178,7 +178,6 @@ const Category = () => {
 
 
             </div>
-        </div>
         </Container>
 
         </>
