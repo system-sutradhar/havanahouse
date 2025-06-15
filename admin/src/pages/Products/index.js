@@ -1,4 +1,3 @@
-import { IoMdCart } from "react-icons/io";
 import { MdShoppingBag } from "react-icons/md";
 import MenuItem from "@mui/material/MenuItem";
 import { useContext, useEffect, useState } from "react";
@@ -32,14 +31,19 @@ import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DashboardBox from "../Dashboard/components/dashboardBox";
 import SearchBox from "../../components/SearchBox";
-import Checkbox from "@mui/material/Checkbox";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import Skeleton from "@mui/material/Skeleton";
 
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
 
 //breadcrumb code
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
@@ -344,92 +348,95 @@ const Products = () => {
           <Skeleton variant="rectangular" width="100%" height={200} />
         ) : (
           <div className="table-responsive mt-3">
-            <table className="table table-bordered table-striped v-align">
-              <thead className="thead-dark">
-                <tr>
-                  <th style={{ width: "300px" }}>PRODUCT</th>
-                  <th>CATEGORY</th>
-                  <th>SUB CATEGORY</th>
-                  <th>BRAND</th>
-                  <th>PRICE</th>
-                  <th>RATING</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ width: 300 }}>PRODUCT</TableCell>
+                  <TableCell>CATEGORY</TableCell>
+                  <TableCell>SUB CATEGORY</TableCell>
+                  <TableCell>BRAND</TableCell>
+                  <TableCell>PRICE</TableCell>
+                  <TableCell>RATING</TableCell>
+                  <TableCell>ACTION</TableCell>
+                </TableRow>
+              </TableHead>
 
-              <tbody>
+              <TableBody>
                 {productList?.products?.length !== 0 &&
-                  productList?.products?.map((item, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>
-                          <div className="d-flex align-items-center productBox justify-content-around">
-                            <div className="imgWrapper">
-                              <div className="img card shadow m-0">
-                                <LazyLoadImage
-                                  alt={"image"}
-                                  effect="blur"
-                                  className="w-100"
-                                  src={item.images[0]}
-                                />
-                              </div>
-                            </div>
-                            <div className="info pl-3">
-                              <h6>{item?.name}</h6>
-                              <p>{item?.description}</p>
-                            </div>
-                          </div>
-                        </td>
-
-                        <td>{item?.category?.name}</td>
-                        <td>{item?.subCatName}</td>
-                        <td>{item?.brand}</td>
-                        <td>
-                          <div style={{ width: "70px" }}>
-                            <del className="old">Rs {item?.oldPrice}</del>
-                            <span className="new text-danger">
-                              Rs {item?.price}
-                            </span>
-                          </div>
-                        </td>
-                        <td>
-                          <Rating
-                            name="read-only"
-                            defaultValue={item?.rating}
-                            precision={0.5}
-                            size="small"
-                            readOnly
+                  productList?.products?.map((item, index) => (
+                    <TableRow hover key={index}>
+                      <TableCell>
+                        <Box display="flex" alignItems="center">
+                          <Avatar
+                            src={item.images[0]}
+                            variant="rounded"
+                            sx={{ width: 56, height: 56, mr: 2 }}
                           />
-                        </td>
+                          <Box>
+                            <h6>{item?.name}</h6>
+                            <p>{item?.description}</p>
+                          </Box>
+                        </Box>
+                      </TableCell>
 
-                        <td>
-                          <div className="actions d-flex align-items-center">
-                            <Link to={`/product/details/${item.id}`}>
-                              <Button className="secondary" color="secondary">
-                                <FaEye />
-                              </Button>
-                            </Link>
+                      <TableCell>{item?.category?.name}</TableCell>
+                      <TableCell>{item?.subCatName}</TableCell>
+                      <TableCell>{item?.brand}</TableCell>
+                      <TableCell>
+                        <div style={{ width: "70px" }}>
+                          <del className="old">Rs {item?.oldPrice}</del>
+                          <span className="new text-danger">Rs {item?.price}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Rating
+                          name="read-only"
+                          defaultValue={item?.rating}
+                          precision={0.5}
+                          size="small"
+                          readOnly
+                        />
+                      </TableCell>
 
-                            <Link to={`/product/edit/${item.id}`}>
-                              <Button className="success" color="success">
-                                <FaPencilAlt />
-                              </Button>
-                            </Link>
-
-                            <Button
-                              className="error"
-                              color="error"
-                              onClick={() => deleteProduct(item?.id)}
+                      <TableCell>
+                        <Box className="actions" display="flex" alignItems="center">
+                          <Tooltip title="View">
+                            <IconButton
+                              component={Link}
+                              to={`/product/details/${item.id}`}
+                              color="secondary"
                             >
-                              <MdDelete />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
+                              <FaEye />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip title="Edit">
+                            <IconButton
+                              component={Link}
+                              to={`/product/edit/${item.id}`}
+                              color="success"
+                            >
+                              <FaPencilAlt />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip title="Delete">
+                            <span>
+                              <IconButton
+                                color="error"
+                                disabled={item?.isActive === false || item?.isSystem}
+                                onClick={() => deleteProduct(item?.id)}
+                              >
+                                <MdDelete />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
 
             {productList?.totalPages > 1 && (
               <div className="d-flex tableFooter">
@@ -442,9 +449,9 @@ const Products = () => {
                   onChange={handleChange}
                 />
               </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
+        )}
         </div>
       </div>
     </>
