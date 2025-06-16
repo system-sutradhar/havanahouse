@@ -40,7 +40,6 @@ import EditHomeSideBanner from "./pages/HomeSideBanners/editHomeSideBanner";
 import HomeBottomBannersList from "./pages/HomeBottomBanners/bannerList";
 import EditHomeBottomBanner from "./pages/HomeBottomBanners/editHomeBottomBanner";
 import AppSettingsList from "./pages/AppSettings/list";
-import EditAppSetting from "./pages/AppSettings/edit";
 import MyAccount from "./pages/MyAccount";
 import Notifications from "./pages/Notifications";
 
@@ -308,7 +307,6 @@ function App() {
                 element={<EditHomeBottomBanner />}
               />
               <Route path="/appSettings" element={<AppSettingsList />} />
-              <Route path="/appSettings/edit/:id" element={<EditAppSetting />} />
               <Route path="/my-account" element={<MyAccount />} />
               <Route path="/notifications" element={<Notifications />} />
 

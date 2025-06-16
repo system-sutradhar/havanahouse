@@ -1,9 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import { fetchDataFromApi, deleteData, editData } from "../../utils/api";
 import logger from "../../utils/logger";
-import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
 import AddAppSetting from "./add";
+import EditAppSetting from "./edit";
 import Switch from "@mui/material/Switch";
 import { MyContext } from "../../App";
 import Container from "@mui/material/Container";
@@ -13,6 +18,7 @@ import Chip from "@mui/material/Chip";
 import { emphasize, styled } from "@mui/material/styles";
 import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { MdClose } from "react-icons/md";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -36,7 +42,9 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 
 const AppSettingsList = () => {
   const [settings, setSettings] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editId, setEditId] = useState(null);
   const context = useContext(MyContext);
 
   const getData = () => {
@@ -93,21 +101,73 @@ const AppSettingsList = () => {
               <StyledBreadcrumb label="App Settings" deleteIcon={<ExpandMoreIcon />} />
             </Breadcrumbs>
             <Button
-              variant="contained"
-              className="ml-3"
-              onClick={() => setShowForm(!showForm)}
+              className="btn-blue ml-3 pl-3 pr-3"
+              onClick={() => setOpenAdd(true)}
             >
-              {showForm ? "Close" : "Add Setting"}
+              Add Setting
             </Button>
           </Box>
         </Box>
       </div>
 
-      {showForm && (
-        <div className="card shadow border-0 p-3 mt-4">
-          <AddAppSetting onSuccess={() => { setShowForm(false); getData(); }} />
-        </div>
-      )}
+      <Dialog open={openAdd} onClose={() => setOpenAdd(false)} fullWidth maxWidth="sm">
+        <DialogTitle className="d-flex justify-content-between align-items-center">
+          Add App Setting
+          <IconButton onClick={() => setOpenAdd(false)}>
+            <MdClose />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <AddAppSetting
+            onSuccess={() => {
+              setOpenAdd(false);
+              getData();
+            }}
+            onClose={() => setOpenAdd(false)}
+            formId="add-setting-form"
+            hideActions
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setOpenAdd(false)}>
+            Cancel
+          </Button>
+          <Button variant="contained" form="add-setting-form" type="submit" className="btn-blue">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openEdit} onClose={() => setOpenEdit(false)} fullWidth maxWidth="sm">
+        <DialogTitle className="d-flex justify-content-between align-items-center">
+          Edit App Setting
+          <IconButton onClick={() => setOpenEdit(false)}>
+            <MdClose />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          {editId && (
+            <EditAppSetting
+              id={editId}
+              onSuccess={() => {
+                setOpenEdit(false);
+                getData();
+              }}
+              onClose={() => setOpenEdit(false)}
+              formId="edit-setting-form"
+              hideActions
+            />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setOpenEdit(false)}>
+            Cancel
+          </Button>
+          <Button variant="contained" form="edit-setting-form" type="submit" className="btn-blue">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <div className="card shadow border-0 p-3 mt-4">
         <div className="table-responsive mt-3">
@@ -151,9 +211,23 @@ const AppSettingsList = () => {
                     />
                   </td>
                   <td>
-                    <Link to={`/appSettings/edit/${item.id}`}>Edit</Link>
-                    {" | "}
-                    <Button size="small" onClick={() => deleteItem(item.id)}>
+                    <Button
+                      size="small"
+                      color="success"
+                      className="success"
+                      onClick={() => {
+                        setEditId(item.id);
+                        setOpenEdit(true);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      size="small"
+                      color="error"
+                      className="error"
+                      onClick={() => deleteItem(item.id)}
+                    >
                       Delete
                     </Button>
                   </td>

@@ -7,7 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { MyContext } from "../../App";
 import logger from "../../utils/logger";
 
-const AddAppSetting = ({ onSuccess }) => {
+const DEFAULT_FORM_ID = "add-setting-form";
+
+const AddAppSetting = ({
+  onSuccess,
+  onClose,
+  formId = DEFAULT_FORM_ID,
+  hideActions = false,
+}) => {
   const [formFields, setFormFields] = useState({
     name: "",
     prelogin: false,
@@ -37,12 +44,8 @@ const AddAppSetting = ({ onSuccess }) => {
   };
 
   return (
-    <div className="right-content w-100">
-      <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-        <h5 className="mb-0">Add App Setting</h5>
-      </div>
-      <form className="form" onSubmit={submitForm}>
-        <div className="card p-4 mt-0">
+    <form id={formId} className="form" onSubmit={submitForm}>
+      <div className="card p-4 mt-0">
           <div className="form-group">
             <h6>NAME</h6>
             <input
@@ -110,12 +113,18 @@ const AddAppSetting = ({ onSuccess }) => {
               className="form-check"
             />
           </div>
-          <Button variant="contained" type="submit" className="mt-2">
-            Submit
-          </Button>
+          {!hideActions && (
+            <Button
+              variant="contained"
+              type="submit"
+              className="btn-blue btn-lg btn-big mt-2"
+              fullWidth
+            >
+              Submit
+            </Button>
+          )}
         </div>
-      </form>
-    </div>
+    </form>
   );
 };
 

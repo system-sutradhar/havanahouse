@@ -8,6 +8,12 @@ import Chip from "@mui/material/Chip";
 import { emphasize, styled } from "@mui/material/styles";
 import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import { MdClose } from "react-icons/md";
 import { MyContext } from "../../App";
 import { fetchDataFromApi, postData, editData, deleteData } from "../../utils/api";
 import logger from "../../utils/logger";
@@ -35,7 +41,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 const Notifications = () => {
   const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const context = useContext(MyContext);
 
   const load = () => {
@@ -122,34 +128,52 @@ const Notifications = () => {
               <StyledBreadcrumb label="Notifications" deleteIcon={<ExpandMoreIcon />} />
             </Breadcrumbs>
             <Button
-              variant="contained"
-              className="ml-3"
-              onClick={() => setShowForm(!showForm)}
+              className="btn-blue ml-3 pl-3 pr-3"
+              onClick={() => setOpenModal(true)}
             >
-              {showForm ? "Close" : "Add Notification"}
+              Add Notification
             </Button>
           </Box>
         </Box>
       </div>
 
-      {showForm && (
-      <form className="form" onSubmit={addNotification}>
-        <div className="card shadow border-0 p-3 mt-4">
-          <div className="d-flex mb-3">
+      <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth maxWidth="sm">
+        <DialogTitle className="d-flex justify-content-between align-items-center">
+          Add Notification
+          <IconButton onClick={() => setOpenModal(false)}>
+            <MdClose />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <form id="add-notification-form" onSubmit={addNotification}>
             <TextField
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               label="Notification Message"
-              className="mr-3"
               fullWidth
               size="small"
+              required
             />
-            <Button variant="contained" type="submit">
-              Add
-            </Button>
-          </div>
-          <div className="table-responsive mt-3">
-            <table className="table table-bordered">
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setOpenModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            form="add-notification-form"
+            type="submit"
+            className="btn-blue"
+          >
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <div className="card shadow border-0 p-3 mt-4">
+        <div className="table-responsive mt-3">
+          <table className="table table-bordered">
             <thead className="thead-dark">
               <tr>
                 <th>Message</th>
@@ -181,9 +205,7 @@ const Notifications = () => {
             </tbody>
           </table>
         </div>
-        </div>
-      </form>
-      )}
+      </div>
     </Container>
   );
 };

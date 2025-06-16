@@ -7,8 +7,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { MyContext } from "../../App";
 import logger from "../../utils/logger";
 
-const EditAppSetting = () => {
-  const { id } = useParams();
+const DEFAULT_FORM_ID = "edit-setting-form";
+
+const EditAppSetting = ({
+  id: propId,
+  onSuccess,
+  onClose,
+  formId = DEFAULT_FORM_ID,
+  hideActions = false,
+}) => {
+  const params = useParams();
+  const id = propId || params.id;
   const [formFields, setFormFields] = useState({
     name: "",
     prelogin: false,
@@ -37,7 +46,11 @@ const EditAppSetting = () => {
     editData(`/api/appSettings/${id}`, formFields)
       .then(() => {
         context.setAlertBox({ open: true, error: false, msg: "Updated!" });
-        history("/appSettings");
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          history("/appSettings");
+        }
       })
       .catch((err) => {
         logger.error(err);
@@ -46,12 +59,8 @@ const EditAppSetting = () => {
   };
 
   return (
-    <div className="right-content w-100">
-      <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-        <h5 className="mb-0">Edit App Setting</h5>
-      </div>
-      <form className="form" onSubmit={submitForm}>
-        <div className="card p-4 mt-0">
+    <form id={formId} className="form" onSubmit={submitForm}>
+      <div className="card p-4 mt-0">
           <div className="form-group">
             <h6>NAME</h6>
             <input
@@ -118,12 +127,18 @@ const EditAppSetting = () => {
               className="form-check"
             />
           </div>
-          <Button variant="contained" type="submit" className="mt-2">
-            Update
-          </Button>
+          {!hideActions && (
+            <Button
+              variant="contained"
+              type="submit"
+              className="btn-blue btn-lg btn-big mt-2"
+              fullWidth
+            >
+              Update
+            </Button>
+          )}
         </div>
-      </form>
-    </div>
+    </form>
   );
 };
 
