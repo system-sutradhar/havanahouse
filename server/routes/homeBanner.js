@@ -14,8 +14,6 @@ cloudinary.config({
     secure: true
 });
 
-var imagesArr = [];
-
 const storage = multer.diskStorage({
 
     destination: function (req, file, cb) {
@@ -32,7 +30,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post(`/upload`, upload.array("images"), async (req, res) => {
-    imagesArr=[];
+    const imagesArr = [];
 
     try{
     
@@ -108,9 +106,8 @@ router.get('/:id', async (req, res) => {
 
 
 router.post('/create', async (req, res) => {
-
-    let newEntry = new HomeBanner({
-        images: imagesArr,
+    const newEntry = new HomeBanner({
+        images: req.body.images || [],
         type: req.body.type,
         overlayText: req.body.overlayText,
         ctaUrl: req.body.ctaUrl,
@@ -127,12 +124,8 @@ router.post('/create', async (req, res) => {
     }
 
 
-    newEntry = await newEntry.save();
-    
-    imagesArr = [];
-
-
-    res.status(201).json(newEntry);
+    const saved = await newEntry.save();
+    res.status(201).json(saved);
 
 });
 
@@ -211,8 +204,6 @@ router.put('/:id', async (req, res) => {
             success: false
         })
     }
-
-    imagesArr = [];
 
     res.send(slideItem);
 

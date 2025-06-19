@@ -36,7 +36,7 @@ The server listens on the `PORT` defined in the `.env` file (8000 in the sample)
 
 ## Environment Variables
 
-Each package relies on environment variables. Copy the provided `.env` files or create them manually using the following keys.
+Each package relies on environment variables. Copy the corresponding `.env.example` file to `.env` and fill in your own credentials.
 
 ### admin/.env
 ```
