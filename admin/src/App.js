@@ -79,7 +79,12 @@ function App() {
   const [selectedCountry, setselectedCountry] = useState("");
 
   const muiTheme = createTheme({
-    palette: { mode: theme },
+    palette: {
+      mode: theme,
+      background: {
+        default: theme === 'dark' ? '#071739' : '#ebe9e9',
+      },
+    },
     components: {
       MuiOutlinedInput: {
         styleOverrides: {
