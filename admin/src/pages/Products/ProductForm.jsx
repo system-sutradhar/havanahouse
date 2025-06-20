@@ -1,5 +1,5 @@
-import { useState, useContext } from 'react';
-import { Box, Grid, TextField, MenuItem, Rating } from '@mui/material';
+import { useState, useContext, useEffect } from 'react';
+import { Box, Grid, TextField, MenuItem, Rating, Select } from '@mui/material';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
@@ -7,26 +7,65 @@ import HomeIcon from '@mui/icons-material/Home';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { MyContext } from '../../App';
 import { uploadMedia } from '../../utils/cloudinaryService';
-import { postData } from '../../utils/api';
+import { postData, fetchDataFromApi } from '../../utils/api';
 
 export default function ProductForm({ onSuccess, onCancel }) {
   const context = useContext(MyContext);
+  const [subCats, setSubCats] = useState([]);
+  const [ramsList, setRamsList] = useState([]);
+  const [sizeList, setSizeList] = useState([]);
+  const [weightList, setWeightList] = useState([]);
   const [form, setForm] = useState({
     name: '',
     description: '',
     brand: '',
     price: '',
     oldPrice: '',
+    discount: '',
     countInStock: '',
     category: '',
+    subCategory: '',
+    isFeatured: '',
+    productRam: [],
+    productSize: [],
+    productWeight: [],
+    location: '',
     rating: 0,
     image: null,
   });
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    const arr = [];
+    context.catData?.categoryList?.forEach((cat) => {
+      if (Array.isArray(cat.children)) arr.push(...cat.children);
+    });
+    setSubCats(arr);
+  }, [context.catData]);
+
+  useEffect(() => {
+    fetchDataFromApi('/api/productRAMS').then((res) =>
+      setRamsList(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/productSIZE').then((res) =>
+      setSizeList(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/productWeight').then((res) =>
+      setWeightList(Array.isArray(res) ? res : [])
+    );
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleMultiChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: typeof value === 'string' ? value.split(',') : value,
+    }));
   };
 
   const handleImage = async (e) => {
@@ -78,13 +117,91 @@ export default function ProductForm({ onSuccess, onCancel }) {
             </TextField>
           </Grid>
           <Grid item xs={12} md={6}>
+            <TextField select name="subCategory" value={form.subCategory} onChange={handleChange} label="Sub Category" fullWidth>
+              <MenuItem value="">None</MenuItem>
+              {subCats.map((sub) => (
+                <MenuItem key={sub._id || sub.id} value={sub._id || sub.id}>{sub.name}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} md={6}>
             <TextField name="price" value={form.price} onChange={handleChange} label="Price" fullWidth type="number" />
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField name="oldPrice" value={form.oldPrice} onChange={handleChange} label="Old Price" fullWidth type="number" />
           </Grid>
           <Grid item xs={12} md={6}>
+            <TextField name="discount" value={form.discount} onChange={handleChange} label="Discount" fullWidth type="number" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField select name="isFeatured" value={form.isFeatured} onChange={handleChange} label="Is Featured" fullWidth>
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="yes">Yes</MenuItem>
+              <MenuItem value="no">No</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={12} md={6}>
             <TextField name="countInStock" value={form.countInStock} onChange={handleChange} label="Stock" fullWidth type="number" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Select
+              multiple
+              name="productRam"
+              value={form.productRam}
+              onChange={handleMultiChange}
+              fullWidth
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                Product RAMS
+              </MenuItem>
+              {ramsList.map((item) => (
+                <MenuItem key={item._id} value={item.productRam}>
+                  {item.productRam}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Select
+              multiple
+              name="productWeight"
+              value={form.productWeight}
+              onChange={handleMultiChange}
+              fullWidth
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                Product Weight
+              </MenuItem>
+              {weightList.map((item) => (
+                <MenuItem key={item._id} value={item.productWeight}>
+                  {item.productWeight}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Select
+              multiple
+              name="productSize"
+              value={form.productSize}
+              onChange={handleMultiChange}
+              fullWidth
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                Product Size
+              </MenuItem>
+              {sizeList.map((item) => (
+                <MenuItem key={item._id} value={item.size}>
+                  {item.size}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="location" value={form.location} onChange={handleChange} label="Location" fullWidth />
           </Grid>
           <Grid item xs={12} md={6}>
             <Rating name="rating" value={form.rating} onChange={(e, val) => setForm((p)=>({...p, rating: val}))} />
