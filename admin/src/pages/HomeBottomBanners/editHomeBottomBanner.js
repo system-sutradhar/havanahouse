@@ -1,9 +1,6 @@
 import React from "react";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { emphasize, styled } from "@mui/material/styles";
-import Chip from "@mui/material/Chip";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
 import { useContext, useEffect, useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from "@mui/material/Button";
@@ -28,26 +25,6 @@ import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
-//breadcrumb code
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-  const backgroundColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[800];
-  return {
-    backgroundColor,
-    height: theme.spacing(3),
-    color: theme.palette.text.primary,
-    fontWeight: theme.typography.fontWeightRegular,
-    "&:hover, &:focus": {
-      backgroundColor: emphasize(backgroundColor, 0.06),
-    },
-    "&:active": {
-      boxShadow: theme.shadows[1],
-      backgroundColor: emphasize(backgroundColor, 0.12),
-    },
-  };
-});
 
 const EditBanner = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -284,28 +261,14 @@ const EditBanner = () => {
   };
 
   return (
-    <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-          <h5 className="mb-0">Edit Banner</h5>
-          <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-            <StyledBreadcrumb
-              component="a"
-              href="#"
-              label="Dashboard"
-              icon={<HomeIcon fontSize="small" />}
-            />
-
-            <StyledBreadcrumb
-              component="a"
-              label="Edit Banner"
-              href="#"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-          </Breadcrumbs>
-        </div>
-
-        <form className="form" onSubmit={editSlide}>
+    <AdminPageLayout
+      title="Edit Banner"
+      breadcrumbs={[
+        { icon: <HomeIcon />, label: "Dashboard", href: "/" },
+        { label: "Edit Banner" },
+      ]}
+    >
+      <form className="form" onSubmit={editSlide}>
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
@@ -442,8 +405,7 @@ const EditBanner = () => {
             </div>
           </div>
         </form>
-      </div>
-    </>
+    </AdminPageLayout>
   );
 };
 

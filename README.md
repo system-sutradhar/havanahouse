@@ -87,3 +87,19 @@ CLOUDINARY_API_SECRET=<cloudinary secret>
 ```
 
 After configuring the environment variables, start each package as shown above.
+
+## Running Tests
+
+The server includes a small Jest test suite. Run it with:
+
+```bash
+cd server
+npm test
+```
+
+The admin app also contains Jest/React Testing Library tests:
+
+```bash
+cd admin
+npm test
+```
