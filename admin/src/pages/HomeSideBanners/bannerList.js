@@ -97,7 +97,6 @@ const BannersList = () => {
           />
         </div>
       </AdminPageLayout>
-    </>
   );
 };
 

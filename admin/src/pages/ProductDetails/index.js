@@ -20,8 +20,9 @@ import { useState } from "react";
 import { fetchDataFromApi } from "../../utils/api";
 import ProductZoom from '../../components/ProductZoom';
 
-//breadcrumb code
+// breadcrumb code
 
+const ProductDetails = () => {
     const [productData, setProductData] = useState([]);
     const [reviewsData, setreviewsData] = useState([]);
 

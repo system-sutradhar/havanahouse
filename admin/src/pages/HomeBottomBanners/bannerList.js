@@ -20,8 +20,7 @@ import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-//breadcrumb code
-});
+// breadcrumb code
 
 const BannersList = () => {
   const [slideList, setSlideList] = useState([]);
