@@ -1,53 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 import BaseModal from "../../components/common/BaseModal";
-
-import { FaPencilAlt } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import { CancelButton } from "../../components/common/ActionButtons";
-import Pagination from "@mui/material/Pagination";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
+import BaseTable from "../../components/common/BaseTable";
+import { AddButton, CancelButton } from "../../components/common/ActionButtons";
 import { MyContext } from "../../App";
-
-import { Link } from "react-router-dom";
 import AddHomeSlide from "./addHomeSlide";
-
-import { emphasize, styled } from "@mui/material/styles";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Chip from "@mui/material/Chip";
 import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import SlideshowIcon from "@mui/icons-material/Slideshow";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-
-import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
-
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
-//breadcrumb code
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-  const backgroundColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[800];
-  return {
-    backgroundColor,
-    height: theme.spacing(3),
-    color: theme.palette.text.primary,
-    fontWeight: theme.typography.fontWeightRegular,
-    "&:hover, &:focus": {
-      backgroundColor: emphasize(backgroundColor, 0.06),
-    },
-    "&:active": {
-      boxShadow: theme.shadows[1],
-      backgroundColor: emphasize(backgroundColor, 0.12),
-    },
-  };
-});
+import { deleteData, fetchDataFromApi } from "../../utils/api";
 
 const HomeSlidesList = () => {
   const [slideList, setSlideList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
 
   const context = useContext(MyContext);
 
@@ -77,132 +45,56 @@ const HomeSlidesList = () => {
     });
   };
 
+  const columns = [
+    {
+      label: "Image",
+      render: (row) => (
+        <LazyLoadImage alt="slide" effect="blur" src={row.images[0]} style={{ width: 150 }} />
+      ),
+    },
+    { label: "Overlay Text", field: "overlayText" },
+    { label: "CTA URL", field: "ctaUrl" },
+    { label: "Position", render: (row) => row.position && row.position.replace(/-/g, " ") },
+  ];
+
   return (
-    <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-          <h5 className="mb-0">Home Banner Slide List</h5>
-
-          <div className="ml-auto d-flex align-items-center">
-            <Breadcrumbs
-              aria-label="breadcrumb"
-              className="ml-auto breadcrumbs_"
-            >
-              <StyledBreadcrumb
-                component="a"
-                href="#"
-                label="Dashboard"
-                icon={<HomeIcon fontSize="small" />}
-              />
-
-              <StyledBreadcrumb
-                label="Home Banner Slide"
-                deleteIcon={<ExpandMoreIcon />}
-              />
-            </Breadcrumbs>
-
-            <Button
-              className="btn-blue  ml-3 pl-3 pr-3"
-              onClick={() => setOpenModal(true)}
-            >
-              Add Home Slide
-            </Button>
-          </div>
-        </div>
-
-        <BaseModal
-          open={openModal}
+    <AdminPageLayout
+      title="Home Banner Slide List"
+      breadcrumbPath={[
+        { icon: <HomeIcon />, label: "Dashboard", href: "/" },
+        { icon: <SlideshowIcon />, label: "Home Slides", href: "/homeBannerSlide" },
+      ]}
+      actions={<AddButton label="Add Home Slide" onClick={() => setOpenModal(true)} />}
+    >
+      <BaseModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        title="Add Home Slide"
+        actions={
+          <>
+            <CancelButton onClick={() => setOpenModal(false)} />
+            <AddButton label="Publish" form="add-slide-form" type="submit" />
+          </>
+        }
+      >
+        <AddHomeSlide
+          onSuccess={() => {
+            setOpenModal(false);
+            loadSlides();
+          }}
           onClose={() => setOpenModal(false)}
-          title="Add Home Slide"
-          actions={
-            <>
-              <CancelButton onClick={() => setOpenModal(false)} />
-              <Button variant="contained" form="add-slide-form" type="submit" className="btn-blue">
-                Publish
-              </Button>
-            </>
-          }
-        >
-          <AddHomeSlide
-            onSuccess={() => {
-              setOpenModal(false);
-              loadSlides();
-            }}
-            onClose={() => setOpenModal(false)}
-            formId="add-slide-form"
-            hideActions
-          />
-        </BaseModal>
+          formId="add-slide-form"
+          hideActions
+        />
+      </BaseModal>
 
-        <div className="card shadow border-0 p-3 mt-4">
-          <div className="table-responsive mt-3">
-            <table className="table table-bordered table-striped v-align">
-              <thead className="thead-dark">
-                <tr>
-                  <th style={{ width: "200px" }}>IMAGE</th>
-                  <th>OVERLAY TEXT</th>
-                  <th>CTA URL</th>
-                  <th>POSITION</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {slideList?.length !== 0 &&
-                  slideList?.map((item, index) => {
-                    return (
-                      <tr key={item.id ?? index}>
-                        <td>
-                          <div
-                            className="d-flex align-items-center "
-                            style={{ width: "200px" }}
-                          >
-                            <div
-                              className="imgWrapper"
-                              style={{ width: "200px", flex: "0 0 200px" }}
-                            >
-                              <div className="img card shadow m-0">
-                                <LazyLoadImage
-                                  alt={"image"}
-                                  effect="blur"
-                                  className="w-100"
-                                  src={item.images[0]}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-
-                        <td>{item.overlayText}</td>
-                        <td>{item.ctaUrl}</td>
-                        <td className="text-capitalize">{item.position}</td>
-                        <td>
-                          <div className="actions d-flex align-items-center">
-                            <Link to={`/homeBannerSlide/edit/${item.id}`}>
-                              {" "}
-                              <Button className="success" color="success">
-                                <FaPencilAlt />
-                              </Button>
-                            </Link>
-
-                            <Button
-                              className="error"
-                              color="error"
-                              onClick={() => deleteSlide(item.id)}
-                            >
-                              <MdDelete />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </>
+      <BaseTable
+        columns={columns}
+        rows={slideList}
+        onEdit={(row) => navigate(`/homeBannerSlide/edit/${row.id}`)}
+        onDelete={(row) => deleteSlide(row.id)}
+      />
+    </AdminPageLayout>
   );
 };
 
