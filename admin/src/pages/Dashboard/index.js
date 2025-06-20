@@ -27,6 +27,8 @@ import { MyContext } from "../../App";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
+import AdminPageLayout from "../../components/common/AdminPageLayout";
+
 import Rating from "@mui/material/Rating";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
 
@@ -193,7 +195,7 @@ const Dashboard = () => {
 
 
   return (
-    <>
+    <AdminPageLayout title="Dashboard">
       <div className="right-content w-100">
         <div className="row dashboardBoxWrapperRow dashboard_Box dashboardBoxWrapperRowV2">
           <div className="col-md-12">
@@ -415,7 +417,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </>
+    </AdminPageLayout>
   );
 };
 
