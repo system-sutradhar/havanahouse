@@ -10,7 +10,10 @@ import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
 import BaseModal from "../../components/common/BaseModal";
 import BaseTable from "../../components/common/BaseTable";
 import { MyContext } from "../../App";
-import { fetchDataFromApi, postData, editData, deleteData, uploadImage } from "../../utils/api";
+import { fetchDataFromApi, postData, editData, deleteData } from "../../utils/api";
+import { uploadMedia } from '../../utils/cloudinaryService';
+import HomeIcon from '@mui/icons-material/Home';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import logger from "../../utils/logger";
 
 
@@ -25,12 +28,10 @@ const Notifications = () => {
   const handleFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const formData = new FormData();
-    formData.append('image', file);
     try {
-      const res = await uploadImage('/api/notifications/upload', formData);
-      setImage(res.data.url);
-      setPreview(res.data.url);
+      const res = await uploadMedia(file);
+      setImage(res.url);
+      setPreview(res.url);
     } catch (err) {
       logger.error(err);
     }
@@ -104,7 +105,10 @@ const Notifications = () => {
   return (
     <AdminPageLayout
       title="Notifications"
-      breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}
+      breadcrumbPath={[
+        { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+        { icon: <NotificationsIcon fontSize="inherit" />, label: 'Notifications', href: '/notifications' },
+      ]}
       actions={<AddButton onClick={() => setOpenModal(true)} label="Add Notification" />}
     >
 

@@ -18,6 +18,8 @@ import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import AddBanner from "./addHomeBanner";
 import BaseTable from "../../components/common/BaseTable";
 import AdminPageLayout from "../../components/common/AdminPageLayout";
+import HomeIcon from '@mui/icons-material/Home';
+import ImageIcon from '@mui/icons-material/Image';
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -59,7 +61,10 @@ const BannersList = () => {
     <>
       <AdminPageLayout
         title="Banner Slide List"
-        breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}
+        breadcrumbPath={[
+          { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+          { icon: <ImageIcon fontSize="inherit" />, label: 'Banners', href: '/banners' },
+        ]}
         actions={
           <AddButton
             onClick={() => setShowForm(!showForm)}

@@ -1,4 +1,6 @@
 import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
+import HomeIcon from '@mui/icons-material/Home';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -502,8 +504,8 @@ const ProductUpload = ({ onSuccess }) => {
           <AppBreadcrumbs
             title="Product Upload"
             path={[
-              { label: 'Dashboard', href: '/' },
-              { label: 'Products', href: '/products' },
+              { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+              { icon: <StorefrontIcon fontSize="inherit" />, label: 'Products', href: '/products' },
             ]}
           />
         </div>

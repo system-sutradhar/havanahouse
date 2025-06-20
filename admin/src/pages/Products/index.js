@@ -35,6 +35,8 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import Skeleton from "@mui/material/Skeleton";
+import HomeIcon from '@mui/icons-material/Home';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 
 
 
@@ -156,7 +158,13 @@ const Products = () => {
 
   return (
     <>
-      <AdminPageLayout title="Product List" breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}> 
+      <AdminPageLayout
+        title="Product List"
+        breadcrumbPath={[
+          { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+          { icon: <StorefrontIcon fontSize="inherit" />, label: 'Products', href: '/products' },
+        ]}
+      >
 
         <div className="row dashboardBoxWrapperRow dashboardBoxWrapperRowV2 pt-0">
           <div className="col-md-12">

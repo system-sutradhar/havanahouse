@@ -1,0 +1,19 @@
+import axios from 'axios';
+
+const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+
+export async function uploadMedia(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', UPLOAD_PRESET);
+  const { data } = await axios.post(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
+    formData
+  );
+  return { url: data.secure_url, public_id: data.public_id };
+}
+
+export function deleteMedia(publicId) {
+  return axios.post('/api/cloudinary/delete', { publicId });
+}

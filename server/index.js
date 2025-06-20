@@ -33,6 +33,7 @@ const homeSideBannerSchema = require('./routes/homeSideBanner.js');
 const homeBottomBannerSchema = require('./routes/homeBottomBanner.js');
 const appSettingsRoutes = require('./routes/appSettings.js');
 const notificationsRoutes = require('./routes/notifications');
+const cloudinaryRoutes = require('./routes/cloudinary');
 const syncRoutes = require("./routes/sync");
 
 app.use("/api/user",userRoutes);
@@ -55,6 +56,7 @@ app.use(`/api/homeBottomBanners`, homeBottomBannerSchema);
 app.use(`/api/appSettings`, appSettingsRoutes);
 app.use("/api", syncRoutes);
 app.use('/api', notificationsRoutes);
+app.use('/api/cloudinary', cloudinaryRoutes);
 
 
 

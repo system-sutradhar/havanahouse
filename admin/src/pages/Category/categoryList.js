@@ -18,6 +18,8 @@ import BaseTable from '../../components/common/BaseTable';
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import AddCategory from "./addCategory";
 import AdminPageLayout from '../../components/common/AdminPageLayout';
+import HomeIcon from '@mui/icons-material/Home';
+import CategoryIcon from '@mui/icons-material/Category';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -66,7 +68,10 @@ const Category = () => {
         <>
             <AdminPageLayout
                 title="Category List"
-                breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}
+                breadcrumbPath={[
+                    { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+                    { icon: <CategoryIcon fontSize="inherit" />, label: 'Categories', href: '/categories' },
+                ]}
                 actions={
                     <AddButton
                         onClick={() => setShowForm(!showForm)}

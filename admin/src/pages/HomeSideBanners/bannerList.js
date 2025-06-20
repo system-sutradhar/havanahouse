@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import AddHomeSideBanner from "./addHomeSideBanner";
 
 import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
+import HomeIcon from '@mui/icons-material/Home';
+import ImageIcon from '@mui/icons-material/Image';
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -61,7 +63,13 @@ const BannersList = () => {
           <h5 className="mb-0">Home Side Banner List</h5>
 
           <div className="ml-auto d-flex align-items-center">
-            <AppBreadcrumbs title="Banners" path={[{ label: 'Dashboard', href: '/' }]} />
+            <AppBreadcrumbs
+              title="Banners"
+              path={[
+                { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+                { icon: <ImageIcon fontSize="inherit" />, label: 'Banners', href: '/banners' },
+              ]}
+            />
 
             <AddButton
               onClick={() => setShowForm(!showForm)}

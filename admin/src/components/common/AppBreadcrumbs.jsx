@@ -2,6 +2,7 @@ import React from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 
 const toCamel = (str = '') =>
   str
@@ -12,11 +13,15 @@ const toCamel = (str = '') =>
 const AppBreadcrumbs = ({ title, path = [] }) => (
   <Breadcrumbs separator="›" aria-label="breadcrumb" className="ml-auto breadcrumbs_">
     {path.map((item, idx) => {
-      const label = typeof item === 'string' ? item : item.label;
-      const href = typeof item === 'string' ? `/${toCamel(item)}` : item.href || '#';
+      const obj = typeof item === 'string' ? { label: item } : item;
+      const label = obj.label;
+      const href = obj.href || `/${toCamel(label)}`;
       return (
         <Link underline="hover" color="inherit" href={href} key={idx}>
-          {label}
+          <Stack direction="row" alignItems="center" spacing={0.5}>
+            {obj.icon}
+            <span>{label}</span>
+          </Stack>
         </Link>
       );
     })}

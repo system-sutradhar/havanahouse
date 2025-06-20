@@ -13,6 +13,8 @@ import { MdOutlineEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 import { MdOutlineDateRange } from "react-icons/md";
+import HomeIcon from '@mui/icons-material/Home';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -114,7 +116,13 @@ const Orders = () => {
 
   return (
     <>
-      <AdminPageLayout title="Orders List" breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}> 
+      <AdminPageLayout
+        title="Orders List"
+        breadcrumbPath={[
+          { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+          { icon: <ListAltIcon fontSize="inherit" />, label: 'Orders', href: '/orders' },
+        ]}
+      >
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3 orderTable">
