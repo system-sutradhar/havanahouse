@@ -6,6 +6,8 @@ import { Navigation } from 'swiper/modules';
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import { useRef, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const ProductZoom = (props) => {
     const [slideIndex, setSlideIndex] = useState(0);
@@ -32,19 +34,23 @@ const ProductZoom = (props) => {
                     className="zoomSliderBig"
                     ref={zoomSliderBig}
                 >
-                    {
-                        props?.images?.map((img, index) => {
-                            return (
-                                <SwiperSlide key={index}>
-                                    <div className='item'>
-                                        <InnerImageZoom
-                                            zoomType="hover" zoomScale={1}
-                                            src={img} />
-                                    </div>
-                                </SwiperSlide>
-                            )
-                        })
-                    }
+                    {props?.images?.length ? (
+                        props.images.map((img, index) => (
+                            <SwiperSlide key={index}>
+                                <div className='item'>
+                                    <InnerImageZoom
+                                        zoomType="hover"
+                                        zoomScale={1}
+                                        src={img}
+                                        alt={`Product image ${index + 1}`}
+                                        loading={index === 0 ? 'eager' : 'lazy'}
+                                    />
+                                </div>
+                            </SwiperSlide>
+                        ))
+                    ) : (
+                        <div className='placeholder-image' aria-label='No image available' />
+                    )}
 
 
                 </Swiper>
@@ -61,17 +67,23 @@ const ProductZoom = (props) => {
                 className="zoomSlider"
                 ref={zoomSlider}
             >
-            {
-                props?.images?.map((img, index) => {
-                    return (
-                        <SwiperSlide key={index}>
-                            <div className={`item ${slideIndex === index && 'item_active'}`} key={index}>
-                                <img src={img} className='w-100' onClick={() => goto(index)} />
-                            </div>
-                        </SwiperSlide>
-                    )
-                })
-            }
+            {props?.images?.length ? (
+                props.images.map((img, index) => (
+                    <SwiperSlide key={index}>
+                        <div className={`item ${slideIndex === index && 'item_active'}`} key={index}>
+                            <LazyLoadImage
+                                src={img}
+                                alt={`Thumbnail ${index + 1}`}
+                                className='w-100'
+                                onClick={() => goto(index)}
+                                effect='blur'
+                            />
+                        </div>
+                    </SwiperSlide>
+                ))
+            ) : (
+                <div className='placeholder-image' aria-label='No image available' />
+            )}
 
                
 
