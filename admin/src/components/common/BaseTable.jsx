@@ -23,6 +23,9 @@ export default function BaseTable({ columns = [], rows = [], onEdit, onDelete })
             color: 'var(--text-color)',
             fontWeight: 'bold',
           },
+          '& tbody td': {
+            color: 'var(--text-color)',
+          },
           '& tbody tr:hover': {
             backgroundColor: 'var(--table-row-bg)',
           },

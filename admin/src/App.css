@@ -339,7 +339,7 @@ table td .text-blue{color:blue !important;}
 
 
 .table-striped tbody tr:nth-of-type(odd){background: var(--table-row-bg);}
-body.dark .table-striped tbody tr:nth-of-type(odd){background: rgba(0,0,0,0.2) !important;}
+body.dark .table-striped tbody tr:nth-of-type(odd){background: var(--table-row-bg) !important;}
 
 .table th{white-space: nowrap;}
 
@@ -392,7 +392,7 @@ table td .info h6{overflow: hidden;
 
  .tableFooter p{ font-size: 14px; font-weight: 500; margin-bottom: 0px;}
 
- body.dark table td{color: rgba(255,255,255,0.5) !important;}
+body.dark table td{color: var(--text-color) !important;}
 
  .css-1to7aaw-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected{background-color: var(--primary-color) !important;}
 
