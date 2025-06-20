@@ -17,7 +17,6 @@ import {
   postData,
   uploadImage,
 } from "../../utils/api";
-import { useNavigate } from "react-router-dom";
 import { FaRegImages } from "react-icons/fa";
 import { MyContext } from "../../App";
 
@@ -48,26 +47,24 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 });
 
-const AddBanner = () => {
+const AddBanner = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formFields, setFormFields] = useState({
     images: [],
-    catName: null,
-    catId: null,
-    subCat: null,
-    subCatId: null,
-    subCatName: null,
+    catName: "",
+    catId: "",
+    subCat: "",
+    subCatId: "",
+    subCatName: "",
   });
 
   const [previews, setPreviews] = useState([]);
-  const [categoryVal, setcategoryVal] = useState(null);
-  const [subCatVal, setSubCatVal] = useState(null);
+  const [categoryVal, setcategoryVal] = useState("");
+  const [subCatVal, setSubCatVal] = useState("");
   const [subCatData, setSubCatData] = useState([]);
 
   const formdata = new FormData();
-
-  const history = useNavigate();
 
   const context = useContext(MyContext);
 
@@ -195,10 +192,13 @@ const AddBanner = () => {
   };
 
   const handleChangeCategory = (event) => {
-    setcategoryVal(event.target.value);
-    setFormFields(() => ({
-      ...formFields,
-      category: event.target.value,
+    const val = event.target.value;
+    setcategoryVal(val);
+    setFormFields((prev) => ({
+      ...prev,
+      category: val,
+      catName: val === "" ? "" : prev.catName,
+      catId: val === "" ? "" : prev.catId,
     }));
   };
 
@@ -218,8 +218,12 @@ const AddBanner = () => {
 }
 
   const handleChangeSubCategory = (event) => {
-    setSubCatVal(event.target.value);
-};
+    const val = event.target.value;
+    setSubCatVal(val);
+    if (val === "") {
+      setFormFields((prev) => ({ ...prev, subCat: "", subCatName: "", subCatId: "" }));
+    }
+  };
 
   const addHomeBanner = (e) => {
     e.preventDefault();
@@ -245,7 +249,7 @@ const AddBanner = () => {
 
         deleteData("/api/imageUpload/deleteAllImages");
 
-        history("/banners");
+        if (onSuccess) onSuccess();
       });
     } else {
       context.setAlertBox({
@@ -259,31 +263,7 @@ const AddBanner = () => {
 
   return (
     <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-          <h5 className="mb-0">Add Home Banner</h5>
-          <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-            <StyledBreadcrumb
-              component="a"
-              href="#"
-              label="Dashboard"
-              icon={<HomeIcon fontSize="small" />}
-            />
-
-            <StyledBreadcrumb
-              component="a"
-              label="Home Banners"
-              href="#"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-            <StyledBreadcrumb
-              label="Add Home Banner"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-          </Breadcrumbs>
-        </div>
-
-        <form className="form" onSubmit={addHomeBanner}>
+      <form className="form" onSubmit={addHomeBanner}>
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
@@ -297,9 +277,10 @@ const AddBanner = () => {
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
                         className="w-100"
+                        required
                       >
                         <MenuItem value="">
-                          <em value={null}>None</em>
+                          <em>None</em>
                         </MenuItem>
                         {context.catData?.categoryList?.length !== 0 &&
                           context.catData?.categoryList?.map((cat, index) => {
@@ -327,9 +308,10 @@ const AddBanner = () => {
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
                         className="w-100"
+                        required
                       >
                         <MenuItem value="">
-                          <em value={null}>None</em>
+                          <em>None</em>
                         </MenuItem>
                         {subCatData?.length !== 0 &&
                           subCatData?.map((subCat, index) => {
@@ -420,7 +402,6 @@ const AddBanner = () => {
             </div>
           </div>
         </form>
-      </div>
     </>
   );
 };

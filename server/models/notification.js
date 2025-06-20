@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const notificationSchema = new mongoose.Schema(
   {
     message: { type: String, required: true },
+    image: { type: String },
     isPublished: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
   },

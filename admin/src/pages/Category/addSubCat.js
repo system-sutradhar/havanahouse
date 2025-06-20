@@ -8,7 +8,6 @@ import { useContext, useEffect, useState } from 'react';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from '@mui/material/Button';
 import { deleteData, deleteImages, editData, fetchDataFromApi, postData, uploadImage } from '../../utils/api';
-import { useNavigate } from 'react-router-dom';
 import { FaRegImages } from "react-icons/fa";
 import { MyContext } from '../../App';
 
@@ -42,7 +41,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const AddSubCat = () => {
+const AddSubCat = ({ onSuccess }) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -60,7 +59,6 @@ const AddSubCat = () => {
 
     const formdata = new FormData();
 
-    const history = useNavigate();
 
     const context = useContext(MyContext);
 
@@ -91,70 +89,43 @@ const AddSubCat = () => {
     }
 
 
-    const addSubCategory = (e) => {
+    const addSubCategory = async (e) => {
         e.preventDefault();
 
-        console.log(formFields)
+        formFields.slug = formFields.name;
 
-        formFields.slug = formFields.name
-
-        if (formFields.name !== "" && formFields.parentId!=="") {
-            setIsLoading(true);
-
-            postData(`/api/category/create`, formFields).then((res) => {
-                // console.log(res);
+        if (formFields.name !== "" && formFields.parentId !== "") {
+            try {
+                setIsLoading(true);
+                await postData(`/api/category/create`, formFields);
                 setIsLoading(false);
                 context.fetchCategory();
-            
-
                 deleteData("/api/imageUpload/deleteAllImages");
-
-                history('/subCategory');
-            });
-
-        }
-
-        else {
+                if (onSuccess) onSuccess();
+            } catch (err) {
+                setIsLoading(false);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: 'Failed to add sub category',
+                });
+            }
+        } else {
             context.setAlertBox({
                 open: true,
                 error: true,
                 msg: 'Please fill all the details'
             });
-            return false;
         }
 
     }
 
     return (
         <>
-            <div className="right-content w-100">
-                <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-                    <h5 className="mb-0">Add Category</h5>
-                    <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-                        <StyledBreadcrumb
-                            component="a"
-                            href="#"
-                            label="Dashboard"
-                            icon={<HomeIcon fontSize="small" />}
-                        />
-
-                        <StyledBreadcrumb
-                            component="a"
-                            label="Category"
-                            href="#"
-                            deleteIcon={<ExpandMoreIcon />}
-                        />
-                        <StyledBreadcrumb
-                            label="Add Category"
-                            deleteIcon={<ExpandMoreIcon />}
-                        />
-                    </Breadcrumbs>
-                </div>
-
-                <form className='form' onSubmit={addSubCategory}>
-                    <div className='row'>
-                        <div className='col-sm-9'>
-                            <div className='card p-4 mt-0'>
+            <form className='form' onSubmit={addSubCategory}>
+                <div className='row'>
+                    <div className='col-sm-9'>
+                        <div className='card p-4 mt-0'>
 
                                 <div className='form-group'>
                                     <h6>Parent Category</h6>
@@ -199,8 +170,6 @@ const AddSubCat = () => {
 
                     </div>
                 </form>
-
-            </div>
         </>
     )
 }

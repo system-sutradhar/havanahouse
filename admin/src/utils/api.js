@@ -1,4 +1,5 @@
 import axios from "axios";
+import logger from "./logger";
 
 const token=localStorage.getItem("token");
 
@@ -15,7 +16,7 @@ export const fetchDataFromApi = async (url) => {
         const { data } = await axios.get(process.env.REACT_APP_BASE_URL + url,params)
         return data;
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         return error;
     }
 }
@@ -52,7 +53,7 @@ export const postData = async (url, formData) => {
         }
 
     } catch (error) {
-        console.error('Error:', error);
+        logger.error('Error:', error);
     }
 
 

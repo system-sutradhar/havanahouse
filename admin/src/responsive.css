@@ -8,7 +8,7 @@
   header{padding: 15px 0px; height: auto;}
   header .part1,header .part3{padding: 0px !important;}
   header .part1{max-width: 40% !important; flex: 0 0 40% !important;}
-  header .logo img{width: 35px !important;}
+  header .logo img{width: 100px !important;}
   header .logo span{font-size: 16px;}
 
   header .part3{max-width: 60% !important; flex: 0 0 60% !important;}

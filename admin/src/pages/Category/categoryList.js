@@ -18,6 +18,9 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
+import AddCategory from "./addCategory";
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -47,16 +50,20 @@ const Category = () => {
 
     const [catData, setCatData] = useState([]);
     const [isLoadingBar, setIsLoadingBar] = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const context = useContext(MyContext);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
+    const loadCategories = () => {
         context.setProgress(20)
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
             context.setProgress(100);
         })
+    }
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        loadCategories();
     }, []);
 
     const deleteCat = (id) => {
@@ -65,16 +72,13 @@ const Category = () => {
         context.setProgress(30);
         deleteData(`/api/category/${id}`).then(res => {
             context.setProgress(100);
-            fetchDataFromApi('/api/category').then((res) => {
-                setCatData(res);
-                context.setProgress(100);
-                context.setProgress({
-                    open: true,
-                    error: false,
-                    msg: "Category Deleted!"
-                })
-                setIsLoadingBar(false);
+            loadCategories();
+            context.setProgress({
+                open: true,
+                error: false,
+                msg: "Category Deleted!"
             })
+            setIsLoadingBar(false);
         })
     }
 
@@ -82,31 +86,36 @@ const Category = () => {
 
     return (
         <>
-            <div className="right-content w-100">
-                <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-                    <h5 className="mb-0">Category List</h5>
+            <Container className="right-content" maxWidth={false}>
+                <div className="card shadow border-0 w-100 p-4">
+                    <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+                        <h5 className="mb-0">Category List</h5>
+                        <Box display="flex" alignItems="center">
+                            <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs_">
+                                <StyledBreadcrumb
+                                    component="a"
+                                    href="#"
+                                    label="Dashboard"
+                                    icon={<HomeIcon fontSize="small" />}
+                                />
 
-                    <div className="ml-auto d-flex align-items-center">
-                        <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-                            <StyledBreadcrumb
-                                component="a"
-                                href="#"
-                                label="Dashboard"
-                                icon={<HomeIcon fontSize="small" />}
-                            />
-
-                            <StyledBreadcrumb
-                                label="Category"
-                                deleteIcon={<ExpandMoreIcon />}
-
-                            />
-                        </Breadcrumbs>
-
-                        <Link to="/category/add"><Button className="btn-blue  ml-3 pl-3 pr-3">Add Category</Button></Link>
-
-
-                    </div>
+                                <StyledBreadcrumb
+                                    label="Category"
+                                    deleteIcon={<ExpandMoreIcon />}
+                                />
+                            </Breadcrumbs>
+                            <Button className="btn-blue  ml-3 pl-3 pr-3" onClick={() => setShowForm(!showForm)}>
+                                {showForm ? "Close" : "Add Category"}
+                            </Button>
+                        </Box>
+                    </Box>
                 </div>
+
+                {showForm && (
+                    <div className="card shadow border-0 p-3 mt-4">
+                        <AddCategory onSuccess={() => { setShowForm(false); loadCategories(); }} />
+                    </div>
+                )}
 
                 <div className="card shadow border-0 p-3 mt-4">
                     <div className="table-responsive mt-3">
@@ -168,9 +177,8 @@ const Category = () => {
                     </div>
 
 
-                </div>
             </div>
-
+        </Container>
 
         </>
     )

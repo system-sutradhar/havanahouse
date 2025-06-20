@@ -22,8 +22,6 @@ cloudinary.config({
   secure: true,
 });
 
-var imagesArr = [];
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
@@ -38,24 +36,19 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post(`/upload`, upload.array("images"), async (req, res) => {
-  imagesArr = [];
+  let imagesArr = [];
 
   try {
-    for (let i = 0; i < req.files?.length; i++) {
+    for (const file of req.files || []) {
       const options = {
         use_filename: true,
         unique_filename: false,
         overwrite: false,
       };
 
-      const img = await cloudinary.uploader.upload(
-        req.files[i].path,
-        options,
-        function (error, result) {
-          imagesArr.push(result.secure_url);
-          fs.unlinkSync(`uploads/${req.files[i].filename}`);
-        }
-      );
+      const result = await cloudinary.uploader.upload(file.path, options);
+      imagesArr.push(result.secure_url);
+      fs.unlinkSync(file.path);
     }
 
     let imagesUploaded = new ImageUpload({
@@ -66,7 +59,8 @@ router.post(`/upload`, upload.array("images"), async (req, res) => {
 
     return res.status(200).json(imagesArr);
   } catch (error) {
-    console.log(error);
+    console.error("Image upload failed", error);
+    return res.status(500).json({ success: false, message: "Image upload failed" });
   }
 });
 
@@ -475,13 +469,10 @@ router.post(`/create`, async (req, res) => {
     });
   }
 
-  imagesArr = [];
-
   res.status(201).json(product);
 });
 
 router.get("/:id", async (req, res) => {
-  productEditId = req.params.id;
 
   const product = await Product.findById(req.params.id).populate("category");
 
@@ -595,8 +586,6 @@ router.put("/:id", async (req, res) => {
       status: false,
     });
   }
-
-  imagesArr = [];
 
   res.status(200).json({
     message: "the product is updated!",

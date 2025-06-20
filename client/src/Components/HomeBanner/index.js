@@ -1,6 +1,10 @@
 // HomeBanner.jsx (Optimized for SEO, Web Vitals, Responsive Design)
 "use client";
 import React, { useContext } from "react";
+
+function sanitize(html) {
+  return html.replace(/<script.*?>.*?<\/script>/gi, "");
+}
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -50,7 +54,7 @@ const HomeBanner = ({ data = [] }) => {
               {item?.cta && (
                 <div
                   className={`banner-cta ${item.position || ""}`.trim()}
-                  dangerouslySetInnerHTML={{ __html: item.cta }}
+                  dangerouslySetInnerHTML={{ __html: sanitize(item.cta) }}
                 />
               )}
             </div>
@@ -62,3 +66,4 @@ const HomeBanner = ({ data = [] }) => {
 };
 
 export default HomeBanner;
+

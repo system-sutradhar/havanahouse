@@ -7,8 +7,8 @@ import Chip from "@mui/material/Chip";
 import { useContext, useEffect, useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import Stack from "@mui/material/Stack";
+import { MenuItem, Select } from "@mui/material";
 import {
   deleteData,
   deleteImages,
@@ -17,7 +17,6 @@ import {
   postData,
   uploadImage,
 } from "../../utils/api";
-import { useNavigate } from "react-router-dom";
 import { FaRegImages } from "react-icons/fa";
 import { MyContext } from "../../App";
 
@@ -48,7 +47,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 });
 
-const AddHomeSlide = () => {
+const AddHomeSlide = ({ onSuccess, onClose , formId = "add-slide-form", hideActions = false}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formFields, setFormFields] = useState({
@@ -61,8 +60,6 @@ const AddHomeSlide = () => {
   const [previews, setPreviews] = useState([]);
 
   const formdata = new FormData();
-
-  const history = useNavigate();
 
   const context = useContext(MyContext);
 
@@ -205,7 +202,7 @@ const AddHomeSlide = () => {
 
         deleteData("/api/imageUpload/deleteAllImages");
 
-        history("/homeBannerSlide/list");
+        if (onSuccess) onSuccess();
       });
     } else {
       context.setAlertBox({
@@ -219,31 +216,7 @@ const AddHomeSlide = () => {
 
   return (
     <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-          <h5 className="mb-0">Add Home Slide</h5>
-          <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-            <StyledBreadcrumb
-              component="a"
-              href="#"
-              label="Dashboard"
-              icon={<HomeIcon fontSize="small" />}
-            />
-
-            <StyledBreadcrumb
-              component="a"
-              label="Home Slide"
-              href="#"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-            <StyledBreadcrumb
-              label="Add Home Slide"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-          </Breadcrumbs>
-        </div>
-
-        <form className="form" onSubmit={addHomeSlide}>
+      <form id={formId} className="form" onSubmit={addHomeSlide}>
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
@@ -257,6 +230,7 @@ const AddHomeSlide = () => {
                         className="form-control"
                         value={formFields.overlayText}
                         onChange={handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -269,6 +243,7 @@ const AddHomeSlide = () => {
                         className="form-control"
                         value={formFields.ctaUrl}
                         onChange={handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -280,6 +255,7 @@ const AddHomeSlide = () => {
                         name="position"
                         onChange={handleChange}
                         className="w-100"
+                        required
                       >
                         <MenuItem value="top-left">Top Left</MenuItem>
                         <MenuItem value="top-center">Top Center</MenuItem>
@@ -295,7 +271,7 @@ const AddHomeSlide = () => {
                   </div>
                 </div>
                 <div className="imagesUploadSec">
-                  <h5 class="mb-4">Media And Published</h5>
+                  <h5 className="mb-4">Media And Published</h5>
 
                   <div className="imgUploadBox d-flex align-items-center">
                     {previews?.length !== 0 &&
@@ -363,24 +339,40 @@ const AddHomeSlide = () => {
                   </div>
 
                   <br />
-
-                  <Button
-                    type="submit"
-                    className="btn-blue btn-lg btn-big w-100"
+{!hideActions && (
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    className="mt-2"
                   >
-                    <FaCloudUploadAlt /> &nbsp;{" "}
-                    {isLoading === true ? (
-                      <CircularProgress color="inherit" className="loader" />
-                    ) : (
-                      "PUBLISH AND VIEW"
-                    )}{" "}
-                  </Button>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      className="btn-blue btn-lg btn-big"
+                      fullWidth
+                    >
+                      <FaCloudUploadAlt /> &nbsp;
+                      {isLoading === true ? (
+                        <CircularProgress color="inherit" className="loader" />
+                      ) : (
+                        "PUBLISH AND VIEW"
+                      )}
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={onClose}
+                      className="btn-blue btn-lg btn-big"
+                      fullWidth
+                    >
+                      Close
+                    </Button>
+                  </Stack>
+)}
                 </div>
               </div>
             </div>
           </div>
         </form>
-      </div>
     </>
   );
 };

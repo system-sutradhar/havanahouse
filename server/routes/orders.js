@@ -2,28 +2,29 @@ const { Orders } = require('../models/orders');
 const express = require('express');
 const { updateStockInErply } = require("../utils/erplyService");
 const router = express.Router();
-const { Order } = require("../models/orders");
 const { Product } = require("../models/products");
 
 
 router.get(`/`, async (req, res) => {
-
     try {
-    
-        const ordersList = await Orders.find(req.query)
+        const allowedFilters = ['userid', 'status'];
+        const query = {};
+        for (const key of allowedFilters) {
+            if (req.query[key]) {
+                query[key] = req.query[key];
+            }
+        }
 
+        const ordersList = await Orders.find(query);
 
         if (!ordersList) {
-            res.status(500).json({ success: false })
+            return res.status(500).json({ success: false });
         }
 
         return res.status(200).json(ordersList);
-
     } catch (error) {
-        res.status(500).json({ success: false })
+        res.status(500).json({ success: false });
     }
-
-
 });
 
 

@@ -7,6 +7,7 @@ import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
 
 import { Link } from "react-router-dom";
+import AddHomeBottomBanner from "./addHomeBottomBanner";
 
 import { emphasize, styled } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -44,16 +45,21 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 
 const BannersList = () => {
   const [slideList, setSlideList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   const context = useContext(MyContext);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  const loadSlides = () => {
     context.setProgress(20);
     fetchDataFromApi("/api/homeBottomBanners").then((res) => {
       setSlideList(res);
       context.setProgress(100);
     });
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    loadSlides();
   }, []);
 
   const deleteSlide = (id) => {
@@ -66,12 +72,8 @@ const BannersList = () => {
         error: false,
         msg: "Banner Deleted!",
       });
-      fetchDataFromApi("/api/homeBottomBanners").then((res) => {
-        setSlideList(res);
-        context.setProgress(100);
-
-      });
-    });   
+      loadSlides();
+    });
    
   };
 
@@ -99,13 +101,20 @@ const BannersList = () => {
               />
             </Breadcrumbs>
 
-            <Link to="/homeBottomBanners/add">
-              <Button className="btn-blue  ml-3 pl-3 pr-3">
-                Add Home Bottom Banner
-              </Button>
-            </Link>
+            <Button
+              className="btn-blue  ml-3 pl-3 pr-3"
+              onClick={() => setShowForm(!showForm)}
+            >
+              {showForm ? "Close" : "Add Home Bottom Banner"}
+            </Button>
           </div>
         </div>
+
+        {showForm && (
+          <div className="card shadow border-0 p-3 mt-4">
+            <AddHomeBottomBanner onSuccess={() => { setShowForm(false); loadSlides(); }} />
+          </div>
+        )}
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3">
@@ -113,6 +122,8 @@ const BannersList = () => {
               <thead className="thead-dark">
                 <tr>
                   <th style={{ width: "200px" }}>IMAGE</th>
+                  <th>CATEGORY</th>
+                  <th>SUB CATEGORY</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
@@ -143,6 +154,8 @@ const BannersList = () => {
                           </div>
                         </td>
 
+                        <td>{item.catName}</td>
+                        <td>{item.subCatName}</td>
                         <td>
                           <div className="actions d-flex align-items-center">
                             <Link to={`/homeBottomBanners/edit/${item.id}`}>

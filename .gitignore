@@ -9,3 +9,6 @@ client/.next/
 server/node_modules/
 server/.cache/
 server/.next/
+server/uploads/
+*.env
+

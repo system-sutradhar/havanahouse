@@ -3,7 +3,8 @@ const { ImageUpload } = require('../models/imageUpload');
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const fs = require("fs");
+const fs = require('fs');
+const path = require('path');
 
 const cloudinary = require('cloudinary').v2;
 
@@ -14,12 +15,14 @@ cloudinary.config({
     secure: true
 });
 
-var imagesArr = [];
+const uploadDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 const storage = multer.diskStorage({
-
     destination: function (req, file, cb) {
-        cb(null, "uploads");
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
         cb(null, `${Date.now()}_${file.originalname}`);
@@ -32,26 +35,23 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post(`/upload`, upload.array("images"), async (req, res) => {
-    imagesArr=[];
+    const imagesArr = [];
 
-    try{
-    
-        for (let i = 0; i < req?.files?.length; i++) {
-
+    try {
+        for (const file of req.files || []) {
             const options = {
                 use_filename: true,
                 unique_filename: false,
                 overwrite: false,
             };
-    
-            const img = await cloudinary.uploader.upload(
-                req.files[i].path,
-                { ...options, resource_type: 'auto' },
-                function (error, result) {
-                    imagesArr.push(result.secure_url);
-                    fs.unlinkSync(`uploads/${req.files[i].filename}`);
-                }
+
+            const result = await cloudinary.uploader.upload(
+                file.path,
+                { ...options, resource_type: 'auto' }
             );
+
+            imagesArr.push(result.secure_url);
+            fs.unlinkSync(file.path);
         }
 
 
@@ -64,8 +64,9 @@ router.post(`/upload`, upload.array("images"), async (req, res) => {
 
        
 
-    }catch(error){
-        console.log(error);
+    } catch (error) {
+        console.error("Image upload failed", error);
+        return res.status(500).json({ success: false, message: "Image upload failed" });
     }
 
 
@@ -108,9 +109,8 @@ router.get('/:id', async (req, res) => {
 
 
 router.post('/create', async (req, res) => {
-
-    let newEntry = new HomeBanner({
-        images: imagesArr,
+    const newEntry = new HomeBanner({
+        images: req.body.images || [],
         type: req.body.type,
         overlayText: req.body.overlayText,
         ctaUrl: req.body.ctaUrl,
@@ -127,12 +127,8 @@ router.post('/create', async (req, res) => {
     }
 
 
-    newEntry = await newEntry.save();
-    
-    imagesArr = [];
-
-
-    res.status(201).json(newEntry);
+    const saved = await newEntry.save();
+    res.status(201).json(saved);
 
 });
 
@@ -211,8 +207,6 @@ router.put('/:id', async (req, res) => {
             success: false
         })
     }
-
-    imagesArr = [];
 
     res.send(slideItem);
 

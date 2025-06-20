@@ -18,6 +18,9 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
+import AddBanner from "./addHomeBanner";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -44,67 +47,72 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 
 const BannersList = () => {
   const [slideList, setSlideList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   const context = useContext(MyContext);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  const loadSlides = () => {
     context.setProgress(20);
     fetchDataFromApi("/api/banners").then((res) => {
       setSlideList(res);
       context.setProgress(100);
     });
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    loadSlides();
   }, []);
 
   const deleteSlide = (id) => {
     context.setProgress(30);
-    deleteData(`/api/banners/${id}`).then((res) => {
+    deleteData(`/api/banners/${id}`).then(() => {
       context.setProgress(100);
-      context.setProgress({
+      context.setAlertBox({
         open: true,
         error: false,
         msg: "Banner Deleted!",
       });
-      fetchDataFromApi("/api/banners").then((res) => {
-        setSlideList(res);
-        context.setProgress(100);
-
-      });
+      loadSlides();
     });
-   
   };
 
   return (
     <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-          <h5 className="mb-0">Banner Slide List</h5>
-
-          <div className="ml-auto d-flex align-items-center">
-            <Breadcrumbs
-              aria-label="breadcrumb"
-              className="ml-auto breadcrumbs_"
-            >
-              <StyledBreadcrumb
-                component="a"
-                href="#"
-                label="Dashboard"
-                icon={<HomeIcon fontSize="small" />}
-              />
-
-              <StyledBreadcrumb
-                label="Banners"
-                deleteIcon={<ExpandMoreIcon />}
-              />
-            </Breadcrumbs>
-
-            <Link to="/banners/add">
-              <Button className="btn-blue  ml-3 pl-3 pr-3">
-                Add Home Banner
+      <Container className="right-content" maxWidth={false}>
+        <div className="card shadow border-0 w-100 p-4">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            flexWrap="wrap"
+          >
+            <h5 className="mb-0">Banner Slide List</h5>
+            <Box display="flex" alignItems="center">
+              <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs_">
+                <StyledBreadcrumb
+                  component="a"
+                  href="#"
+                  label="Dashboard"
+                  icon={<HomeIcon fontSize="small" />}
+                />
+                <StyledBreadcrumb label="Banners" deleteIcon={<ExpandMoreIcon />} />
+              </Breadcrumbs>
+              <Button
+                className="btn-blue ml-3 pl-3 pr-3"
+                onClick={() => setShowForm(!showForm)}
+              >
+                {showForm ? "Close" : "Add Home Banner"}
               </Button>
-            </Link>
-          </div>
+            </Box>
+          </Box>
         </div>
+
+        {showForm && (
+          <div className="card shadow border-0 p-3 mt-4">
+            <AddBanner onSuccess={() => { setShowForm(false); loadSlides(); }} />
+          </div>
+        )}
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3">
@@ -112,6 +120,8 @@ const BannersList = () => {
               <thead className="thead-dark">
                 <tr>
                   <th style={{ width: "200px" }}>IMAGE</th>
+                  <th>CATEGORY</th>
+                  <th>SUB CATEGORY</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
@@ -120,7 +130,7 @@ const BannersList = () => {
                 {slideList?.length !== 0 &&
                   slideList?.map((item, index) => {
                     return (
-                      <tr>
+                      <tr key={item.id || index}>
                         <td>
                           <div
                             className="d-flex align-items-center "
@@ -141,7 +151,8 @@ const BannersList = () => {
                             </div>
                           </div>
                         </td>
-
+                        <td>{item.catName}</td>
+                        <td>{item.subCatName}</td>
                         <td>
                           <div className="actions d-flex align-items-center">
                             <Link to={`/banners/edit/${item.id}`}>
@@ -167,7 +178,7 @@ const BannersList = () => {
             </table>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

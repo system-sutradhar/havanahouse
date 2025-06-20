@@ -1,4 +1,3 @@
-import { IoMdCart } from "react-icons/io";
 import { MdShoppingBag } from "react-icons/md";
 import MenuItem from "@mui/material/MenuItem";
 import { useContext, useEffect, useState } from "react";
@@ -18,6 +17,12 @@ import { MyContext } from "../../App";
 
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import AddProduct from "./addProduct";
 
 import { emphasize, styled } from "@mui/material/styles";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -26,12 +31,19 @@ import HomeIcon from "@mui/icons-material/Home";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DashboardBox from "../Dashboard/components/dashboardBox";
 import SearchBox from "../../components/SearchBox";
-import Checkbox from "@mui/material/Checkbox";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Alert from "@mui/material/Alert";
+import Skeleton from "@mui/material/Skeleton";
 
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
 
 //breadcrumb code
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
@@ -69,30 +81,57 @@ const Products = () => {
   const context = useContext(MyContext);
 
   const [productList, setProductList] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   const ITEM_HEIGHT = 48;
 
+  const loadProducts = async (pageVal = 1) => {
+    setLoading(true);
+    const query =
+      categoryVal !== "all"
+        ? `/api/products/catId?catId=${categoryVal}&page=${pageVal}&perPage=${perPage}`
+        : `/api/products?page=${pageVal}&perPage=${perPage}`;
+    try {
+      const res = await fetchDataFromApi(query);
+      if (res?.products) {
+        setProductList(res);
+        setError(null);
+      } else {
+        throw new Error("Invalid response");
+      }
+    } catch (err) {
+      setError("Failed to load products");
+    } finally {
+      setLoading(false);
+      context.setProgress(100);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    context.setProgress(40);
-    fetchDataFromApi(`/api/products?page=1&perPage=${perPage}`).then(
-      (res) => {
-        setProductList(res);
-        context.setProgress(100);
+    const fetchInitial = async () => {
+      context.setProgress(40);
+      try {
+        await loadProducts(1);
+
+        const count = await fetchDataFromApi("/api/products/get/count");
+        setTotalProducts(count.productsCount);
+
+        const catCount = await fetchDataFromApi("/api/category/get/count");
+        setTotalCategory(catCount.categoryCount);
+
+        const subCount = await fetchDataFromApi("/api/category/subCat/get/count");
+        setTotalSubCategory(subCount.categoryCount);
+      } catch (err) {
+        setError("Failed to load products");
       }
-    );
-
-    fetchDataFromApi("/api/products/get/count").then((res) => {
-      setTotalProducts(res.productsCount);
-    });
-
-    fetchDataFromApi("/api/category/get/count").then((res) => {
-      setTotalCategory(res.categoryCount);
-    });
-
-    fetchDataFromApi("/api/category/subCat/get/count").then((res) => {
-      setTotalSubCategory(res.categoryCount);
-    });
+    };
+    fetchInitial();
   }, []);
 
   const deleteProduct = (id) => {
@@ -106,11 +145,7 @@ const Products = () => {
         msg: "Product Deleted!",
       });
 
-      fetchDataFromApi(
-        `/api/products?page=${page}&perPage=${perPage}`
-      ).then((res) => {
-        setProductList(res);
-      });
+      loadProducts(page);
       context.fetchCategory();
       setIsLoadingBar(false);
     });
@@ -118,48 +153,17 @@ const Products = () => {
 
   const handleChange = (event, value) => {
     context.setProgress(40);
-    if(categoryVal!=="all"){
-      fetchDataFromApi(`/api/products/catId?catId=${categoryVal}&page=${value}&perPage=${perPage}`).then((res) => {
-        setProductList(res);
-        context.setProgress(100);
-      });
-    }
-else{
-  fetchDataFromApi(`/api/products?page=${value}&perPage=${perPage}`).then((res) => {
-    setProductList(res);
-    context.setProgress(100);
-  });
-}
+    loadProducts(value);
   };
 
   const showPerPage = (e) => {
     setshowBy(e.target.value);
-    fetchDataFromApi(
-      `/api/products?page=${1}&perPage=${e.target.value}`
-    ).then((res) => {
-      setProductList(res);
-      context.setProgress(100);
-    });
+    loadProducts(1);
   };
 
   const handleChangeCategory = (event) => {
-    if (event.target.value !== "all") {
-      setcategoryVal(event.target.value);
-      fetchDataFromApi(`/api/products/catId?catId=${event.target.value}&page=${1}&perPage=${perPage}`).then(
-        (res) => {
-          setProductList(res);
-          context.setProgress(100);
-        }
-      );
-    }
-    if (event.target.value === "all") {
-      setcategoryVal("all");
-      setcategoryVal(event.target.value);
-      fetchDataFromApi(`/api/products?page=${1}&perPage=${perPage}`).then((res) => {
-        setProductList(res);
-        context.setProgress(100);
-      });
-    }
+    setcategoryVal(event.target.value);
+    loadProducts(1);
   };
 
 
@@ -201,9 +205,6 @@ else{
               />
             </Breadcrumbs>
 
-            <Link to="/product/upload">
-              <Button className="btn-blue  ml-3 pl-3 pr-3">Add Product</Button>
-            </Link>
           </div>
         </div>
 
@@ -234,47 +235,80 @@ else{
         </div>
 
         <div className="card shadow border-0 p-3 mt-4">
-          <h3 className="hd">Best Selling Products</h3>
-
-          <div className="row cardFilters mt-3">
-            <div className="col-md-3">
-              <h4>SHOW BY</h4>
-              <FormControl size="small" className="w-100">
-                <Select
-                  value={showBy}
-                  onChange={showPerPage}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                  labelId="demo-select-small-label"
-                  className="w-100"
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <h3 className="hd mb-0">Best Selling Products</h3>
+            <Box>
+              {!showForm && (
+                <Button
+                  variant="contained"
+                  className="ml-2"
+                  onClick={() => setShowForm(true)}
                 >
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={30}>30</MenuItem>
-                  <MenuItem value={40}>40</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
-                  <MenuItem value={60}>60</MenuItem>
-                  <MenuItem value={70}>70</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-
-            <div className="col-md-3">
-              <h4>CATEGORY BY</h4>
-              <FormControl size="small" className="w-100">
-                <Select
-                  value={categoryVal}
-                  onChange={handleChangeCategory}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                  className="w-100"
+                  Add Product
+                </Button>
+              )}
+              {showForm && (
+                <Button
+                  variant="outlined"
+                  className="ml-2"
+                  onClick={() => setShowForm(false)}
                 >
-                  <MenuItem value="all" >
-                    <em>All</em>
-                  </MenuItem>
-                  {context.catData?.categoryList?.length !== 0 &&
-                    context.catData?.categoryList?.map((cat, index) => {
-                      return (
+                  Close
+                </Button>
+              )}
+          </Box>
+        </Box>
+
+        {showForm && (
+          <Box mt={3}>
+            <AddProduct onSuccess={() => { setShowForm(false); loadProducts(); }} />
+          </Box>
+        )}
+
+        <Grid container spacing={2} className="cardFilters mt-3">
+          <Grid item xs={12} md={3}>
+            <h4>SHOW BY</h4>
+            <FormControl size="small" className="w-100">
+              <Select
+                value={showBy}
+                onChange={showPerPage}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                labelId="demo-select-small-label"
+                className="w-100"
+              >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+                <MenuItem value={40}>40</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={60}>60</MenuItem>
+                <MenuItem value={70}>70</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} md={9}>
+            <Stack
+              direction={isSmall ? "column" : "row"}
+              spacing={2}
+              alignItems={isSmall ? "stretch" : "flex-end"}
+            >
+              <Box flex={1}>
+                <h4>CATEGORY BY</h4>
+                <FormControl size="small" className="w-100">
+                  <Select
+                    value={categoryVal}
+                    onChange={handleChangeCategory}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Without label" }}
+                    className="w-100"
+                  >
+                    <MenuItem value="all">
+                      <em>All</em>
+                    </MenuItem>
+                    {context.catData?.categoryList?.length !== 0 &&
+                      context.catData?.categoryList?.map((cat, index) => (
                         <MenuItem
                           className="text-capitalize"
                           value={cat._id}
@@ -282,108 +316,127 @@ else{
                         >
                           {cat.name}
                         </MenuItem>
-                      );
-                    })}
-                </Select>
-              </FormControl>
-            </div>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Box>
 
-            <div className="col-md-6 d-flex justify-content-end">
-              <div className="searchWrap d-flex">
-                <SearchBox searchProducts={searchProducts}/>
-              </div>
-            </div>
+              <Box flex={1} sx={{ display: "flex", justifyContent: isSmall ? "flex-start" : "flex-end" }}>
+                <div className="searchWrap d-flex" style={{ width: "100%" }}>
+                  <SearchBox searchProducts={searchProducts} />
+                </div>
+              </Box>
+            </Stack>
+          </Grid>
+        </Grid>
 
-            
-          </div>
+        {error && (
+          <Alert
+            severity="error"
+            action={
+              <Button color="inherit" size="small" onClick={() => loadProducts(page)}>
+                Retry
+              </Button>
+            }
+            sx={{ mb: 2 }}
+          >
+            {error}
+          </Alert>
+        )}
 
+        {loading ? (
+          <Skeleton variant="rectangular" width="100%" height={200} />
+        ) : (
           <div className="table-responsive mt-3">
-            <table className="table table-bordered table-striped v-align">
-              <thead className="thead-dark">
-                <tr>
-                  <th style={{ width: "300px" }}>PRODUCT</th>
-                  <th>CATEGORY</th>
-                  <th>SUB CATEGORY</th>
-                  <th>BRAND</th>
-                  <th>PRICE</th>
-                  <th>RATING</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ width: 300 }}>PRODUCT</TableCell>
+                  <TableCell>CATEGORY</TableCell>
+                  <TableCell>SUB CATEGORY</TableCell>
+                  <TableCell>BRAND</TableCell>
+                  <TableCell>PRICE</TableCell>
+                  <TableCell>RATING</TableCell>
+                  <TableCell>ACTION</TableCell>
+                </TableRow>
+              </TableHead>
 
-              <tbody>
+              <TableBody>
                 {productList?.products?.length !== 0 &&
-                  productList?.products?.map((item, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>
-                          <div className="d-flex align-items-center productBox justify-content-around">
-                            <div className="imgWrapper">
-                              <div className="img card shadow m-0">
-                                <LazyLoadImage
-                                  alt={"image"}
-                                  effect="blur"
-                                  className="w-100"
-                                  src={item.images[0]}
-                                />
-                              </div>
-                            </div>
-                            <div className="info pl-3">
-                              <h6>{item?.name}</h6>
-                              <p>{item?.description}</p>
-                            </div>
-                          </div>
-                        </td>
-
-                        <td>{item?.category?.name}</td>
-                        <td>{item?.subCatName}</td>
-                        <td>{item?.brand}</td>
-                        <td>
-                          <div style={{ width: "70px" }}>
-                            <del className="old">Rs {item?.oldPrice}</del>
-                            <span className="new text-danger">
-                              Rs {item?.price}
-                            </span>
-                          </div>
-                        </td>
-                        <td>
-                          <Rating
-                            name="read-only"
-                            defaultValue={item?.rating}
-                            precision={0.5}
-                            size="small"
-                            readOnly
+                  productList?.products?.map((item, index) => (
+                    <TableRow hover key={index}>
+                      <TableCell>
+                        <Box display="flex" alignItems="center">
+                          <Avatar
+                            src={item.images[0]}
+                            variant="rounded"
+                            sx={{ width: 56, height: 56, mr: 2 }}
                           />
-                        </td>
+                          <Box>
+                            <h6>{item?.name}</h6>
+                            <p>{item?.description}</p>
+                          </Box>
+                        </Box>
+                      </TableCell>
 
-                        <td>
-                          <div className="actions d-flex align-items-center">
-                            <Link to={`/product/details/${item.id}`}>
-                              <Button className="secondary" color="secondary">
-                                <FaEye />
-                              </Button>
-                            </Link>
+                      <TableCell>{item?.category?.name}</TableCell>
+                      <TableCell>{item?.subCatName}</TableCell>
+                      <TableCell>{item?.brand}</TableCell>
+                      <TableCell>
+                        <div style={{ width: "70px" }}>
+                          <del className="old">Rs {item?.oldPrice}</del>
+                          <span className="new text-danger">Rs {item?.price}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Rating
+                          name="read-only"
+                          defaultValue={item?.rating}
+                          precision={0.5}
+                          size="small"
+                          readOnly
+                        />
+                      </TableCell>
 
-                            <Link to={`/product/edit/${item.id}`}>
-                              <Button className="success" color="success">
-                                <FaPencilAlt />
-                              </Button>
-                            </Link>
-
-                            <Button
-                              className="error"
-                              color="error"
-                              onClick={() => deleteProduct(item?.id)}
+                      <TableCell>
+                        <Box className="actions" display="flex" alignItems="center">
+                          <Tooltip title="View">
+                            <IconButton
+                              component={Link}
+                              to={`/product/details/${item.id}`}
+                              color="secondary"
                             >
-                              <MdDelete />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
+                              <FaEye />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip title="Edit">
+                            <IconButton
+                              component={Link}
+                              to={`/product/edit/${item.id}`}
+                              color="success"
+                            >
+                              <FaPencilAlt />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip title="Delete">
+                            <span>
+                              <IconButton
+                                color="error"
+                                disabled={item?.isActive === false || item?.isSystem}
+                                onClick={() => deleteProduct(item?.id)}
+                              >
+                                <MdDelete />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
 
             {productList?.totalPages > 1 && (
               <div className="d-flex tableFooter">
@@ -398,6 +451,7 @@ else{
               </div>
             )}
           </div>
+        )}
         </div>
       </div>
     </>

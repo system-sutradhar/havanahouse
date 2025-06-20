@@ -14,8 +14,6 @@ cloudinary.config({
   secure: true,
 });
 
-var imagesArr = [];
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
@@ -30,7 +28,7 @@ const upload = multer({ storage: storage });
 
 // **Upload Images & Store in Cloudinary**
 router.post(`/upload`, upload.array("images"), async (req, res) => {
-  imagesArr = [];
+  const imagesArr = [];
   try {
     for (let file of req.files) {
       const result = await cloudinary.uploader.upload(file.path, {
@@ -142,11 +140,10 @@ router.post("/create", async (req, res) => {
       slug,
       color,
       parentId: parentId || null,
-      images: imagesArr.length ? imagesArr : [],
+      images: Array.isArray(req.body.images) ? req.body.images : [],
     });
 
     const savedCategory = await newCategory.save();
-    imagesArr = []; // ✅ Clear image array after use
 
     res.status(201).json({ success: true, category: savedCategory });
   } catch (error) {

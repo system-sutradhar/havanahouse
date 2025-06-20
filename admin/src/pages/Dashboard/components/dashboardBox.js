@@ -48,14 +48,13 @@ const DashboardBox = (props) => {
 
                 <div className="ml-auto">
                     {
-                        props.icon ?
-                            <span span className="icon">
-                                {props.icon ? props.icon : ''}
+                        props.icon ? (
+                            <span className="icon">
+                                {props.icon}
                             </span>
-
-                            :
-
+                        ) : (
                             ''
+                        )
                     }
 
                 </div>

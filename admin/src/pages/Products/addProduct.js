@@ -62,7 +62,7 @@ const MenuProps = {
   },
 };
 
-const ProductUpload = () => {
+const ProductUpload = ({ onSuccess }) => {
   const [categoryVal, setcategoryVal] = useState("");
   const [subCatVal, setSubCatVal] = useState("");
 
@@ -502,8 +502,11 @@ const ProductUpload = () => {
 
       setIsLoading(false);
       deleteData("/api/imageUpload/deleteAllImages");
-
-      history("/products");
+      if (typeof onSuccess === "function") {
+        onSuccess();
+      } else {
+        history("/products");
+      }
     });
   };
 
@@ -810,7 +813,7 @@ const ProductUpload = () => {
 
           <div className="card p-4 mt-0">
             <div className="imagesUploadSec">
-              <h5 class="mb-4">Media And Published</h5>
+              <h5 className="mb-4">Media And Published</h5>
 
               <div className="imgUploadBox d-flex align-items-center">
                 {previews?.length !== 0 &&

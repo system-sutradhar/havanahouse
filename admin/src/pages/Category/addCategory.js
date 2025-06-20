@@ -15,7 +15,6 @@ import {
   postData,
   uploadImage,
 } from "../../utils/api";
-import { useNavigate } from "react-router-dom";
 import { FaRegImages } from "react-icons/fa";
 import { MyContext } from "../../App";
 
@@ -46,7 +45,7 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   };
 });
 
-const AddCategory = () => {
+const AddCategory = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [formFields, setFormFields] = useState({
@@ -61,7 +60,6 @@ const AddCategory = () => {
 
   const formdata = new FormData();
 
-  const history = useNavigate();
 
   const context = useContext(MyContext);
 
@@ -202,13 +200,10 @@ const AddCategory = () => {
       setIsLoading(true);
 
       postData(`/api/category/create`, formFields).then((res) => {
-        // console.log(res);
         setIsLoading(false);
         context.fetchCategory();
-
         deleteData("/api/imageUpload/deleteAllImages");
-
-        history("/category");
+        if (onSuccess) onSuccess();
       });
     } else {
       context.setAlertBox({
@@ -222,31 +217,7 @@ const AddCategory = () => {
 
   return (
     <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-          <h5 className="mb-0">Add Category</h5>
-          <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-            <StyledBreadcrumb
-              component="a"
-              href="#"
-              label="Dashboard"
-              icon={<HomeIcon fontSize="small" />}
-            />
-
-            <StyledBreadcrumb
-              component="a"
-              label="Category"
-              href="#"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-            <StyledBreadcrumb
-              label="Add Category"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-          </Breadcrumbs>
-        </div>
-
-        <form className="form" onSubmit={addCat}>
+      <form className="form" onSubmit={addCat}>
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
@@ -257,6 +228,7 @@ const AddCategory = () => {
                     name="name"
                     value={formFields.name}
                     onChange={changeInput}
+                    required
                   />
                 </div>
 
@@ -267,11 +239,12 @@ const AddCategory = () => {
                     name="color"
                     value={formFields.color}
                     onChange={changeInput}
+                    required
                   />
                 </div>
 
                 <div className="imagesUploadSec">
-                  <h5 class="mb-4">Media And Published</h5>
+                  <h5 className="mb-4">Media And Published</h5>
 
                   <div className="imgUploadBox d-flex align-items-center">
                     {previews?.length !== 0 &&
@@ -339,7 +312,6 @@ const AddCategory = () => {
             </div>
           </div>
         </form>
-      </div>
     </>
   );
 };

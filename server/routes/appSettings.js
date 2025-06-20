@@ -28,6 +28,7 @@ router.post('/create', async (req, res) => {
   try {
     let appSetting = new AppSetting({
       name: req.body.name,
+      value: req.body.value,
       prelogin: req.body.prelogin,
       postlogin: req.body.postlogin,
       desktop: req.body.desktop,
@@ -47,6 +48,7 @@ router.put('/:id', async (req, res) => {
       req.params.id,
       {
         name: req.body.name,
+        value: req.body.value,
         prelogin: req.body.prelogin,
         postlogin: req.body.postlogin,
         desktop: req.body.desktop,
