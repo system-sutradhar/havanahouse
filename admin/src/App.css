@@ -726,7 +726,11 @@ body.dark .MuiInputBase-root, body.dark .MuiSvgIcon-root, body.dark .css-1yk1gt9
 body.dark .MuiInputBase-root fieldset{border-color:rgba(255,255,255,0.4) !important}
 body.dark .MuiMenu-paper{background-color: var(--dark-secondary-bg) !important;}
 
-body.dark .MuiOutlinedInput-notchedOutline{border-color: rgba(255,255,255,0.4) !important;}
+body.dark .MuiOutlinedInput-notchedOutline{border-color: var(--input-dark-border) !important;}
+body.dark .MuiOutlinedInput-root{background-color: var(--input-dark-bg) !important; color: rgba(255,255,255,0.87);}
+body.dark .MuiInputLabel-root{color: rgba(255,255,255,0.7) !important;}
+body.dark .MuiOutlinedInput-root:hover fieldset{border-color:#888 !important;}
+body.dark .MuiOutlinedInput-root.Mui-focused fieldset{border-color:#1976d2 !important;}
 
 body.dark .MuiPaginationItem-root{color: rgba(255,255,255,0.8) !important;}
 

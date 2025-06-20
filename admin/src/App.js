@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import React, { createContext, useEffect, useState, useRef } from "react";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -75,6 +77,39 @@ function App() {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [countryList, setCountryList] = useState([]);
   const [selectedCountry, setselectedCountry] = useState("");
+
+  const muiTheme = createTheme({
+    palette: { mode: theme },
+    components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            backgroundColor: theme === 'dark' ? '#1e1e1e' : '#fff',
+            color: theme === 'dark' ? '#fff' : 'inherit',
+            '& fieldset': {
+              borderColor: theme === 'dark' ? '#444' : '#ccc',
+            },
+            '&:hover fieldset': {
+              borderColor: '#888',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#1976d2',
+            },
+          },
+        },
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            color: theme === 'dark' ? '#ccc' : 'inherit',
+            '&.Mui-focused': {
+              color: '#1976d2',
+            },
+          },
+        },
+      },
+    },
+  });
 
   useEffect(() => {
     if (theme === "dark") {
@@ -178,7 +213,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <MyContext.Provider value={values}>
+      <ThemeProvider theme={muiTheme}>
+        <CssBaseline />
+        <MyContext.Provider value={values}>
         <LoadingBar
           color="#f11946"
           progress={progress}
@@ -316,6 +353,7 @@ function App() {
           </div>
         </div>
       </MyContext.Provider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
