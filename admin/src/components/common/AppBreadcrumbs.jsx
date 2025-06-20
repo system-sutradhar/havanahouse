@@ -11,7 +11,7 @@ const toCamel = (str = '') =>
     .join('');
 
 const AppBreadcrumbs = ({ title, path = [] }) => (
-  <Breadcrumbs separator="›" aria-label="breadcrumb" className="ml-auto breadcrumbs_">
+  <Breadcrumbs separator="›" aria-label="breadcrumb" className="breadcrumbs_">
     {path.map((item, idx) => {
       const obj = typeof item === 'string' ? { label: item } : item;
       const label = obj.label;
