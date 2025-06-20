@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const appSettingSchema = mongoose.Schema({
   name: { type: String, required: true },
+  value: { type: String, default: '' },
   prelogin: { type: Boolean, default: false },
   postlogin: { type: Boolean, default: false },
   desktop: { type: Boolean, default: false },
