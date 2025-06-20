@@ -88,12 +88,14 @@ const HomeSlidesList = () => {
         />
       </BaseModal>
 
-      <BaseTable
-        columns={columns}
-        rows={slideList}
-        onEdit={(row) => navigate(`/homeBannerSlide/edit/${row.id}`)}
-        onDelete={(row) => deleteSlide(row.id)}
-      />
+      <div className="card shadow border-0 p-3 mt-4">
+        <BaseTable
+          columns={columns}
+          rows={slideList}
+          onEdit={(row) => navigate(`/homeBannerSlide/edit/${row.id}`)}
+          onDelete={(row) => deleteSlide(row.id)}
+        />
+      </div>
     </AdminPageLayout>
   );
 };
