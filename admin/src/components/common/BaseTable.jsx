@@ -15,17 +15,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 export default function BaseTable({ columns = [], rows = [], onEdit, onDelete }) {
   return (
     <TableContainer>
-      <Table size="small" sx={{ '& tbody tr:hover': { backgroundColor: '#f9f9f9' } }}>
+      <Table
+        size="small"
+        sx={{
+          '& thead th': {
+            backgroundColor: 'var(--table-header-bg)',
+            color: 'var(--text-color)',
+            fontWeight: 'bold',
+          },
+          '& tbody tr:hover': {
+            backgroundColor: 'var(--table-row-bg)',
+          },
+        }}
+      >
         <TableHead>
           <TableRow>
             {columns.map((col, idx) => (
-              <TableCell key={idx} sx={{ fontWeight: 'bold' }}>
-                {col.label}
-              </TableCell>
+              <TableCell key={idx}>{col.label}</TableCell>
             ))}
-            <TableCell align="right" sx={{ fontWeight: 'bold' }}>
-              Actions
-            </TableCell>
+            <TableCell align="right">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
