@@ -33,6 +33,7 @@ export default function ProductForm({ onSuccess, onCancel }) {
     rating: 0,
     image: null,
   });
+  const [preview, setPreview] = useState('');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -71,6 +72,7 @@ export default function ProductForm({ onSuccess, onCancel }) {
   const handleImage = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    setPreview(URL.createObjectURL(file));
     const res = await uploadMedia(file).catch(() => null);
     if (res) {
       setForm((prev) => ({ ...prev, image: res.url }));
@@ -208,6 +210,11 @@ export default function ProductForm({ onSuccess, onCancel }) {
           </Grid>
           <Grid item xs={12} md={6}>
             <input type="file" onChange={handleImage} />
+            {preview && (
+              <Box mt={2}>
+                <img src={preview} alt="preview" width={100} loading="lazy" />
+              </Box>
+            )}
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="flex-end" mt={3} gap={2}>
