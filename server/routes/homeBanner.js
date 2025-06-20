@@ -32,24 +32,21 @@ const upload = multer({ storage: storage })
 router.post(`/upload`, upload.array("images"), async (req, res) => {
     const imagesArr = [];
 
-    try{
-    
-        for (let i = 0; i < req?.files?.length; i++) {
-
+    try {
+        for (const file of req.files || []) {
             const options = {
                 use_filename: true,
                 unique_filename: false,
                 overwrite: false,
             };
-    
-            const img = await cloudinary.uploader.upload(
-                req.files[i].path,
-                { ...options, resource_type: 'auto' },
-                function (error, result) {
-                    imagesArr.push(result.secure_url);
-                    fs.unlinkSync(`uploads/${req.files[i].filename}`);
-                }
+
+            const result = await cloudinary.uploader.upload(
+                file.path,
+                { ...options, resource_type: 'auto' }
             );
+
+            imagesArr.push(result.secure_url);
+            fs.unlinkSync(file.path);
         }
 
 
@@ -62,8 +59,9 @@ router.post(`/upload`, upload.array("images"), async (req, res) => {
 
        
 
-    }catch(error){
-        console.log(error);
+    } catch (error) {
+        console.error("Image upload failed", error);
+        return res.status(500).json({ success: false, message: "Image upload failed" });
     }
 
 
