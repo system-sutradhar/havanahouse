@@ -3,7 +3,8 @@ const { ImageUpload } = require('../models/imageUpload');
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const fs = require("fs");
+const fs = require('fs');
+const path = require('path');
 
 const cloudinary = require('cloudinary').v2;
 
@@ -14,10 +15,14 @@ cloudinary.config({
     secure: true
 });
 
-const storage = multer.diskStorage({
+const uploadDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
+const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads");
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
         cb(null, `${Date.now()}_${file.originalname}`);
