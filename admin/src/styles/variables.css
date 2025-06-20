@@ -1,0 +1,21 @@
+:root {
+  --text-color: #403e57;
+  --body-bg: #ebe9e9;
+  --body-dark-bg: #071739;
+  --primary-color: #0858f7;
+  --accent-color: #1866ee;
+  --danger-color: #ff4964;
+  --header-dark-bg: #112143;
+  --muted-text: #5e5d72;
+  --light-bg: #f0f5ff;
+  --dark-secondary-bg: #12254e;
+  --icon-color: #292929;
+  --checkbox-color: #0079bf;
+  --gray-light: #f1f1f1;
+  --search-bg: #e7e7e7;
+  --logout-bg: #bcd2fd;
+  --table-header-bg: #f3f6fd;
+  --table-row-bg: #fafbff;
+  --font-base: 'Poppins', sans-serif;
+}
+

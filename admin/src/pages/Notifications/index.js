@@ -15,7 +15,7 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import { MdClose } from "react-icons/md";
 import { MyContext } from "../../App";
-import { fetchDataFromApi, postData, editData, deleteData } from "../../utils/api";
+import { fetchDataFromApi, postData, editData, deleteData, uploadImage } from "../../utils/api";
 import logger from "../../utils/logger";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
@@ -42,7 +42,23 @@ const Notifications = () => {
   const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [image, setImage] = useState("");
+  const [preview, setPreview] = useState(null);
   const context = useContext(MyContext);
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const res = await uploadImage('/api/notifications/upload', formData);
+      setImage(res.data.url);
+      setPreview(res.data.url);
+    } catch (err) {
+      logger.error(err);
+    }
+  };
 
   const load = () => {
     fetchDataFromApi('/api/notifications')
@@ -66,9 +82,11 @@ const Notifications = () => {
     e.preventDefault();
     if (!message.trim()) return;
     context.setProgress(30);
-    postData('/api/notifications', { message })
+    postData('/api/notifications', { message, image })
       .then(() => {
         setMessage("");
+        setImage("");
+        setPreview(null);
         load();
         context.setProgress(100);
         context.setAlertBox({ open: true, error: false, msg: 'Added!' });
@@ -153,7 +171,14 @@ const Notifications = () => {
               fullWidth
               size="small"
               required
+              sx={{ mb: 2 }}
             />
+            <input type="file" accept="image/*" onChange={handleFile} />
+            {preview && (
+              <div className="mt-2">
+                <img src={preview} alt="preview" width="100" loading="lazy" />
+              </div>
+            )}
           </form>
         </DialogContent>
         <DialogActions>
@@ -176,6 +201,7 @@ const Notifications = () => {
           <table className="table table-bordered">
             <thead className="thead-dark">
               <tr>
+                <th>Image</th>
                 <th>Message</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -184,6 +210,11 @@ const Notifications = () => {
             <tbody>
               {list.map((item) => (
                 <tr key={item.id}>
+                  <td>
+                    {item.image && (
+                      <img src={item.image} alt="banner" width="60" loading="lazy" />
+                    )}
+                  </td>
                   <td>{item.message}</td>
                   <td>{item.isPublished ? "Published" : "Draft"}</td>
                   <td>

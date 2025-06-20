@@ -1,6 +1,27 @@
 const express = require('express');
 const Notification = require('../models/notification');
 const router = express.Router();
+const multer = require('multer');
+const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: process.env.cloudinary_Config_Cloud_Name,
+  api_key: process.env.cloudinary_Config_api_key,
+  api_secret: process.env.cloudinary_Config_api_secret,
+  secure: true,
+});
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${Date.now()}_${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // Get currently published notification
 router.get('/notification', async (req, res) => {
@@ -22,13 +43,46 @@ router.get('/notifications', async (req, res) => {
   }
 });
 
+// Upload notification image
+router.post('/notifications/upload', upload.single('image'), async (req, res) => {
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: false,
+    });
+    fs.unlinkSync(req.file.path);
+    res.json({ url: result.secure_url });
+  } catch (err) {
+    console.error('Image upload failed', err);
+    res.status(500).json({ error: 'Image upload failed' });
+  }
+});
+
 // Create new notification
 router.post('/notifications', async (req, res) => {
   try {
-    const created = await Notification.create({ message: req.body.message });
+    const created = await Notification.create({
+      message: req.body.message,
+      image: req.body.image,
+    });
     res.json(created);
   } catch (err) {
     res.status(500).json({ error: 'Failed to create notification' });
+  }
+});
+
+// Edit notification
+router.put('/notifications/:id', async (req, res) => {
+  try {
+    const updated = await Notification.findByIdAndUpdate(
+      req.params.id,
+      { message: req.body.message, image: req.body.image },
+      { new: true }
+    );
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: 'Update failed' });
   }
 });
 
