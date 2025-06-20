@@ -31,12 +31,14 @@
   "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "glob": "^10.3.10"
   },
   "scripts": {
     "start": "cross-env PORT=3002 react-scripts start",
     "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
+    "analyze": "node scripts/checkRoutes.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

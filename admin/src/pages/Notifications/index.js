@@ -4,8 +4,8 @@ import { AddButton, SaveButton, CancelButton, DeleteButton } from "../../compone
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import AdminFormLayout from "../../components/common/AdminFormLayout";
-import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
 import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
 import BaseModal from "../../components/common/BaseModal";
 import BaseTable from "../../components/common/BaseTable";
@@ -102,21 +102,11 @@ const Notifications = () => {
   };
 
   return (
-    <Container className="right-content" maxWidth={false}>
-      <div className="card shadow border-0 w-100 p-4">
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          flexWrap="wrap"
-        >
-          <h5 className="mb-0">Notifications</h5>
-          <Box display="flex" alignItems="center">
-            <AppBreadcrumbs title="Notifications" path={[{ label: 'Dashboard', href: '/' }]} />
-            <AddButton onClick={() => setOpenModal(true)} label="Add Notification" />
-          </Box>
-        </Box>
-      </div>
+    <AdminPageLayout
+      title="Notifications"
+      breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}
+      actions={<AddButton onClick={() => setOpenModal(true)} label="Add Notification" />}
+    >
 
       <BaseModal
         open={openModal}
@@ -182,7 +172,7 @@ const Notifications = () => {
           onDelete={(row) => remove(row.id)}
         />
       </div>
-    </Container>
+    </AdminPageLayout>
   );
 };
 

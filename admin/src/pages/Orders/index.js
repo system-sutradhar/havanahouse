@@ -3,7 +3,7 @@ import { editData, fetchDataFromApi } from "../../utils/api";
 import { useState } from "react";
 import { useEffect } from "react";
 
-import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
 import Pagination from "@mui/material/Pagination";
 import BaseModal from "../../components/common/BaseModal";
 import { CancelButton } from "../../components/common/ActionButtons";
@@ -114,14 +114,7 @@ const Orders = () => {
 
   return (
     <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-          <h5 className="mb-0">Orders List</h5>
-
-          <div className="ml-auto d-flex align-items-center">
-            <AppBreadcrumbs title="Orders" path={[{ label: 'Dashboard', href: '/' }]} />
-          </div>
-        </div>
+      <AdminPageLayout title="Orders List" breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}> 
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3 orderTable">
@@ -218,7 +211,6 @@ const Orders = () => {
             </table>
           </div>
         </div>
-      </div>
 
       <BaseModal
         open={isOpenModal}
@@ -263,6 +255,7 @@ const Orders = () => {
           </table>
         </div>
       </BaseModal>
+    </AdminPageLayout>
     </>
   );
 };

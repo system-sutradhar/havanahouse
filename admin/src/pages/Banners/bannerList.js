@@ -16,9 +16,8 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import AddBanner from "./addHomeBanner";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
 import BaseTable from "../../components/common/BaseTable";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -58,24 +57,16 @@ const BannersList = () => {
 
   return (
     <>
-      <Container className="right-content" maxWidth={false}>
-        <div className="card shadow border-0 w-100 p-4">
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            flexWrap="wrap"
-          >
-            <h5 className="mb-0">Banner Slide List</h5>
-            <Box display="flex" alignItems="center">
-              <AppBreadcrumbs title="Banners" path={[{ label: 'Dashboard', href: '/' }]} />
-              <AddButton
-                onClick={() => setShowForm(!showForm)}
-                label={showForm ? 'Close' : 'Add Home Banner'}
-              />
-            </Box>
-          </Box>
-        </div>
+      <AdminPageLayout
+        title="Banner Slide List"
+        breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}
+        actions={
+          <AddButton
+            onClick={() => setShowForm(!showForm)}
+            label={showForm ? 'Close' : 'Add Home Banner'}
+          />
+        }
+      >
 
         {showForm && (
           <div className="card shadow border-0 p-3 mt-4">
@@ -107,7 +98,7 @@ const BannersList = () => {
             onDelete={(row) => deleteSlide(row.id)}
           />
         </div>
-      </Container>
+      </AdminPageLayout>
     </>
   );
 };

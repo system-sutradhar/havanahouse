@@ -25,7 +25,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import AddProduct from "./addProduct";
 
-import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
 import DashboardBox from "../Dashboard/components/dashboardBox";
 import SearchBox from "../../components/SearchBox";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
@@ -156,11 +156,7 @@ const Products = () => {
 
   return (
     <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-          <h5 className="mb-0">Product List</h5>
-          <AppBreadcrumbs title="Products" path={[{ label: 'Dashboard', href: '/' }]} />
-        </div>
+      <AdminPageLayout title="Product List" breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}> 
 
         <div className="row dashboardBoxWrapperRow dashboardBoxWrapperRowV2 pt-0">
           <div className="col-md-12">
@@ -344,7 +340,7 @@ const Products = () => {
           </div>
         )}
         </div>
-      </div>
+      </AdminPageLayout>
     </>
   );
 };

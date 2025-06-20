@@ -17,8 +17,7 @@ import BaseTable from '../../components/common/BaseTable';
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import AddCategory from "./addCategory";
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
+import AdminPageLayout from '../../components/common/AdminPageLayout';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -65,19 +64,16 @@ const Category = () => {
 
     return (
         <>
-            <Container className="right-content" maxWidth={false}>
-                <div className="card shadow border-0 w-100 p-4">
-                    <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-                        <h5 className="mb-0">Category List</h5>
-                        <Box display="flex" alignItems="center">
-                            <AppBreadcrumbs title="Category" path={[{ label: 'Dashboard', href: '/' }]} />
-                            <AddButton
-                                onClick={() => setShowForm(!showForm)}
-                                label={showForm ? 'Close' : 'Add Category'}
-                            />
-                        </Box>
-                    </Box>
-                </div>
+            <AdminPageLayout
+                title="Category List"
+                breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}
+                actions={
+                    <AddButton
+                        onClick={() => setShowForm(!showForm)}
+                        label={showForm ? 'Close' : 'Add Category'}
+                    />
+                }
+            >
 
                 {showForm && (
                     <div className="card shadow border-0 p-3 mt-4">
@@ -111,7 +107,7 @@ const Category = () => {
                 </div>
 
 
-        </Container>
+        </AdminPageLayout>
 
         </>
     )

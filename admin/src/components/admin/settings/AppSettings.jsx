@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import { AddButton } from '../../common/ActionButtons';
+import AdminPageLayout from '../../common/AdminPageLayout';
 import BaseTable from '../../common/BaseTable';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import SettingForm from './SettingForm';
@@ -48,11 +47,11 @@ const AppSettings = () => {
   };
 
   return (
-    <Container className="right-content" maxWidth={false}>
-      <Box className="card shadow border-0 w-100 p-4" mb={2} display="flex" justifyContent="space-between" alignItems="center">
-        <h5 className="mb-0">App Settings</h5>
-        <AddButton onClick={() => setOpenForm(true)} label="Add Setting" />
-      </Box>
+    <AdminPageLayout
+      title="App Settings"
+      breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}
+      actions={<AddButton onClick={() => setOpenForm(true)} label="Add Setting" />}
+    >
       <Paper className="card shadow border-0 p-3">
         <BaseTable
           columns={[
@@ -84,7 +83,7 @@ const AppSettings = () => {
           editId={editId}
         />
       )}
-    </Container>
+    </AdminPageLayout>
   );
 };
 
