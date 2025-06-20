@@ -47,6 +47,8 @@ REACT_APP_FIREBASE_PROJECT_ID=<firebase project id>
 REACT_APP_FIREBASE_STORAGE_BUCKET=<firebase storage bucket>
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=<firebase messaging sender id>
 REACT_APP_FIREBASE_APP_ID=<firebase app id>
+REACT_APP_CLOUDINARY_CLOUD_NAME=<cloudinary name>
+REACT_APP_CLOUDINARY_UPLOAD_PRESET=<upload preset>
 ```
 
 ### client/.env

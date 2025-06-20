@@ -87,6 +87,7 @@ const AddCategory = ({ onSuccess }) => {
   let selectedImages = [];
 
   const onChangeFile = async (e, apiEndPoint) => {
+    e.preventDefault && e.preventDefault();
     try {
       const files = e.target.files;
 

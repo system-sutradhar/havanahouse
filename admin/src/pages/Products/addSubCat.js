@@ -1,188 +1,107 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { emphasize, styled } from '@mui/material/styles';
-import Chip from '@mui/material/Chip';
-import HomeIcon from '@mui/icons-material/Home';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { MyContext } from '../../App';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
-import { FaCloudUploadAlt } from "react-icons/fa";
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import HomeIcon from '@mui/icons-material/Home';
+import CategoryIcon from '@mui/icons-material/Category';
+import { FaCloudUploadAlt } from 'react-icons/fa';
+import AdminPageLayout from '../../components/common/AdminPageLayout';
+import AdminFormLayout from '../../components/common/AdminFormLayout';
+import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
+import { MyContext } from '../../App';
 import { postData } from '../../utils/api';
-import { useNavigate } from 'react-router-dom';
-
-//breadcrumb code
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-    const backgroundColor =
-        theme.palette.mode === 'light'
-            ? theme.palette.grey[100]
-            : theme.palette.grey[800];
-    return {
-        backgroundColor,
-        height: theme.spacing(3),
-        color: theme.palette.text.primary,
-        fontWeight: theme.typography.fontWeightRegular,
-        '&:hover, &:focus': {
-            backgroundColor: emphasize(backgroundColor, 0.06),
-        },
-        '&:active': {
-            boxShadow: theme.shadows[1],
-            backgroundColor: emphasize(backgroundColor, 0.12),
-        },
-    };
-});
-
-
 
 const AddSubCat = () => {
+  const [categoryVal, setCategoryVal] = useState('');
+  const [catData, setCatData] = useState([]);
+  const [formFields, setFormFields] = useState({ category: '', subCat: '' });
+  const [isLoading, setIsLoading] = useState(false);
+  const history = useNavigate();
+  const context = useContext(MyContext);
 
-    const [categoryVal, setcategoryVal] = useState('');
-    const [catData, setCatData] = useState([]);
-    const [subCatData, setSubCatData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [formFields, setFormFields] = useState({
-        category: '',
-        subCat: '',
-    });
+  useEffect(() => {
+    setCatData(context.catData?.categoryList || []);
+  }, [context.catData]);
 
-    const history = useNavigate();
-    const context = useContext(MyContext);
+  const handleChangeCategory = (e) => {
+    const val = e.target.value;
+    setCategoryVal(val);
+    setFormFields((prev) => ({ ...prev, category: val }));
+  };
 
-    useEffect(()=>{
-        setCatData(context.catData);
-        setSubCatData(context.subCatData);
-    },[context.catData, context.subCatData]);
+  const inputChange = (e) => {
+    setFormFields((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-    const inputChange = (e) => {
-        setFormFields(() => ({
-            ...formFields,
-            [e.target.name]: e.target.value
-        }))
+  const addSubCat = (e) => {
+    e.preventDefault();
+    if (!formFields.category || !formFields.subCat.trim()) {
+      context.setAlertBox({ open: true, error: true, msg: 'Please fill all fields' });
+      return;
     }
+    setIsLoading(true);
+    postData('/api/subCat/create', formFields)
+      .then(() => {
+        context.fetchCategory();
+        history('/subCategory');
+      })
+      .finally(() => setIsLoading(false));
+  };
 
-    const handleChangeCategory = (event) => {
-        setcategoryVal(event.target.value);
-        setFormFields(() => ({
-            ...formFields,
-            category: event.target.value
-        }))
-    };
+  const handleCancel = () => history('/subCategory');
 
-
-    const addSubCat = (e) => {
-        e.preventDefault();
-        const formdata = new FormData();
-        formdata.append('category', formFields.category);
-        formdata.append('subCat', formFields.subCat);
-
-        if (formFields.category === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'Please select a category'
-            });
-            return false;
-        }
-
-        if (formFields.subCat === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'Please enter sub category'
-            });
-            return false;
-        }
-
-
-
-        postData('/api/subCat/create', formFields).then(res => {
-            setIsLoading(false);
-            context.fetchCategory();
-         
-            history('/subCategory');
-        });
-
-    }
-
-    return (
-        <div className="right-content w-100">
-            <div className="card shadow border-0 w-100 flex-row p-4 mt-2">
-                <h5 className="mb-0">Add Sub Category</h5>
-                <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-                    <StyledBreadcrumb
-                        component="a"
-                        href="#"
-                        label="Dashboard"
-                        icon={<HomeIcon fontSize="small" />}
-                    />
-
-                    <StyledBreadcrumb
-                        component="a"
-                        label="Sub Category"
-                        href="#"
-                        deleteIcon={<ExpandMoreIcon />}
-                    />
-                    <StyledBreadcrumb
-                        label="Add Category"
-                        deleteIcon={<ExpandMoreIcon />}
-                    />
-                </Breadcrumbs>
-            </div>
-
-            <form className='form' onSubmit={addSubCat}>
-                <div className='row'>
-                    <div className='col-sm-9'>
-                        <div className='card p-4 mt-0'>
-                            <div className='row'>
-                                <div className='col'>
-                                    <div className='form-group'>
-                                        <h6>CATEGORY</h6>
-                                        <Select
-                                            value={categoryVal}
-                                            onChange={handleChangeCategory}
-                                            displayEmpty
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                            className='w-100'
-                                            name="category"
-                                        >
-                                            <MenuItem value="">
-                                                <em value={null}>None</em>
-                                            </MenuItem>
-                                            {
-                                                catData?.categoryList?.length !== 0 && catData?.categoryList?.map((cat, index) => {
-                                                    return (
-                                                        <MenuItem className="text-capitalize" value={cat.id} key={index}>{cat.name}</MenuItem>
-                                                    )
-                                                })
-                                            }
-
-                                        </Select>
-                                    </div>
-                                </div>
-
-
-
-                                <div className='col'>
-                                    <div className='form-group'>
-                                        <h6>SUB CATEGORY</h6>
-                                        <input type='text' name="subCat" value={formFields.subCat} onChange={inputChange} />
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-                            <Button type="submit" className="btn-blue btn-lg btn-big w-100"
-                            ><FaCloudUploadAlt /> &nbsp;  {isLoading === true ? <CircularProgress color="inherit" className="loader" /> : 'PUBLISH AND VIEW'}  </Button>
-
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    )
-}
+  return (
+    <AdminPageLayout
+      title="Add Sub Category"
+      breadcrumbPath={[
+        { icon: <HomeIcon fontSize='inherit' />, label: 'Dashboard', href: '/' },
+        { icon: <CategoryIcon fontSize='inherit' />, label: 'Category', href: '/category' },
+        { label: 'Add Sub Category' },
+      ]}
+    >
+      <AdminFormLayout onSubmit={addSubCat}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Select
+              value={categoryVal}
+              onChange={handleChangeCategory}
+              displayEmpty
+              fullWidth
+              name='category'
+            >
+              <MenuItem value=''>
+                <em>None</em>
+              </MenuItem>
+              {catData.map((cat) => (
+                <MenuItem key={cat.id || cat._id} value={cat.id || cat._id} className='text-capitalize'>
+                  {cat.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              name='subCat'
+              value={formFields.subCat}
+              onChange={inputChange}
+              label='Sub Category'
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+        <Box display='flex' justifyContent='flex-end' mt={3} gap={2}>
+          <CancelButton onClick={handleCancel} />
+          <SaveButton type='submit' startIcon={<FaCloudUploadAlt />} disabled={isLoading}>
+            {isLoading ? <CircularProgress size={20} color='inherit' /> : 'Save'}
+          </SaveButton>
+        </Box>
+      </AdminFormLayout>
+    </AdminPageLayout>
+  );
+};
 
 export default AddSubCat;
