@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
+import { AddButton } from "../../components/common/ActionButtons";
 
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -9,11 +10,7 @@ import { MyContext } from "../../App";
 import { Link } from "react-router-dom";
 import AddHomeSideBanner from "./addHomeSideBanner";
 
-import { emphasize, styled } from "@mui/material/styles";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Chip from "@mui/material/Chip";
-import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -23,25 +20,6 @@ import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 //breadcrumb code
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-  const backgroundColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[800];
-  return {
-    backgroundColor,
-    height: theme.spacing(3),
-    color: theme.palette.text.primary,
-    fontWeight: theme.typography.fontWeightRegular,
-    "&:hover, &:focus": {
-      backgroundColor: emphasize(backgroundColor, 0.06),
-    },
-    "&:active": {
-      boxShadow: theme.shadows[1],
-      backgroundColor: emphasize(backgroundColor, 0.12),
-    },
-  };
-});
 
 const BannersList = () => {
   const [slideList, setSlideList] = useState([]);
@@ -83,29 +61,12 @@ const BannersList = () => {
           <h5 className="mb-0">Home Side Banner List</h5>
 
           <div className="ml-auto d-flex align-items-center">
-            <Breadcrumbs
-              aria-label="breadcrumb"
-              className="ml-auto breadcrumbs_"
-            >
-              <StyledBreadcrumb
-                component="a"
-                href="#"
-                label="Dashboard"
-                icon={<HomeIcon fontSize="small" />}
-              />
+            <AppBreadcrumbs title="Banners" path={[{ label: 'Dashboard', href: '/' }]} />
 
-              <StyledBreadcrumb
-                label="Banners"
-                deleteIcon={<ExpandMoreIcon />}
-              />
-            </Breadcrumbs>
-
-            <Button
-              className="btn-blue  ml-3 pl-3 pr-3"
+            <AddButton
               onClick={() => setShowForm(!showForm)}
-            >
-              {showForm ? "Close" : "Add Home Side Banner"}
-            </Button>
+              label={showForm ? 'Close' : 'Add Home Side Banner'}
+            />
           </div>
         </div>
 

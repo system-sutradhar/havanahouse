@@ -1,16 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import { AddButton } from '../../common/ActionButtons';
+import BaseTable from '../../common/BaseTable';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import SettingForm from './SettingForm';
 import { fetchDataFromApi, deleteData } from '../../../utils/api';
@@ -57,54 +51,30 @@ const AppSettings = () => {
     <Container className="right-content" maxWidth={false}>
       <Box className="card shadow border-0 w-100 p-4" mb={2} display="flex" justifyContent="space-between" alignItems="center">
         <h5 className="mb-0">App Settings</h5>
-        <Button variant="contained" className="btn-blue" onClick={() => setOpenForm(true)}>
-          Add Setting
-        </Button>
+        <AddButton onClick={() => setOpenForm(true)} label="Add Setting" />
       </Box>
       <Paper className="card shadow border-0 p-3">
-        <TableContainer sx={{ overflowX: 'auto' }}>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Value</TableCell>
-                <TableCell>Prelogin</TableCell>
-                <TableCell>Postlogin</TableCell>
-                <TableCell>Desktop</TableCell>
-                <TableCell>Mobile</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {list.map((item) => (
-                <TableRow hover key={item.id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>
-                    <Tooltip title={item.value || ''}>
-                      <span>{item.value && item.value.length > 60 ? `${item.value.slice(0, 60)}...` : item.value}</span>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell>{item.prelogin ? 'Yes' : 'No'}</TableCell>
-                  <TableCell>{item.postlogin ? 'Yes' : 'No'}</TableCell>
-                  <TableCell>{item.desktop ? 'Yes' : 'No'}</TableCell>
-                  <TableCell>{item.mobile ? 'Yes' : 'No'}</TableCell>
-                  <TableCell>
-                    <Tooltip title="Edit">
-                      <IconButton onClick={() => { setEditId(item.id); setOpenForm(true); }} aria-label="Edit">
-                        <MdEdit />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton onClick={() => handleDelete(item.id)} aria-label="Delete" color="error">
-                        <MdDelete />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <BaseTable
+          columns={[
+            { label: 'Name', field: 'name' },
+            {
+              label: 'Value',
+              field: 'value',
+              render: (row) => (
+                <Tooltip title={row.value || ''}>
+                  <span>{row.value && row.value.length > 60 ? `${row.value.slice(0, 60)}...` : row.value}</span>
+                </Tooltip>
+              ),
+            },
+            { label: 'Prelogin', field: 'prelogin', render: (row) => (row.prelogin ? 'Yes' : 'No') },
+            { label: 'Postlogin', field: 'postlogin', render: (row) => (row.postlogin ? 'Yes' : 'No') },
+            { label: 'Desktop', field: 'desktop', render: (row) => (row.desktop ? 'Yes' : 'No') },
+            { label: 'Mobile', field: 'mobile', render: (row) => (row.mobile ? 'Yes' : 'No') },
+          ]}
+          rows={list}
+          onEdit={(row) => { setEditId(row.id); setOpenForm(true); }}
+          onDelete={(row) => handleDelete(row.id)}
+        />
       </Paper>
       {openForm && (
         <SettingForm

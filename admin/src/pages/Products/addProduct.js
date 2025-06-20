@@ -1,8 +1,4 @@
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { emphasize, styled } from "@mui/material/styles";
-import Chip from "@mui/material/Chip";
+import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -10,6 +6,8 @@ import { useContext, useEffect, useRef, useState } from "react";
 import Rating from "@mui/material/Rating";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { SaveButton, CancelButton } from "../../components/common/ActionButtons";
 import {
   deleteData,
   deleteImages,
@@ -23,6 +21,7 @@ import { FaRegImages } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoCloseSharp } from "react-icons/io5";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import AdminFormLayout from "../../components/common/AdminFormLayout";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -31,25 +30,6 @@ import axios from "axios";
 import CountryDropdown from "../../components/CountryDropdown";
 
 //breadcrumb code
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-  const backgroundColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[800];
-  return {
-    backgroundColor,
-    height: theme.spacing(3),
-    color: theme.palette.text.primary,
-    fontWeight: theme.typography.fontWeightRegular,
-    "&:hover, &:focus": {
-      backgroundColor: emphasize(backgroundColor, 0.06),
-    },
-    "&:active": {
-      boxShadow: theme.shadows[1],
-      backgroundColor: emphasize(backgroundColor, 0.12),
-    },
-  };
-});
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -510,33 +490,25 @@ const ProductUpload = ({ onSuccess }) => {
     });
   };
 
+  const handleCancel = () => {
+    history('/products');
+  };
+
   return (
     <>
       <div className="right-content w-100">
         <div className="card shadow border-0 w-100 flex-row p-4">
           <h5 className="mb-0">Product Upload</h5>
-          <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-            <StyledBreadcrumb
-              component="a"
-              href="#"
-              label="Dashboard"
-              icon={<HomeIcon fontSize="small" />}
-            />
-
-            <StyledBreadcrumb
-              component="a"
-              label="Products"
-              href="#"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-            <StyledBreadcrumb
-              label="Product Upload"
-              deleteIcon={<ExpandMoreIcon />}
-            />
-          </Breadcrumbs>
+          <AppBreadcrumbs
+            title="Product Upload"
+            path={[
+              { label: 'Dashboard', href: '/' },
+              { label: 'Products', href: '/products' },
+            ]}
+          />
         </div>
 
-        <form className="form" onSubmit={addProduct}>
+        <AdminFormLayout onSubmit={addProduct}>
           <div className="row">
             <div className="col-md-12">
               <div className="card p-4 mt-0">
@@ -863,23 +835,23 @@ const ProductUpload = ({ onSuccess }) => {
                 </div>
               </div>
 
-              <br />
-
-              <Button
-                type="submit"
-                disabled={uploading === true ? true : false}
-                className="btn-blue btn-lg btn-big w-100"
-              >
-                <FaCloudUploadAlt /> &nbsp;{" "}
-                {isLoading === true ? (
-                  <CircularProgress color="inherit" className="loader" />
-                ) : (
-                  "PUBLISH AND VIEW"
-                )}{" "}
-              </Button>
+              <Box mt={2} display="flex" justifyContent="flex-end" gap={2}>
+                <CancelButton onClick={handleCancel} />
+                <SaveButton
+                  type="submit"
+                  disabled={uploading === true}
+                  startIcon={<FaCloudUploadAlt />}
+                >
+                  {isLoading ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : (
+                    "Publish and View"
+                  )}
+                </SaveButton>
+              </Box>
             </div>
           </div>
-        </form>
+        </AdminFormLayout>
       </div>
     </>
   );

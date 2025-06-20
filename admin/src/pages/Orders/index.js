@@ -3,13 +3,10 @@ import { editData, fetchDataFromApi } from "../../utils/api";
 import { useState } from "react";
 import { useEffect } from "react";
 
-import { emphasize, styled } from "@mui/material/styles";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Chip from "@mui/material/Chip";
-import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
 import Pagination from "@mui/material/Pagination";
-import Dialog from "@mui/material/Dialog";
+import BaseModal from "../../components/common/BaseModal";
+import { CancelButton } from "../../components/common/ActionButtons";
 import { MdClose } from "react-icons/md";
 import Button from "@mui/material/Button";
 import { MdOutlineEmail } from "react-icons/md";
@@ -24,25 +21,6 @@ import { MyContext } from "../../App";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 //breadcrumb code
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-  const backgroundColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[800];
-  return {
-    backgroundColor,
-    height: theme.spacing(3),
-    color: theme.palette.text.primary,
-    fontWeight: theme.typography.fontWeightRegular,
-    "&:hover, &:focus": {
-      backgroundColor: emphasize(backgroundColor, 0.06),
-    },
-    "&:active": {
-      boxShadow: theme.shadows[1],
-      backgroundColor: emphasize(backgroundColor, 0.12),
-    },
-  };
-});
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -141,22 +119,7 @@ const Orders = () => {
           <h5 className="mb-0">Orders List</h5>
 
           <div className="ml-auto d-flex align-items-center">
-            <Breadcrumbs
-              aria-label="breadcrumb"
-              className="ml-auto breadcrumbs_"
-            >
-              <StyledBreadcrumb
-                component="a"
-                href="#"
-                label="Dashboard"
-                icon={<HomeIcon fontSize="small" />}
-              />
-
-              <StyledBreadcrumb
-                label="Orders"
-                deleteIcon={<ExpandMoreIcon />}
-              />
-            </Breadcrumbs>
+            <AppBreadcrumbs title="Orders" path={[{ label: 'Dashboard', href: '/' }]} />
           </div>
         </div>
 
@@ -257,12 +220,12 @@ const Orders = () => {
         </div>
       </div>
 
-      <Dialog open={isOpenModal} className="productModal">
-        <Button className="close_" onClick={() => setIsOpenModal(false)}>
-          <MdClose />
-        </Button>
-        <h4 className="mb-1 font-weight-bold pr-5 mb-4">Products</h4>
-
+      <BaseModal
+        open={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        title="Products"
+        actions={<CancelButton onClick={() => setIsOpenModal(false)} />}
+      >
         <div className="table-responsive orderTable">
           <table className="table table-striped table-bordered">
             <thead className="thead-dark">
@@ -299,7 +262,7 @@ const Orders = () => {
             </tbody>
           </table>
         </div>
-      </Dialog>
+      </BaseModal>
     </>
   );
 };

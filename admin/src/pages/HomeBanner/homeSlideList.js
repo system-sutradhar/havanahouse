@@ -1,13 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
+import BaseModal from "../../components/common/BaseModal";
 
 import { FaPencilAlt } from "react-icons/fa";
-import { MdDelete, MdClose } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { CancelButton } from "../../components/common/ActionButtons";
 import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
 
@@ -113,33 +110,29 @@ const HomeSlidesList = () => {
           </div>
         </div>
 
-        <Dialog open={openModal} onClose={() => setOpenModal(false)} className="editModal" fullWidth maxWidth="md">
-          <DialogTitle className="d-flex justify-content-between align-items-center">
-            Add Home Slide
-            <IconButton onClick={() => setOpenModal(false)}>
-              <MdClose />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent dividers>
-            <AddHomeSlide
-              onSuccess={() => {
-                setOpenModal(false);
-                loadSlides();
-              }}
-              onClose={() => setOpenModal(false)}
-              formId="add-slide-form"
-              hideActions
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button variant="outlined" onClick={() => setOpenModal(false)}>
-              Cancel
-            </Button>
-            <Button variant="contained" form="add-slide-form" type="submit" className="btn-blue">
-              Publish
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <BaseModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          title="Add Home Slide"
+          actions={
+            <>
+              <CancelButton onClick={() => setOpenModal(false)} />
+              <Button variant="contained" form="add-slide-form" type="submit" className="btn-blue">
+                Publish
+              </Button>
+            </>
+          }
+        >
+          <AddHomeSlide
+            onSuccess={() => {
+              setOpenModal(false);
+              loadSlides();
+            }}
+            onClose={() => setOpenModal(false)}
+            formId="add-slide-form"
+            hideActions
+          />
+        </BaseModal>
 
         <div className="card shadow border-0 p-3 mt-4">
           <div className="table-responsive mt-3">

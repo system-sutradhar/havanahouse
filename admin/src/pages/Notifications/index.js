@@ -1,42 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
+import { AddButton, SaveButton, CancelButton, DeleteButton } from "../../components/common/ActionButtons";
 import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import AdminFormLayout from "../../components/common/AdminFormLayout";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Chip from "@mui/material/Chip";
-import { emphasize, styled } from "@mui/material/styles";
-import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import { MdClose } from "react-icons/md";
+import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
+import BaseModal from "../../components/common/BaseModal";
+import BaseTable from "../../components/common/BaseTable";
 import { MyContext } from "../../App";
 import { fetchDataFromApi, postData, editData, deleteData, uploadImage } from "../../utils/api";
 import logger from "../../utils/logger";
 
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-  const backgroundColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[800];
-  return {
-    backgroundColor,
-    height: theme.spacing(3),
-    color: theme.palette.text.primary,
-    fontWeight: theme.typography.fontWeightRegular,
-    "&:hover, &:focus": {
-      backgroundColor: emphasize(backgroundColor, 0.06),
-    },
-    "&:active": {
-      boxShadow: theme.shadows[1],
-      backgroundColor: emphasize(backgroundColor, 0.12),
-    },
-  };
-});
 
 const Notifications = () => {
   const [message, setMessage] = useState("");
@@ -136,106 +112,75 @@ const Notifications = () => {
         >
           <h5 className="mb-0">Notifications</h5>
           <Box display="flex" alignItems="center">
-            <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs_">
-              <StyledBreadcrumb
-                component="a"
-                href="#"
-                label="Dashboard"
-                icon={<HomeIcon fontSize="small" />}
-              />
-              <StyledBreadcrumb label="Notifications" deleteIcon={<ExpandMoreIcon />} />
-            </Breadcrumbs>
-            <Button
-              className="btn-blue ml-3 pl-3 pr-3"
-              onClick={() => setOpenModal(true)}
-            >
-              Add Notification
-            </Button>
+            <AppBreadcrumbs title="Notifications" path={[{ label: 'Dashboard', href: '/' }]} />
+            <AddButton onClick={() => setOpenModal(true)} label="Add Notification" />
           </Box>
         </Box>
       </div>
 
-      <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth maxWidth="sm">
-        <DialogTitle className="d-flex justify-content-between align-items-center">
-          Add Notification
-          <IconButton onClick={() => setOpenModal(false)}>
-            <MdClose />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent dividers>
-          <form id="add-notification-form" onSubmit={addNotification}>
-            <TextField
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              label="Notification Message"
-              fullWidth
-              size="small"
-              required
-              sx={{ mb: 2 }}
-            />
-            <input type="file" accept="image/*" onChange={handleFile} />
-            {preview && (
-              <div className="mt-2">
-                <img src={preview} alt="preview" width="100" loading="lazy" />
-              </div>
-            )}
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="outlined" onClick={() => setOpenModal(false)}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            form="add-notification-form"
-            type="submit"
-            className="btn-blue"
-          >
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <BaseModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        title="Add Notification"
+        actions={
+          <>
+            <CancelButton onClick={() => setOpenModal(false)} />
+            <AddButton form="add-notification-form" type="submit" label="Add" />
+          </>
+        }
+      >
+        <AdminFormLayout>
+          <Grid container spacing={3} id="add-notification-form" component="form" onSubmit={addNotification}>
+            <Grid item xs={12}>
+              <TextField
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                label="Notification Message"
+                fullWidth
+                size="small"
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <input type="file" accept="image/*" onChange={handleFile} />
+              {preview && (
+                <Box mt={2}>
+                  <img src={preview} alt="preview" width={100} loading="lazy" />
+                </Box>
+              )}
+            </Grid>
+          </Grid>
+        </AdminFormLayout>
+      </BaseModal>
 
       <div className="card shadow border-0 p-3 mt-4">
-        <div className="table-responsive mt-3">
-          <table className="table table-bordered">
-            <thead className="thead-dark">
-              <tr>
-                <th>Image</th>
-                <th>Message</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {list.map((item) => (
-                <tr key={item.id}>
-                  <td>
-                    {item.image && (
-                      <img src={item.image} alt="banner" width="60" loading="lazy" />
-                    )}
-                  </td>
-                  <td>{item.message}</td>
-                  <td>{item.isPublished ? "Published" : "Draft"}</td>
-                  <td>
-                    {item.isPublished ? (
-                      <Button size="small" onClick={() => unpublish(item.id)}>
-                        Unpublish
-                      </Button>
-                    ) : (
-                      <Button size="small" onClick={() => publish(item.id)}>
-                        Publish
-                      </Button>
-                    )}
-                    <Button color="error" size="small" onClick={() => remove(item.id)}>
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <BaseTable
+          columns={[
+            {
+              label: 'Image',
+              field: 'image',
+              render: (row) =>
+                row.image ? <img src={row.image} alt="banner" width={60} loading="lazy" /> : null,
+            },
+            { label: 'Message', field: 'message' },
+            {
+              label: 'Status',
+              field: 'isPublished',
+              render: (row) =>
+                row.isPublished ? (
+                  <Button size="small" onClick={() => unpublish(row.id)}>
+                    Unpublish
+                  </Button>
+                ) : (
+                  <Button size="small" onClick={() => publish(row.id)}>
+                    Publish
+                  </Button>
+                ),
+            },
+          ]}
+          rows={list}
+          onDelete={(row) => remove(row.id)}
+        />
       </div>
     </Container>
   );
