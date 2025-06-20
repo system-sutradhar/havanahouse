@@ -2,7 +2,7 @@ import { MdShoppingBag } from "react-icons/md";
 import MenuItem from "@mui/material/MenuItem";
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { AddButton, CancelButton, DeleteButton } from "../../components/common/ActionButtons";
+import { AddButton } from "../../components/common/ActionButtons";
 
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -23,7 +23,7 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import AddProduct from "./addProduct";
+import ProductForm from "./ProductForm";
 
 import AdminPageLayout from "../../components/common/AdminPageLayout";
 import DashboardBox from "../Dashboard/components/dashboardBox";
@@ -156,15 +156,27 @@ const Products = () => {
 }
 
 
+  if (showForm) {
+    return (
+      <ProductForm
+        onSuccess={() => {
+          setShowForm(false);
+          loadProducts();
+        }}
+        onCancel={() => setShowForm(false)}
+      />
+    );
+  }
+
   return (
-    <>
-      <AdminPageLayout
-        title="Product List"
-        breadcrumbPath={[
-          { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
-          { icon: <StorefrontIcon fontSize="inherit" />, label: 'Products', href: '/products' },
-        ]}
-      >
+    <AdminPageLayout
+      title="Product List"
+      breadcrumbPath={[
+        { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+        { icon: <StorefrontIcon fontSize="inherit" />, label: 'Products', href: '/products' },
+      ]}
+      actions={<AddButton onClick={() => setShowForm(true)} label="Add Product" />}
+    >
 
         <div className="row dashboardBoxWrapperRow dashboardBoxWrapperRowV2 pt-0">
           <div className="col-md-12">
@@ -195,19 +207,7 @@ const Products = () => {
         <div className="card shadow border-0 p-3 mt-4">
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <h3 className="hd mb-0">Best Selling Products</h3>
-            <Box>
-              {!showForm && (
-                <AddButton onClick={() => setShowForm(true)} label="Add Product" />
-              )}
-              {showForm && <CancelButton onClick={() => setShowForm(false)} />}
           </Box>
-        </Box>
-
-        {showForm && (
-          <Box mt={3}>
-            <AddProduct onSuccess={() => { setShowForm(false); loadProducts(); }} />
-          </Box>
-        )}
 
         <Grid container spacing={2} className="cardFilters mt-3">
           <Grid item xs={12} md={3}>
@@ -349,7 +349,6 @@ const Products = () => {
         )}
         </div>
       </AdminPageLayout>
-    </>
   );
 };
 
