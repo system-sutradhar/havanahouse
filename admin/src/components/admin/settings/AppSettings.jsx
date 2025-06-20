@@ -6,6 +6,7 @@ import AdminPageLayout from '../../common/AdminPageLayout';
 import BaseTable from '../../common/BaseTable';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import SettingForm from './SettingForm';
+import SettingFormPage from '../../pages/AppSettings/SettingFormPage';
 import { fetchDataFromApi, deleteData } from '../../../utils/api';
 import { MyContext } from '../../../App';
 import logger from '../../../utils/logger';
@@ -46,6 +47,16 @@ const AppSettings = () => {
     loadData();
   };
 
+  if (openForm) {
+    return (
+      <SettingFormPage
+        editId={editId}
+        onCancel={() => { setOpenForm(false); setEditId(null); }}
+        onSuccess={handleSuccess}
+      />
+    );
+  }
+
   return (
     <AdminPageLayout
       title="App Settings"
@@ -75,14 +86,6 @@ const AppSettings = () => {
           onDelete={(row) => handleDelete(row.id)}
         />
       </Paper>
-      {openForm && (
-        <SettingForm
-          open={openForm}
-          onClose={() => { setOpenForm(false); setEditId(null); }}
-          onSuccess={handleSuccess}
-          editId={editId}
-        />
-      )}
     </AdminPageLayout>
   );
 };

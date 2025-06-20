@@ -1,22 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import Button from '@mui/material/Button';
-import { AddButton } from '../../components/common/ActionButtons';
+import { AddButton, CancelButton } from '../../components/common/ActionButtons';
 
-import { FaPencilAlt } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import Pagination from '@mui/material/Pagination';
 import { MyContext } from "../../App";
-
-import { Link } from "react-router-dom";
-
-import AppBreadcrumbs from '../../components/common/AppBreadcrumbs';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import BaseTable from '../../components/common/BaseTable';
 
-import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
-import AddCategory from "./addCategory";
+import { deleteData, fetchDataFromApi } from "../../utils/api";
+import CategoryForm from "./CategoryForm";
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -64,58 +56,60 @@ const Category = () => {
 
 
 
-    return (
-        <>
+    if (showForm) {
+        return (
             <AdminPageLayout
-                title="Category List"
+                title="Add Category"
                 breadcrumbPath={[
-                    { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
-                    { icon: <CategoryIcon fontSize="inherit" />, label: 'Categories', href: '/categories' },
+                    { icon: <HomeIcon fontSize='inherit' />, label: 'Dashboard', href: '/' },
+                    { icon: <CategoryIcon fontSize='inherit' />, label: 'Categories', href: '/categories' },
+                    { label: 'Add' },
                 ]}
-                actions={
-                    <AddButton
-                        onClick={() => setShowForm(!showForm)}
-                        label={showForm ? 'Close' : 'Add Category'}
-                    />
-                }
+                actions={<CancelButton onClick={() => setShowForm(false)} />}
             >
+                <CategoryForm
+                    onCancel={() => setShowForm(false)}
+                    onSuccess={() => { setShowForm(false); loadCategories(); }}
+                />
+            </AdminPageLayout>
+        );
+    }
 
-                {showForm && (
-                    <div className="card shadow border-0 p-3 mt-4">
-                        <AddCategory onSuccess={() => { setShowForm(false); loadCategories(); }} />
-                    </div>
-                )}
-
-                <div className="card shadow border-0 p-3 mt-4">
-                    <BaseTable
-                        columns={[
-                            {
-                                label: 'IMAGE',
-                                field: 'images',
-                                render: (row) => (
-                                    <div className="d-flex align-items-center" style={{ width: '150px' }}>
-                                        <div className="imgWrapper" style={{ width: '50px', flex: '0 0 50px' }}>
-                                            <div className="img card shadow m-0">
-                                                <LazyLoadImage alt="image" effect="blur" className="w-100" src={row.images[0]} />
-                                            </div>
+    return (
+        <AdminPageLayout
+            title="Category List"
+            breadcrumbPath={[
+                { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+                { icon: <CategoryIcon fontSize="inherit" />, label: 'Categories', href: '/categories' },
+            ]}
+            actions={<AddButton onClick={() => setShowForm(true)} label="Add Category" />}
+        >
+            <div className="card shadow border-0 p-3 mt-4">
+                <BaseTable
+                    columns={[
+                        {
+                            label: 'IMAGE',
+                            field: 'images',
+                            render: (row) => (
+                                <div className="d-flex align-items-center" style={{ width: '150px' }}>
+                                    <div className="imgWrapper" style={{ width: '50px', flex: '0 0 50px' }}>
+                                        <div className="img card shadow m-0">
+                                            <LazyLoadImage alt="image" effect="blur" className="w-100" src={row.images[0]} />
                                         </div>
                                     </div>
-                                ),
-                            },
-                            { label: 'CATEGORY', field: 'name' },
-                            { label: 'COLOR', field: 'color' },
-                        ]}
-                        rows={catData?.categoryList?.slice(0).reverse() || []}
-                        onEdit={(row) => (window.location.href = `/category/edit/${row._id}`)}
-                        onDelete={(row) => deleteCat(row._id)}
-                    />
-                </div>
-
-
+                                </div>
+                            ),
+                        },
+                        { label: 'CATEGORY', field: 'name' },
+                        { label: 'COLOR', field: 'color' },
+                    ]}
+                    rows={catData?.categoryList?.slice(0).reverse() || []}
+                    onEdit={(row) => (window.location.href = `/category/edit/${row._id}`)}
+                    onDelete={(row) => deleteCat(row._id)}
+                />
+            </div>
         </AdminPageLayout>
-
-        </>
-    )
+    );
 }
 
 export default Category;

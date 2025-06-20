@@ -1,41 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { AddButton, SaveButton, CancelButton, DeleteButton } from "../../components/common/ActionButtons";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import AdminFormLayout from "../../components/common/AdminFormLayout";
-import Box from "@mui/material/Box";
+import { AddButton, DeleteButton } from "../../components/common/ActionButtons";
 import AdminPageLayout from "../../components/common/AdminPageLayout";
-import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
-import BaseModal from "../../components/common/BaseModal";
 import BaseTable from "../../components/common/BaseTable";
 import { MyContext } from "../../App";
-import { fetchDataFromApi, postData, editData, deleteData } from "../../utils/api";
-import { uploadMedia } from '../../utils/cloudinaryService';
+import { fetchDataFromApi, editData, deleteData } from "../../utils/api";
 import HomeIcon from '@mui/icons-material/Home';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationForm from './NotificationForm';
 import logger from "../../utils/logger";
 
 
 const Notifications = () => {
-  const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [image, setImage] = useState("");
-  const [preview, setPreview] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const context = useContext(MyContext);
-
-  const handleFile = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try {
-      const res = await uploadMedia(file);
-      setImage(res.url);
-      setPreview(res.url);
-    } catch (err) {
-      logger.error(err);
-    }
-  };
 
   const load = () => {
     fetchDataFromApi('/api/notifications')
@@ -55,25 +34,6 @@ const Notifications = () => {
     };
   }, []);
 
-  const addNotification = (e) => {
-    e.preventDefault();
-    if (!message.trim()) return;
-    context.setProgress(30);
-    postData('/api/notifications', { message, image })
-      .then(() => {
-        setMessage("");
-        setImage("");
-        setPreview(null);
-        load();
-        context.setProgress(100);
-        context.setAlertBox({ open: true, error: false, msg: 'Added!' });
-      })
-      .catch((err) => {
-        logger.error(err);
-        context.setProgress(100);
-        context.setAlertBox({ open: true, error: true, msg: 'Failed to add' });
-      });
-  };
 
   const publish = (id) => {
     editData(`/api/notifications/${id}/publish`)
@@ -109,43 +69,17 @@ const Notifications = () => {
         { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
         { icon: <NotificationsIcon fontSize="inherit" />, label: 'Notifications', href: '/notifications' },
       ]}
-      actions={<AddButton onClick={() => setOpenModal(true)} label="Add Notification" />}
+      actions={<AddButton onClick={() => setShowForm(true)} label="Add Notification" />}
     >
-
-      <BaseModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        title="Add Notification"
-        actions={
-          <>
-            <CancelButton onClick={() => setOpenModal(false)} />
-            <AddButton form="add-notification-form" type="submit" label="Add" />
-          </>
-        }
-      >
-        <AdminFormLayout>
-          <Grid container spacing={3} id="add-notification-form" component="form" onSubmit={addNotification}>
-            <Grid item xs={12}>
-              <TextField
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                label="Notification Message"
-                fullWidth
-                size="small"
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <input type="file" accept="image/*" onChange={handleFile} />
-              {preview && (
-                <Box mt={2}>
-                  <img src={preview} alt="preview" width={100} loading="lazy" />
-                </Box>
-              )}
-            </Grid>
-          </Grid>
-        </AdminFormLayout>
-      </BaseModal>
+      {showForm && (
+        <NotificationForm
+          onCancel={() => setShowForm(false)}
+          onSuccess={() => {
+            setShowForm(false);
+            load();
+          }}
+        />
+      )}
 
       <div className="card shadow border-0 p-3 mt-4">
         <BaseTable

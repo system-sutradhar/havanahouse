@@ -4,7 +4,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { IoCloseSharp } from 'react-icons/io5';
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import BaseTable from '../../components/common/BaseTable';
-import { AddButton, DeleteButton } from '../../components/common/ActionButtons';
+import { AddButton, CancelButton } from '../../components/common/ActionButtons';
 import AddSubCat from './addSubCat';
 import { MyContext } from '../../App';
 import { fetchDataFromApi, deleteData } from '../../utils/api';
@@ -45,6 +45,25 @@ const SubCategory = () => {
     children: item.children
   }));
 
+  if (showForm) {
+    return (
+      <AdminPageLayout
+        title="Add Sub Category"
+        breadcrumbPath={[
+          { icon: <HomeIcon fontSize='inherit' />, label: 'Dashboard', href: '/' },
+          { icon: <CategoryIcon fontSize='inherit' />, label: 'Category', href: '/category' },
+          { label: 'Add Sub Category' },
+        ]}
+        actions={<CancelButton onClick={() => setShowForm(false)} />}
+      >
+        <AddSubCat
+          onCancel={() => setShowForm(false)}
+          onSuccess={() => { setShowForm(false); loadCategories(); }}
+        />
+      </AdminPageLayout>
+    );
+  }
+
   return (
     <AdminPageLayout
       title="Sub Category List"
@@ -54,14 +73,9 @@ const SubCategory = () => {
         { label: 'Sub Category' },
       ]}
       actions={
-        <AddButton onClick={() => setShowForm(!showForm)} label={showForm ? 'Close' : 'Add Sub Category'} />
+        <AddButton onClick={() => setShowForm(true)} label="Add Sub Category" />
       }
     >
-      {showForm && (
-        <div className='card shadow border-0 p-3 mt-4'>
-          <AddSubCat onSuccess={() => { setShowForm(false); loadCategories(); }} />
-        </div>
-      )}
       <div className='card shadow border-0 p-3 mt-4'>
         <BaseTable
           columns={[

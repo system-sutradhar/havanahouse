@@ -15,7 +15,7 @@ import { SaveButton, CancelButton } from '../../components/common/ActionButtons'
 import { MyContext } from '../../App';
 import { postData } from '../../utils/api';
 
-const AddSubCat = () => {
+const AddSubCat = ({ onCancel, onSuccess }) => {
   const [categoryVal, setCategoryVal] = useState('');
   const [catData, setCatData] = useState([]);
   const [formFields, setFormFields] = useState({ category: '', subCat: '' });
@@ -47,12 +47,16 @@ const AddSubCat = () => {
     postData('/api/subCat/create', formFields)
       .then(() => {
         context.fetchCategory();
-        history('/subCategory');
+        if (onSuccess) onSuccess();
+        else history('/subCategory');
       })
       .finally(() => setIsLoading(false));
   };
 
-  const handleCancel = () => history('/subCategory');
+  const handleCancel = () => {
+    if (onCancel) onCancel();
+    else history('/subCategory');
+  };
 
   return (
     <AdminPageLayout
