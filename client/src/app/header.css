@@ -101,10 +101,10 @@
 
 /* Quick Links */
 .header-middle-wrapper {
-  background-color: #f8f8f8;
+  background-color: var(--color-light-bg);
   padding: 6px 0;
   font-size: 14px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .top-links ul {
@@ -163,8 +163,8 @@
 .search-bar {
   display: flex;
   align-items: center;
-  background: #fff;
-  border: 2px solid #111;
+  background: var(--color-light-bg);
+  border: 2px solid var(--color-primary-bg);
   margin: 0 20px;
   border-radius: 50px;
   transition: max-width 0.3s ease, border-color 0.3s ease;
@@ -183,7 +183,7 @@
   flex: 1;
   padding: 10px 12px;
   font-family: var(--font-body);
-  color: #111;
+  color: var(--color-primary-bg);
   background: transparent;
 }
 
@@ -202,7 +202,7 @@
 
 .search-bar button svg {
   font-size: 16px;
-  color: #111;
+  color: var(--color-primary-bg);
 }
 
 .action-icons {
@@ -214,7 +214,7 @@
 }
 
 .action-icons a {
-  color: white;
+  color: var(--color-primary-text);
   padding: 10px;
   border-radius: 10px;
   background-color: transparent;
@@ -244,7 +244,7 @@
 .mobile-hamburger span {
   width: 24px;
   height: 2px;
-  background: white;
+  background: var(--color-primary-text);
   display: block;
   transition: all 0.3s ease;
 }
@@ -252,8 +252,8 @@
 .mobile-search-bar {
   display: flex;
   align-items: center;
-  background: #fff;
-  border: 2px solid #000;
+  background: var(--color-light-bg);
+  border: 2px solid var(--color-primary-bg);
   border-radius: 30px;
   margin: 12px auto;
   padding: 6px 12px;
@@ -269,7 +269,7 @@
   padding: 10px;
   outline: none;
   background: transparent;
-  color: #000;
+  color: var(--color-primary-bg);
 }
 
 .mobile-search-bar input::placeholder {
@@ -281,13 +281,13 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
-  color: #000;
+  color: var(--color-primary-bg);
   padding: 6px;
 }
 
 .mobile-search-bar button svg {
   font-size: 16px;
-  color: #111;
+  color: var(--color-primary-bg);
 }
 /* 🖥️ Hide mobile search on desktop */
 @media (min-width: 992px) {
@@ -353,7 +353,7 @@
     width: 82%;
     max-width: 320px;
     height: 100%;
-    background-color: #fff;
+    background-color: var(--color-light-bg);
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1001;
     overflow-y: auto;
@@ -366,7 +366,7 @@
     background: none;
     border: none;
     font-size: 28px;
-    color: #000;
+    color: var(--color-primary-bg);
     align-self: flex-end;
     cursor: pointer;
   }
@@ -385,18 +385,18 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f9f9f9;
+    background: var(--color-light-bg);
     border-radius: 8px;
     padding: 10px;
     transition: background 0.3s ease;
     cursor: pointer;
-    color: #1a1a1a;
+    color: var(--color-primary-bg);
     font-weight: 500;
     text-transform: capitalize;
   }
   
   .mobile-category-item:hover {
-    background-color: #f2e9da;
+    background-color: var(--color-hover-bg);
     color: var(--color-accent-gold);
   }
   
@@ -405,11 +405,11 @@
     height: 48px;
     object-fit: cover;
     border-radius: 6px;
-    background: #eee;
+    background: var(--color-gray-light);
   }
   
   .mobile-category-item a{
-    color: black;
+    color: var(--color-primary-bg);
   }
   /* 🔸 Help & Info Links */
   .mobile-help-info {
@@ -417,12 +417,12 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--color-border);
     padding-top: 16px;
   }
   
   .mobile-help-info a {
-    color: #1a1a1a;
+    color: var(--color-primary-bg);
     font-size: 15px;
     font-weight: 500;
     text-decoration: none;
@@ -447,7 +447,7 @@
     height: 34px;
     display: inline-block;
     border-radius: 50%;
-    background-color: #eee;
+    background-color: var(--color-gray-light);
     background-size: 18px;
     background-repeat: no-repeat;
     background-position: center;
@@ -603,7 +603,7 @@
   object-fit: contain;
   border-radius: 50%;
   border: 2px solid var(--color-highlight);
-  background-color: #fff;
+  background-color: var(--color-light-bg);
   padding: 6px;
   transition: transform 0.3s ease;
 }

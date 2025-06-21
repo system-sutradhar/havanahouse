@@ -1,35 +1,5 @@
 @import "./variables.css";
 
-:root {
-  /* Brand Colors */
-  --dark-color: #0a0a0a;          /* Near Black */
-  --primary-color: #6d4aae; /* Purple */
-  --secondary-color: #f1f1f1; /* Light Gray */
-  --accent-color: #7a55c1; /* Darker Purple */
-  --text-color: #000; /* Black */
-  --background-color: #fff; /* White */
-  --hover-color: #53348c; /* Hover effect color */
-  --error-color: #ed174a; /* Red for errors */
-  --success-color: #16b858; /* Green for success */
-  --link-color: #0858f7; /* Blue for links */
-  --overlay-color: rgba(0, 0, 0, 0.5); /* Overlay background */
-  
-  /* Text Colors */
-  --text-color: #1c1c1c;
-  --text-light: #ffffff;
-  --text-muted: #888888;
-
-  /* Button Colors */
-  --btn-primary-bg: var(--accent-color);
-  --btn-primary-text: #ffffff;
-  --btn-secondary-bg: var(--secondary-color);
-  --btn-secondary-text: #121212;
-
-  /* Border and Shadow */
-  --border-color: #e0e0e0;
-  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -41,10 +11,10 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css');
 
 body {
-  font-family: "Lato", sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
-  color: var(--text-color);
-  background-color: var(--background-color);
+  color: var(--color-primary-text);
+  background: var(--color-primary-bg);
   overflow-x: hidden;
 }
 
