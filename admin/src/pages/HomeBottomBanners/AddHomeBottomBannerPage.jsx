@@ -15,9 +15,7 @@ export default function AddHomeBottomBannerPage({ onCancel, onSuccess }) {
       ]}
       actions={<CancelButton onClick={onCancel} />}
     >
-      <div className="card shadow border-0 p-3 mt-4">
-        <AddBanner onSuccess={onSuccess} />
-      </div>
+      <AddBanner onSuccess={onSuccess} />
     </AdminPageLayout>
   );
 }

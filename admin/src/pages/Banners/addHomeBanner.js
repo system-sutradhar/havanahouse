@@ -267,7 +267,7 @@ const AddBanner = ({ onSuccess }) => {
       <form className="form" onSubmit={addHomeBanner}>
           <div className="row">
             <div className="col-sm-9">
-              <div className="card p-4 mt-0">
+              <div className="p-4 mt-0">
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
