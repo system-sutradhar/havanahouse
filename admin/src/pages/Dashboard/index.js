@@ -22,6 +22,8 @@ import BaseTable from "../../components/common/BaseTable";
 
 import AdminPageLayout from "../../components/common/AdminPageLayout";
 
+import DeleteConfirmDialog from "../../components/common/DeleteConfirmDialog";
+
 import Rating from "@mui/material/Rating";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
 
@@ -51,6 +53,8 @@ const Dashboard = () => {
   const [totalProductsReviews, setTotalProductsReviews] = useState();
   const [totalSales, setTotalSales] = useState();
   const [perPage, setPerPage] = useState(10);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const open = Boolean(anchorEl);
 
@@ -94,21 +98,23 @@ const Dashboard = () => {
     });
   }, []);
 
-  const deleteProduct = (id) => {
+  const deleteProduct = () => {
+    if (!deleteId) return;
     context.setProgress(40);
-      deleteData(`/api/products/${id}`).then((res) => {
+    deleteData(`/api/products/${deleteId}`).then(() => {
         context.setProgress(100);
         context.setAlertBox({
           open: true,
           error: false,
           msg: "Product Deleted!",
         });
-        fetchDataFromApi(`/api/products?page=${1}&perPage=${perPage}`).then(
-          (res) => {
+        fetchDataFromApi(`/api/products?page=${1}&perPage=${perPage}`).then((res) => {
             setProductList(res);
-          }
-        );
-      });
+        });
+    }).finally(() => {
+        setConfirmOpen(false);
+        setDeleteId(null);
+    });
   };
 
   const handleChange = (event, value) => {
@@ -346,7 +352,7 @@ const Dashboard = () => {
               ]}
               rows={productList?.products || []}
               onEdit={(row) => (window.location.href = `/product/edit/${row.id}`)}
-              onDelete={(row) => deleteProduct(row.id)}
+              onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
             />
 
             {productList?.totalPages > 1 && (
@@ -364,6 +370,11 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={deleteProduct}
+      />
     </AdminPageLayout>
   );
 };

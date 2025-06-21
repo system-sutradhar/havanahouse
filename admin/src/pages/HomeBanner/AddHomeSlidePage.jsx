@@ -1,5 +1,5 @@
 import AdminPageLayout from '../../components/common/AdminPageLayout';
-import AddHomeSlide from './AddHomeSlide';
+import SlideForm from './SlideForm';
 import HomeIcon from '@mui/icons-material/Home';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import { useContext } from 'react';
@@ -16,7 +16,7 @@ export default function AddHomeSlidePage({ onCancel, onSuccess }) {
         { label: 'Add' }
       ]}
     >
-      <AddHomeSlide
+      <SlideForm
         onSuccess={() => {
           if (onSuccess) onSuccess();
           ctx.setAlertBox({ open: true, error: false, msg: 'Slide Created!' });

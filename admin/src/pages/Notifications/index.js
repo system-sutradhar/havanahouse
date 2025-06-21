@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { AddButton, DeleteButton } from "../../components/common/ActionButtons";
+import { AddButton } from "../../components/common/ActionButtons";
 import AdminPageLayout from "../../components/common/AdminPageLayout";
 import BaseTable from "../../components/common/BaseTable";
 import { MyContext } from "../../App";
 import { fetchDataFromApi, editData, deleteData } from "../../utils/api";
+import DeleteConfirmDialog from "../../components/common/DeleteConfirmDialog";
 import HomeIcon from '@mui/icons-material/Home';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationForm from './NotificationForm';
@@ -14,6 +15,8 @@ import logger from "../../utils/logger";
 const Notifications = () => {
   const [list, setList] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const context = useContext(MyContext);
 
   const load = () => {
@@ -53,13 +56,18 @@ const Notifications = () => {
       .catch((err) => logger.error(err));
   };
 
-  const remove = (id) => {
-    deleteData(`/api/notifications/${id}`)
+  const deleteNotification = () => {
+    if (!deleteId) return;
+    deleteData(`/api/notifications/${deleteId}`)
       .then(() => {
         context.setAlertBox({ open: true, error: false, msg: 'Deleted!' });
         load();
       })
-      .catch((err) => logger.error(err));
+      .catch((err) => logger.error(err))
+      .finally(() => {
+        setConfirmOpen(false);
+        setDeleteId(null);
+      });
   };
 
   if (showForm) {
@@ -110,8 +118,13 @@ const Notifications = () => {
             },
           ]}
           rows={list}
-          onDelete={(row) => remove(row.id)}
+          onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
         />
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={deleteNotification}
+      />
       </div>
     </AdminPageLayout>
   );

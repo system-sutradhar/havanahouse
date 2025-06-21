@@ -9,13 +9,16 @@ import { MyContext } from '../../App';
 import { postData, fetchDataFromApi } from '../../utils/api';
 import MultiMediaUpload from '../../components/common/MultiMediaUpload';
 
-export default function ProductForm({ onSuccess, onCancel }) {
-  const context = useContext(MyContext);
-  const [subCats, setSubCats] = useState([]);
-  const [ramsList, setRamsList] = useState([]);
-  const [sizeList, setSizeList] = useState([]);
-  const [weightList, setWeightList] = useState([]);
-  const [form, setForm] = useState({
+export default function ProductForm({
+  onSuccess,
+  onCancel,
+  pageTitle = 'Product Upload',
+  breadcrumbPath = [
+    { icon: <HomeIcon fontSize='inherit' />, label: 'Dashboard', href: '/' },
+    { icon: <StorefrontIcon fontSize='inherit' />, label: 'Products', href: '/products' },
+    { label: 'Add Product' },
+  ],
+  initialValues = {
     name: '',
     description: '',
     brand: '',
@@ -32,8 +35,21 @@ export default function ProductForm({ onSuccess, onCancel }) {
     location: '',
     rating: 0,
     media: [],
-  });
+  },
+  requestUrl = '/api/products/create',
+  requestFn,
+}) {
+  const context = useContext(MyContext);
+  const [subCats, setSubCats] = useState([]);
+  const [ramsList, setRamsList] = useState([]);
+  const [sizeList, setSizeList] = useState([]);
+  const [weightList, setWeightList] = useState([]);
+  const [form, setForm] = useState(initialValues);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setForm(initialValues);
+  }, [initialValues]);
 
   useEffect(() => {
     const arr = [];
@@ -74,7 +90,8 @@ export default function ProductForm({ onSuccess, onCancel }) {
     setSaving(true);
     const payload = { ...form, images: form.media.map((m) => m.url) };
     delete payload.media;
-    postData('/api/products/create', payload)
+    const fn = requestFn || postData;
+    fn(requestUrl, payload)
       .then(() => {
         if (onSuccess) onSuccess();
       })
@@ -83,12 +100,8 @@ export default function ProductForm({ onSuccess, onCancel }) {
 
   return (
     <AdminPageLayout
-      title="Product Upload"
-      breadcrumbPath={[
-        { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
-        { icon: <StorefrontIcon fontSize="inherit" />, label: 'Products', href: '/products' },
-        { label: 'Add Product' },
-      ]}
+      title={pageTitle}
+      breadcrumbPath={breadcrumbPath}
       actions={<CancelButton onClick={onCancel} />}
     >
       <AdminFormLayout onSubmit={handleSubmit}>

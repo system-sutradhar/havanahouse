@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Grid, TextField, Box } from '@mui/material';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
@@ -6,11 +6,22 @@ import { MyContext } from '../../App';
 import { postData, uploadImage } from '../../utils/api';
 import LoadingSkeleton from '../../components/common/LoadingSkeleton';
 
-export default function CategoryForm({ onCancel, onSuccess }) {
+export default function CategoryForm({
+  onCancel,
+  onSuccess,
+  initialValues = { name: '', color: '', image: null },
+  requestUrl = '/api/category/create',
+  requestFn,
+}) {
   const context = useContext(MyContext);
-  const [form, setForm] = useState({ name: '', color: '', image: null });
+  const [form, setForm] = useState(initialValues);
   const [saving, setSaving] = useState(false);
-  const [preview, setPreview] = useState('');
+  const [preview, setPreview] = useState(initialValues.image || '');
+
+  useEffect(() => {
+    setForm(initialValues);
+    setPreview(initialValues.image || '');
+  }, [initialValues]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,13 +44,15 @@ export default function CategoryForm({ onCancel, onSuccess }) {
     e.preventDefault();
     if (!form.name || !form.color || !form.image) return;
     setSaving(true);
-    await postData('/api/category/create', {
+    const fn = requestFn || postData;
+    await fn(requestUrl, {
       name: form.name,
       color: form.color,
       images: [form.image],
       slug: form.name,
     });
-    context.setAlertBox({ open: true, error: false, msg: 'Category Created!' });
+    const msg = fn === postData ? 'Category Created!' : 'Category Updated!';
+    context.setAlertBox({ open: true, error: false, msg });
     setSaving(false);
     if (onSuccess) onSuccess();
   };
