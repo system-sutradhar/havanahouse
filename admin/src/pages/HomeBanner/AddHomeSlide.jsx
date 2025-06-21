@@ -49,7 +49,7 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!image || !form.ctaUrl) return;
+    if (!image) return;
     setSaving(true);
     postData('/api/homeBanner/create', {
       images: [image],
@@ -85,12 +85,11 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField
+        <TextField
             label="CTA URL"
             name="ctaUrl"
             value={form.ctaUrl}
             onChange={handleChange}
-            required
             fullWidth
             InputLabelProps={{ shrink: true }}
             sx={{
@@ -159,7 +158,7 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
       </Grid>
       <Box display="flex" justifyContent="flex-end" mt={3} gap={2}>
         <CancelButton onClick={onClose} />
-        <SaveButton type="submit" disabled={saving || !image || !form.ctaUrl} />
+        <SaveButton type="submit" disabled={saving || !image} />
       </Box>
     </AdminFormLayout>
   );
