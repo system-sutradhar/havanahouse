@@ -1,80 +1,81 @@
-"use client"
+"use client";
 import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "@/context/ThemeContext";
 
-const QuantityBox = (props) => {
+const QuantityBox = ({ value = 1, onChange, quantity, selectedItem, item }) => {
+  const [inputVal, setInputVal] = useState(value);
+  const context = useContext(MyContext);
 
-    const [inputVal, setInputVal] = useState(1);
-
-    const context = useContext(MyContext);
-
-    useEffect(() => {
-        if (props?.value !== undefined && props?.value !== null && props?.value !== "") {
-            setInputVal(parseInt(props?.value))
-        }
-    }, [props.value])
-
-
-    const minus = () => {
-        if (inputVal !== 1 && inputVal > 0) {
-            setInputVal(inputVal - 1);
-        }
-        context.setAlertBox({
-            open:false,
-        })
-
+  useEffect(() => {
+    if (value !== undefined && value !== null && value !== "") {
+      setInputVal(parseInt(value));
     }
+  }, [value]);
 
-    const plus = () => {
-        console.log(props.item)
-        let stock = parseInt(props.item.countInStock);
-        if(inputVal<stock){
-            setInputVal(inputVal + 1);
-        }else{
-            context.setAlertBox({
-                open:true,
-                error:true,
-                msg:"The quantity is greater than product count in stock"
-            })
-        }
+  const propagateChange = (val) => {
+    if (onChange) onChange(val);
+    if (quantity) quantity(val);
+    if (selectedItem) selectedItem(item, val);
+  };
+
+  const minus = () => {
+    if (inputVal > 1) {
+      const newVal = inputVal - 1;
+      setInputVal(newVal);
+      propagateChange(newVal);
     }
+    context.setAlertBox({ open: false });
+  };
 
-    useEffect(() => {
-        if (props.quantity) {
-            props.quantity(inputVal)
-        }
+  const plus = () => {
+    const stock = item?.countInStock ? parseInt(item.countInStock) : Infinity;
+    if (inputVal < stock) {
+      const newVal = inputVal + 1;
+      setInputVal(newVal);
+      propagateChange(newVal);
+    } else {
+      context.setAlertBox({
+        open: true,
+        error: true,
+        msg: "The quantity is greater than product count in stock",
+      });
+    }
+  };
 
-        if (props.selectedItem) {
-            props.selectedItem(props.item, inputVal);
-        }
+  const handleChange = (e) => {
+    const val = parseInt(e.target.value) || 1;
+    setInputVal(val);
+    propagateChange(val);
+  };
 
-        let countInStock = parseInt(props.item.countInStock);
-        if(inputVal>countInStock){
-            context.setAlertBox({
-                open:true,
-                error:true,
-                msg:"The quantity is greater than product count in stock"
-            })
-        }else{
-            context.setAlertBox({
-                open:false,
-                error:true,
-                msg:"The quantity is greater than product count in stock"
-            })
-        }
+  useEffect(() => {
+    if (!item?.countInStock) return;
+    const countInStock = parseInt(item.countInStock);
+    if (inputVal > countInStock) {
+      context.setAlertBox({
+        open: true,
+        error: true,
+        msg: "The quantity is greater than product count in stock",
+      });
+    } else {
+      context.setAlertBox({ open: false });
+    }
+  }, [inputVal, item]);
 
-    }, [inputVal]);
-
-    return (
-        <div className='quantityDrop d-flex align-items-center'>
-            <Button onClick={minus}><FaMinus /></Button>
-            <input type="text" value={inputVal} />
-            <Button onClick={plus}><FaPlus /></Button>
-        </div>
-    )
-}
+  return (
+    <div className="quantityDrop d-flex align-items-center">
+      <Button onClick={minus} aria-label="Decrease quantity">
+        <FaMinus />
+      </Button>
+      <input type="text" value={inputVal} onChange={handleChange} />
+      <Button onClick={plus} aria-label="Increase quantity">
+        <FaPlus />
+      </Button>
+    </div>
+  );
+};
 
 export default QuantityBox;
