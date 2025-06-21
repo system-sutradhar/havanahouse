@@ -16,7 +16,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
-import AddBanner from "./addHomeBanner";
 import BaseTable from "../../components/common/BaseTable";
 import AdminPageLayout from "../../components/common/AdminPageLayout";
 import HomeIcon from '@mui/icons-material/Home';

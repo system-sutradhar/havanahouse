@@ -7,7 +7,6 @@ import { MdDelete } from "react-icons/md";
 import { MyContext } from "../../App";
 
 import { Link } from "react-router-dom";
-import AddHomeBottomBanner from "./addHomeBottomBanner";
 
 import AdminPageLayout from "../../components/common/AdminPageLayout";
 import BaseTable from "../../components/common/BaseTable";

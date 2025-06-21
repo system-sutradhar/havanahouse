@@ -158,7 +158,7 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
       </Grid>
       <Box display="flex" justifyContent="flex-end" mt={3} gap={2}>
         <CancelButton onClick={onClose} />
-        <SaveButton type="submit" disabled={saving || !image} />
+        <SaveButton type="submit" />
       </Box>
     </AdminFormLayout>
   );

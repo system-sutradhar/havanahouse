@@ -1,6 +1,6 @@
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import { CancelButton } from '../../components/common/ActionButtons';
-import AddBanner from './addHomeSideBanner';
+import BannerForm from '../Banners/BannerForm';
 import HomeIcon from '@mui/icons-material/Home';
 import ImageIcon from '@mui/icons-material/Image';
 
@@ -15,7 +15,12 @@ export default function AddHomeSideBannerPage({ onCancel, onSuccess }) {
       ]}
       actions={<CancelButton onClick={onCancel} />}
     >
-      <AddBanner onSuccess={onSuccess} />
+      <BannerForm
+        uploadUrl="/api/homeSideBanners/upload"
+        createUrl="/api/homeSideBanners/create"
+        onSuccess={onSuccess}
+        onCancel={onCancel}
+      />
     </AdminPageLayout>
   );
 }
