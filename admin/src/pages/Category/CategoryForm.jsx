@@ -4,6 +4,7 @@ import { SaveButton, CancelButton } from '../../components/common/ActionButtons'
 import AdminFormLayout from '../../components/common/AdminFormLayout';
 import { MyContext } from '../../App';
 import { postData, uploadImage } from '../../utils/api';
+import LoadingSkeleton from '../../components/common/LoadingSkeleton';
 
 export default function CategoryForm({ onCancel, onSuccess }) {
   const context = useContext(MyContext);
@@ -38,9 +39,14 @@ export default function CategoryForm({ onCancel, onSuccess }) {
       images: [form.image],
       slug: form.name,
     });
+    context.setAlertBox({ open: true, error: false, msg: 'Category Created!' });
     setSaving(false);
     if (onSuccess) onSuccess();
   };
+
+  if (saving) {
+    return <LoadingSkeleton rows={8} />;
+  }
 
   return (
     <AdminFormLayout onSubmit={handleSubmit}>

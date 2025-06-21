@@ -19,6 +19,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { MyContext } from "../../App";
+import Skeleton from "@mui/material/Skeleton";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -26,6 +27,7 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [products, setproducts] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -38,9 +40,10 @@ const Orders = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
+    setLoading(true);
     fetchDataFromApi(`/api/orders`).then((res) => {
       setOrders(res);
+      setLoading(false);
     });
   }, []);
 
@@ -78,6 +81,7 @@ const Orders = () => {
           // });
         });
         context.setProgress(100);
+        context.setAlertBox({ open: true, error: false, msg: 'Order Updated!' });
         setIsLoading(false);
       });
 
@@ -125,6 +129,9 @@ const Orders = () => {
       >
 
         <div className="card shadow border-0 p-3 mt-4">
+          {loading || isLoading ? (
+            <Skeleton variant="rectangular" width="100%" height={200} />
+          ) : (
           <div className="table-responsive mt-3 orderTable">
             <table className="table table-bordered table-striped v-align">
               <thead className="thead-dark">
@@ -218,6 +225,7 @@ const Orders = () => {
               </tbody>
             </table>
           </div>
+          )}
         </div>
 
       <BaseModal

@@ -3,8 +3,11 @@ import { CancelButton } from '../../components/common/ActionButtons';
 import BannerForm from './BannerForm';
 import HomeIcon from '@mui/icons-material/Home';
 import ImageIcon from '@mui/icons-material/Image';
+import { useContext } from 'react';
+import { MyContext } from '../../App';
 
 export default function AddHomeBannerPage({ onCancel, onSuccess }) {
+  const ctx = useContext(MyContext);
   return (
     <AdminPageLayout
       title="Add Home Banner"
@@ -17,7 +20,10 @@ export default function AddHomeBannerPage({ onCancel, onSuccess }) {
     >
       <BannerForm
         createUrl="/api/banners/create"
-        onSuccess={onSuccess}
+        onSuccess={() => {
+          if (onSuccess) onSuccess();
+          ctx.setAlertBox({ open: true, error: false, msg: 'Banner Created!' });
+        }}
         onCancel={onCancel}
       />
     </AdminPageLayout>

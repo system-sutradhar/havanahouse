@@ -4,6 +4,7 @@ import { SaveButton, CancelButton } from '../../components/common/ActionButtons'
 import AdminFormLayout from '../../components/common/AdminFormLayout';
 import { MyContext } from '../../App';
 import { postData } from '../../utils/api';
+import LoadingSkeleton from '../../components/common/LoadingSkeleton';
 import MultiMediaUpload from '../../components/common/MultiMediaUpload';
 
 export default function BannerForm({ createUrl, onCancel, onSuccess }) {
@@ -35,9 +36,14 @@ export default function BannerForm({ createUrl, onCancel, onSuccess }) {
       catId: form.catId,
       subCatId: form.subCatId,
     });
+    context.setAlertBox({ open: true, error: false, msg: 'Banner Saved!' });
     setSaving(false);
     if (onSuccess) onSuccess();
   };
+
+  if (saving) {
+    return <LoadingSkeleton rows={8} />;
+  }
 
   return (
     <AdminFormLayout onSubmit={handleSubmit}>
