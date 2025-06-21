@@ -6,6 +6,8 @@ import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { MdOutlineCompareArrows } from 'react-icons/md';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import QuantityBox from '@/Components/QuantityBox';
 import { MyContext } from '@/context/ThemeContext';
 import styles from './productInfo.module.css';
@@ -22,11 +24,25 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart }) => {
     discount,
     rating,
     reviewCount,
+    origin,
+    wrapperType,
+    strength,
+    boxType,
+    badgeIcons = [],
+    trustLabels = [],
+    complianceNotes,
   } = product || {};
 
   return (
     <div className={styles.productInfo}>
       <h1 className={styles.productTitle}>{name}</h1>
+      {badgeIcons.length > 0 && (
+        <Stack direction="row" spacing={1} className="mb-2" flexWrap="wrap">
+          {badgeIcons.map((b) => (
+            <Chip key={b} label={b} color="secondary" size="small" />
+          ))}
+        </Stack>
+      )}
       {brand && <p className={styles.productBrand}>by {brand}</p>}
 
       <div className={`d-flex align-items-center gap-2 mb-3 ${styles.productRating ?? ''}`}>
@@ -68,6 +84,41 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart }) => {
             <MdOutlineCompareArrows />
           </button>
         </Tooltip>
+      </div>
+
+      <div className="mb-2">
+        <ul className="list-unstyled mb-2">
+          {origin && (
+            <li>
+              <strong>Origin:</strong> {origin}
+            </li>
+          )}
+          {wrapperType && (
+            <li>
+              <strong>Wrapper:</strong> {wrapperType}
+            </li>
+          )}
+          {strength && (
+            <li>
+              <strong>Strength:</strong> {strength}
+            </li>
+          )}
+          {boxType && (
+            <li>
+              <strong>Box Type:</strong> {boxType}
+            </li>
+          )}
+        </ul>
+        {complianceNotes && (
+          <p className="text-danger small">{complianceNotes}</p>
+        )}
+        {trustLabels.length > 0 && (
+          <Stack direction="row" spacing={1} flexWrap="wrap">
+            {trustLabels.map((t) => (
+              <Chip key={t} label={t} variant="outlined" size="small" />
+            ))}
+          </Stack>
+        )}
       </div>
     </div>
   );

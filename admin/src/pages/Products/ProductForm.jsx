@@ -8,6 +8,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import { MyContext } from '../../App';
 import { postData, fetchDataFromApi } from '../../utils/api';
 import MultiMediaUpload from '../../components/common/MultiMediaUpload';
+import { TagsInput } from 'react-tag-input-component';
 
 export default function ProductForm({
   onSuccess,
@@ -32,6 +33,20 @@ export default function ProductForm({
     productRam: [],
     productSize: [],
     productWeight: [],
+    ringGauge: '',
+    lengthInInches: '',
+    binder: '',
+    filler: '',
+    origin: '',
+    wrapperType: '',
+    strength: '',
+    flavorNotes: [],
+    tastingNotes: [],
+    pairingSuggestions: [],
+    boxType: '',
+    badgeIcons: [],
+    trustLabels: [],
+    complianceNotes: '',
     location: '',
     rating: 0,
     media: [],
@@ -44,6 +59,12 @@ export default function ProductForm({
   const [ramsList, setRamsList] = useState([]);
   const [sizeList, setSizeList] = useState([]);
   const [weightList, setWeightList] = useState([]);
+  const [boxTypes, setBoxTypes] = useState([]);
+  const [badgeOptions, setBadgeOptions] = useState([]);
+  const [trustOptions, setTrustOptions] = useState([]);
+  const [originOptions, setOriginOptions] = useState([]);
+  const [wrapperTypeOptions, setWrapperTypeOptions] = useState([]);
+  const [strengthOptions, setStrengthOptions] = useState([]);
   const [form, setForm] = useState(initialValues);
   const [saving, setSaving] = useState(false);
 
@@ -69,6 +90,24 @@ export default function ProductForm({
     fetchDataFromApi('/api/productWeight').then((res) =>
       setWeightList(Array.isArray(res) ? res : [])
     );
+    fetchDataFromApi('/api/cigar-meta?type=boxType').then((res) =>
+      setBoxTypes(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/cigar-meta?type=origin').then((res) =>
+      setOriginOptions(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/cigar-meta?type=wrapperType').then((res) =>
+      setWrapperTypeOptions(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/cigar-meta?type=strength').then((res) =>
+      setStrengthOptions(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/cigar-meta?type=badgeIcon').then((res) =>
+      setBadgeOptions(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/cigar-meta?type=trustLabel').then((res) =>
+      setTrustOptions(Array.isArray(res) ? res : [])
+    );
   }, []);
 
   const handleChange = (e) => {
@@ -83,6 +122,8 @@ export default function ProductForm({
       [name]: typeof value === 'string' ? value.split(',') : value,
     }));
   };
+
+
 
 
   const handleSubmit = (e) => {
@@ -139,6 +180,68 @@ export default function ProductForm({
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField name="discount" value={form.discount} onChange={handleChange} label="Discount" fullWidth type="number" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="ringGauge" value={form.ringGauge} onChange={handleChange} label="Ring Gauge" fullWidth type="number" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="lengthInInches" value={form.lengthInInches} onChange={handleChange} label="Length (inches)" fullWidth type="number" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="binder" value={form.binder} onChange={handleChange} label="Binder" fullWidth />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="filler" value={form.filler} onChange={handleChange} label="Filler" fullWidth />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField select name="origin" value={form.origin} onChange={handleChange} label="Origin" fullWidth>
+              <MenuItem value="">None</MenuItem>
+              {originOptions.map((item) => (
+                <MenuItem key={item.id} value={item.value}>{item.value}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField select name="wrapperType" value={form.wrapperType} onChange={handleChange} label="Wrapper Type" fullWidth>
+              <MenuItem value="">None</MenuItem>
+              {wrapperTypeOptions.map((item) => (
+                <MenuItem key={item.id} value={item.value}>{item.value}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField select name="strength" value={form.strength} onChange={handleChange} label="Strength" fullWidth>
+              <MenuItem value="">None</MenuItem>
+              {strengthOptions.map((item) => (
+                <MenuItem key={item.id} value={item.value}>{item.value}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TagsInput value={form.flavorNotes} onChange={(val) => setForm((p) => ({ ...p, flavorNotes: val }))} name="flavorNotes" placeHolder="Flavor Notes" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="tastingNotes" value={Array.isArray(form.tastingNotes) ? form.tastingNotes.join(',') : form.tastingNotes} onChange={handleMultiChange} label="Tasting Notes" fullWidth multiline />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="pairingSuggestions" value={Array.isArray(form.pairingSuggestions) ? form.pairingSuggestions.join(',') : form.pairingSuggestions} onChange={handleMultiChange} label="Pairing Suggestions" fullWidth multiline />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField select name="boxType" value={form.boxType} onChange={handleChange} label="Box Type" fullWidth>
+              <MenuItem value="">None</MenuItem>
+              {boxTypes.map((item) => (
+                <MenuItem key={item.id} value={item.value}>{item.value}</MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TagsInput value={form.badgeIcons} onChange={(val) => setForm((p) => ({ ...p, badgeIcons: val }))} name="badgeIcons" placeHolder="Badge Icons" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TagsInput value={form.trustLabels} onChange={(val) => setForm((p) => ({ ...p, trustLabels: val }))} name="trustLabels" placeHolder="Trust Labels" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="complianceNotes" value={form.complianceNotes} onChange={handleChange} label="Compliance Notes" fullWidth multiline />
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField select name="isFeatured" value={form.isFeatured} onChange={handleChange} label="Is Featured" fullWidth>

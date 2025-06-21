@@ -1,8 +1,12 @@
 'use client';
 import { useState } from 'react';
 
-const Tabs = ({ description, reviews }) => {
+const Tabs = ({ description, reviews, specs = {} }) => {
   const [activeTab, setActiveTab] = useState('description');
+  const entries = Object.entries(specs || {});
+  const hasSpecs = entries.length > 0;
+
+  const formatKey = (k) => k.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase());
 
   return (
     <div className="product-tabs">
@@ -32,6 +36,19 @@ const Tabs = ({ description, reviews }) => {
         {activeTab === 'description' && (
           <div id="tab-desc" role="tabpanel" aria-labelledby="tab-desc-btn" className="tab-content">
             {description || 'No description available.'}
+            {hasSpecs && (
+              <div className="mt-3">
+                <h3>Cigar Specifications</h3>
+                <ul>
+                  {entries.map(([k, v]) => (
+                    <li key={k}>
+                      <strong>{formatKey(k)}:</strong>{' '}
+                      {Array.isArray(v) ? v.join(', ') : v}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 'reviews' && (
