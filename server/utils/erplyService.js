@@ -231,7 +231,9 @@ async function syncProductsFromErply() {
             return {
                 name: product.name || "Unnamed Product",
                 description: product.longDescription || "No description available",
-                images: product.imageURLs && product.imageURLs.length > 0 ? product.imageURLs : ["https://via.placeholder.com/150"], // ✅ Default image
+                images: product.imageURLs && product.imageURLs.length > 0 ? product.imageURLs : [
+                    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iJTIzZGRkIi8+PC9zdmc+'
+                ], // ✅ Local placeholder image
                 brand: product.brandName || "Unknown",
                 price: product.price || 0,
                 oldPrice: product.previousPrice || product.price || 0,
