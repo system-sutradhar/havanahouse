@@ -38,18 +38,14 @@ router.get('/:id', async (req, res) => {
     return res.status(200).send(order);
 })
 
-router.get(`/get/count`, async (req, res) =>{
-    const orderCount = await Orders.countDocuments()
-
-    if(!orderCount) {
-        res.status(500).json({success: false})
-    } else{
-        res.send({
-            orderCount: orderCount
-        });
+router.get(`/get/count`, async (req, res) => {
+    try {
+        const orderCount = await Orders.countDocuments();
+        res.send({ orderCount });
+    } catch (err) {
+        res.status(500).json({ success: false });
     }
-   
-})
+});
 
 // API: Place Order and Update ERPLY Stock
 router.post("/create", async (req, res) => {

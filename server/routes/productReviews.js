@@ -29,18 +29,14 @@ router.get(`/`, async (req, res) => {
 
 });
 
-router.get(`/get/count`, async (req, res) =>{
-    const productsReviews = await ProductReviews.countDocuments()
-
-    if(!productsReviews) {
-        res.status(500).json({success: false})
-    } else{
-        res.send({
-            productsReviews: productsReviews
-        });
+router.get(`/get/count`, async (req, res) => {
+    try {
+        const productsReviews = await ProductReviews.countDocuments();
+        res.send({ productsReviews });
+    } catch (err) {
+        res.status(500).json({ success: false });
     }
-   
-})
+});
 
 
 
