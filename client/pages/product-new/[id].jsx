@@ -76,7 +76,7 @@ const BreadcrumbWrapper = styled.div`
 
 const ProductNewPage = () => {
   const router = useRouter();
-  const { slug } = router.query || {};
+  const { id } = router.query || {};
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -88,10 +88,10 @@ const ProductNewPage = () => {
   const theme = createTheme();
 
   useEffect(() => {
-    if (!slug) return;
+    if (!id) return;
     const load = async () => {
       try {
-        const prod = await fetchDataFromApi(`/api/products/${slug}`);
+        const prod = await fetchDataFromApi(`/api/products/${id}`);
         if (!prod || prod.status === false) {
           setFound(false);
           return;
@@ -112,7 +112,7 @@ const ProductNewPage = () => {
       }
     };
     load();
-  }, [slug]);
+  }, [id]);
 
   const handleAddToCart = (quantity = 1) => {
     if (!product) return;
@@ -156,7 +156,7 @@ const ProductNewPage = () => {
             </Link>
           {product.catName && (
             <Link
-              href={`/#`}
+              href="/#"
               itemProp="itemListElement"
               itemScope
               itemType="https://schema.org/ListItem"
@@ -165,20 +165,9 @@ const ProductNewPage = () => {
               <meta itemProp="position" content="2" />
             </Link>
           )}
-          {product.subCatName && (
-            <Link
-              href={`/#`}
-              itemProp="itemListElement"
-              itemScope
-              itemType="https://schema.org/ListItem"
-            >
-              <span itemProp="name">{product.subCatName}</span>
-              <meta itemProp="position" content="3" />
-            </Link>
-          )}
           <span aria-current="page" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <span itemProp="name">{product.name}</span>
-            <meta itemProp="position" content="4" />
+            <meta itemProp="position" content="3" />
           </span>
         </Breadcrumbs>
         </BreadcrumbWrapper>
