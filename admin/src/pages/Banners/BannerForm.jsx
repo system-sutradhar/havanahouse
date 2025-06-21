@@ -7,19 +7,30 @@ import { postData } from '../../utils/api';
 import LoadingSkeleton from '../../components/common/LoadingSkeleton';
 import MultiMediaUpload from '../../components/common/MultiMediaUpload';
 
-export default function BannerForm({ createUrl, onCancel, onSuccess }) {
+export default function BannerForm({
+  createUrl = '/api/banners/create',
+  requestUrl,
+  requestFn,
+  onCancel,
+  onSuccess,
+  initialValues = { catId: '', subCatId: '', media: [] },
+}) {
   const context = useContext(MyContext);
-  const [form, setForm] = useState({ catId: '', subCatId: '', media: [] });
+  const [form, setForm] = useState(initialValues);
   const [subCats, setSubCats] = useState([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const subs = [];
-    context.catData?.categoryList?.forEach(cat => {
-      cat.children?.forEach(sc => subs.push({ ...sc, parentId: cat._id }));
+    context.catData?.categoryList?.forEach((cat) => {
+      cat.children?.forEach((sc) => subs.push({ ...sc, parentId: cat._id }));
     });
     setSubCats(subs);
   }, [context.catData]);
+
+  useEffect(() => {
+    setForm(initialValues);
+  }, [initialValues]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +42,8 @@ export default function BannerForm({ createUrl, onCancel, onSuccess }) {
     e.preventDefault();
     if (!form.media.length) return;
     setSaving(true);
-    await postData(createUrl, {
+    const fn = requestFn || postData;
+    await fn(requestUrl || createUrl, {
       images: form.media.map((m) => m.url),
       catId: form.catId,
       subCatId: form.subCatId,

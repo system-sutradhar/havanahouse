@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import {
   Grid,
@@ -16,14 +16,35 @@ import AdminFormLayout from '../../components/common/AdminFormLayout';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
 import LoadingSkeleton from '../../components/common/LoadingSkeleton';
 
-export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-form' }) {
+export default function SlideForm({
+  onSuccess,
+  onClose,
+  formId = 'add-slide-form',
+  initialValues = { overlayText: '', ctaUrl: '', position: 'center', image: '' },
+  requestUrl = '/api/homeBanner/create',
+  requestFn,
+}) {
   const theme = useTheme();
-  const [form, setForm] = useState({ overlayText: '', ctaUrl: '', position: 'center' });
-  const [image, setImage] = useState(null);
+  const [form, setForm] = useState({
+    overlayText: initialValues.overlayText,
+    ctaUrl: initialValues.ctaUrl,
+    position: initialValues.position || 'center',
+  });
+  const [image, setImage] = useState(initialValues.image || null);
   const [publicId, setPublicId] = useState('');
-  const [preview, setPreview] = useState('');
+  const [preview, setPreview] = useState(initialValues.image || '');
   const [previewType, setPreviewType] = useState('image');
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setForm({
+      overlayText: initialValues.overlayText,
+      ctaUrl: initialValues.ctaUrl,
+      position: initialValues.position || 'center',
+    });
+    setImage(initialValues.image || null);
+    setPreview(initialValues.image || '');
+  }, [initialValues]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,7 +77,8 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
     e.preventDefault();
     if (!image) return;
     setSaving(true);
-    postData('/api/homeBanner/create', {
+    const fn = requestFn || postData;
+    fn(requestUrl, {
       images: [image],
       overlayText: form.overlayText,
       ctaUrl: form.ctaUrl,

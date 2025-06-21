@@ -1,412 +1,51 @@
-import React from "react";
-import HomeIcon from "@mui/icons-material/Home";
-import AdminPageLayout from "../../components/common/AdminPageLayout";
-import { useContext, useEffect, useState } from "react";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import {
-  deleteData,
-  deleteImages,
-  editData,
-  fetchDataFromApi,
-  postData,
-  uploadImage,
-} from "../../utils/api";
-import { useNavigate } from "react-router-dom";
-import { FaRegImages } from "react-icons/fa";
-import { MyContext } from "../../App";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import ImageIcon from '@mui/icons-material/Image';
+import AdminPageLayout from '../../components/common/AdminPageLayout';
+import { CancelButton } from '../../components/common/ActionButtons';
+import BannerForm from '../Banners/BannerForm';
+import LoadingSkeleton from '../../components/common/LoadingSkeleton';
+import { MyContext } from '../../App';
+import { fetchDataFromApi, editData } from '../../utils/api';
 
-import CircularProgress from "@mui/material/CircularProgress";
-import { IoCloseSharp } from "react-icons/io5";
-
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
-
-
-const EditBanner = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [formFields, setFormFields] = useState({
-    images: [],
-    catName: "",
-    catId: "",
-    subCat: "",
-    subCatId: "",
-    subCatName: "",
-  });
-
-  const [previews, setPreviews] = useState([]);
-  const [categoryVal, setcategoryVal] = useState("");
-  const [subCatVal, setSubCatVal] = useState("");
-  const [subCatData, setSubCatData] = useState([]);
-
-  let { id } = useParams();
-
-  const formdata = new FormData();
-
-  const history = useNavigate();
-
-  const context = useContext(MyContext);
+export default function EditHomeBottomBanner() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const ctx = useContext(MyContext);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    context.setProgress(20);
-    fetchDataFromApi("/api/imageUpload").then((res) => {
-      res?.map((item) => {
-        item?.images?.map((img) => {
-          deleteImages(`/api/homeBottomBanners/deleteImage?img=${img}`).then(
-            (res) => {
-              deleteData("/api/imageUpload/deleteAllImages");
-            }
-          );
-        });
-      });
-    });
-
     fetchDataFromApi(`/api/homeBottomBanners/${id}`).then((res) => {
-      // setcategory(res);
-      console.log(res);
-      setPreviews(res.images);
-      setcategoryVal(res?.catId);
-      setSubCatVal(res?.subCatId);
-      formFields.catId = res?.catId;
-      formFields.subCatId = res?.subCatId;
-      context.setProgress(100);
+      if (res) {
+        setData({ catId: res.catId || '', subCatId: res.subCatId || '', media: res.images?.map(url => ({ url })) || [] });
+      }
     });
   }, [id]);
 
-  useEffect(() => {
-    const subCatArr = [];
+  if (!data) {
+    return <LoadingSkeleton rows={8} />;
+  }
 
-    context.catData?.categoryList?.length !== 0 &&
-      context.catData?.categoryList?.map((cat, index) => {
-        if (cat?.children.length !== 0) {
-          cat?.children?.map((subCat) => {
-            subCatArr.push(subCat);
-          });
-        }
-      });
-
-    setSubCatData(subCatArr);
-  }, [context.catData]);
-
-  let img_arr = [];
-  let uniqueArray = [];
-
-  const onChangeFile = async (e, apiEndPoint) => {
-    e.preventDefault && e.preventDefault();
-    try {
-      const files = e.target.files;
-
-      setUploading(true);
-
-      //const fd = new FormData();
-      for (var i = 0; i < files.length; i++) {
-        // Validate file type
-        if (
-          files[i] &&
-          (files[i].type === "image/jpeg" ||
-            files[i].type === "image/jpg" ||
-            files[i].type === "image/webp" ||
-            files[i].type === "image/png")
-        ) {
-          const file = files[i];
-
-          formdata.append(`images`, file);
-        } else {
-          context.setAlertBox({
-            open: true,
-            error: true,
-            msg: "Please select a valid JPG or PNG image file.",
-          });
-
-          return false;
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-
-    uploadImage(apiEndPoint, formdata).then((res) => {
-      fetchDataFromApi("/api/imageUpload").then((response) => {
-        if (
-          response !== undefined &&
-          response !== null &&
-          response !== "" &&
-          response.length !== 0
-        ) {
-          response.length !== 0 &&
-            response.map((item) => {
-              item?.images.length !== 0 &&
-                item?.images?.map((img) => {
-                  img_arr.push(img);
-                  //console.log(img)
-                });
-            });
-
-          uniqueArray = img_arr.filter(
-            (item, index) => img_arr.indexOf(item) === index
-          );
-
-          // const appendedArray = [...previews, ...uniqueArray];
-
-          // console.log(uniqueArray);
-
-          setPreviews(uniqueArray);
-          setTimeout(() => {
-            setUploading(false);
-            img_arr = [];
-            context.setAlertBox({
-              open: true,
-              error: false,
-              msg: "Images Uploaded!",
-            });
-          }, 500);
-        }
-      });
-    });
-  };
-
-  const removeImg = async (index, imgUrl) => {
-    const imgIndex = previews.indexOf(imgUrl);
-
-      deleteImages(`/api/homeBottomBanners/deleteImage?img=${imgUrl}`).then(
-        (res) => {
-          context.setAlertBox({
-            open: true,
-            error: false,
-            msg: "Image Deleted!",
-          });
-        }
-      );
-
-      if (imgIndex > -1) {
-        // only splice array when item is found
-        previews.splice(index, 1); // 2nd parameter means remove one item only
-      }
-  };
-
-  const handleChangeCategory = (event) => {
-    const val = event.target.value;
-    setcategoryVal(val);
-    setFormFields((prev) => ({
-      ...prev,
-      category: val,
-      catName: val === "" ? "" : prev.catName,
-      catId: val === "" ? "" : prev.catId,
-    }));
-  };
-
-  const selectCat = (cat, id) => {
-    formFields.catName = cat;
-    formFields.catId = id;
-  };
-
-  const selectSubCat = (subCat, id) => {
-    setFormFields(() => ({
-      ...formFields,
-      subCat: subCat,
-      subCatName: subCat,
-      subCatId: id,
-    }));
-  };
-
-  const handleChangeSubCategory = (event) => {
-    const val = event.target.value;
-    setSubCatVal(val);
-    if (val === "") {
-      setFormFields((prev) => ({ ...prev, subCat: "", subCatId: "", subCatName: "" }));
-    }
-  };
-
-  const editSlide = (e) => {
-    e.preventDefault();
-
-    const appendedArray = [...previews, ...uniqueArray];
-    console.log(appendedArray);
-
-    img_arr = [];
-
-    formdata.append("images", appendedArray);
-
-    formFields.images = appendedArray;
-
-    console.log(formdata);
-    if (
-      formFields.name !== "" &&
-      formFields.color !== "" &&
-      previews.length !== 0
-    ) {
-      setIsLoading(true);
-
-      editData(`/api/homeBottomBanners/${id}`, formFields).then((res) => {
-        // console.log(res);
-        setIsLoading(false);
-        context.fetchCategory();
-
-        deleteData("/api/imageUpload/deleteAllImages");
-
-        history("/homeBottomBanners");
-      });
-    } else {
-      context.setAlertBox({
-        open: true,
-        error: true,
-        msg: "Please fill all the details",
-      });
-      return false;
-    }
-  };
+  const handleSuccess = () => navigate('/homeBottomBanners');
 
   return (
     <AdminPageLayout
-      title="Edit Banner"
-      breadcrumbs={[
-        { icon: <HomeIcon />, label: "Dashboard", href: "/" },
-        { label: "Edit Banner" },
+      title="Edit Home Bottom Banner"
+      breadcrumbPath={[
+        { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+        { icon: <ImageIcon fontSize="inherit" />, label: 'Banners', href: '/homeBottomBanners' },
+        { label: 'Edit' },
       ]}
+      actions={<CancelButton onClick={() => navigate('/homeBottomBanners')} />}
     >
-      <form className="form" onSubmit={editSlide}>
-          <div className="row">
-            <div className="col-sm-9">
-              <div className="card p-4 mt-0">
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <h6>CATEGORY</h6>
-                      <Select
-                        value={categoryVal}
-                        onChange={handleChangeCategory}
-                        displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
-                        className="w-100"
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        {context.catData?.categoryList?.length !== 0 &&
-                          context.catData?.categoryList?.map((cat, index) => {
-                            return (
-                              <MenuItem
-                                className="text-capitalize"
-                                value={cat._id}
-                                key={index}
-                                onClick={() => selectCat(cat.name, cat._id)}
-                              >
-                                {cat.name}
-                              </MenuItem>
-                            );
-                          })}
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <h6>SUB CATEGORY</h6>
-                      <Select
-                        value={subCatVal}
-                        onChange={handleChangeSubCategory}
-                        displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
-                        className="w-100"
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        {subCatData?.length !== 0 &&
-                          subCatData?.map((subCat, index) => {
-                            return (
-                              <MenuItem
-                                className="text-capitalize"
-                                value={subCat._id}
-                                key={index}
-                                onClick={() =>
-                                  selectSubCat(subCat.name, subCat._id)
-                                }
-                              >
-                                {subCat.name}
-                              </MenuItem>
-                            );
-                          })}
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="imagesUploadSec">
-                  <h5 className="mb-4">Media And Published</h5>
-
-                  <div className="imgUploadBox d-flex align-items-center">
-                    {previews?.length !== 0 &&
-                      previews?.map((img, index) => {
-                        return (
-                          <div className="uploadBox" key={index}>
-                            <span
-                              className="remove"
-                              onClick={() => removeImg(index, img)}
-                            >
-                              <IoCloseSharp />
-                            </span>
-                            <div className="box">
-                              <LazyLoadImage
-                                alt={"image"}
-                                effect="blur"
-                                className="w-100"
-                                src={img}
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-
-                    <div className="uploadBox">
-                      {uploading === true ? (
-                        <div className="progressBar text-center d-flex align-items-center justify-content-center flex-column">
-                          <CircularProgress />
-                          <span>Uploading...</span>
-                        </div>
-                      ) : (
-                        <>
-                          <input
-                            type="file"
-                            multiple
-                            onChange={(e) =>
-                              onChangeFile(e, "/api/homeBanner/upload")
-                            }
-                            name="images"
-                          />
-                          <div className="info">
-                            <FaRegImages />
-                            <h5>image upload</h5>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-
-                  <br />
-
-                  <Button
-                    type="submit"
-                    className="btn-blue btn-lg btn-big w-100"
-                  >
-                    <FaCloudUploadAlt /> &nbsp;{" "}
-                    {isLoading === true ? (
-                      <CircularProgress color="inherit" className="loader" />
-                    ) : (
-                      "PUBLISH AND VIEW"
-                    )}{" "}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+      <BannerForm
+        initialValues={data}
+        requestUrl={`/api/homeBottomBanners/${id}`}
+        requestFn={editData}
+        onSuccess={handleSuccess}
+        onCancel={() => navigate('/homeBottomBanners')}
+      />
     </AdminPageLayout>
   );
-};
-
-export default EditBanner;
+}
