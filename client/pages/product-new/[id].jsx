@@ -95,7 +95,7 @@ const BreadcrumbWrapper = styled.div`
 
 const ProductNewPage = () => {
   const router = useRouter();
-  const { slug: slugParam } = router.query || {};
+  const { id: idParam } = router.query || {};
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -107,10 +107,10 @@ const ProductNewPage = () => {
   const [muiTheme, setMuiTheme] = useState(createTheme());
 
   useEffect(() => {
-    if (!slugParam) return;
+    if (!idParam) return;
     const load = async () => {
       try {
-        const prod = await fetchDataFromApi(`/api/products/slug/${slugParam}`);
+        const prod = await fetchDataFromApi(`/api/products/${idParam}`);
         if (!prod || prod.status === false) {
           setFound(false);
           return;
@@ -146,7 +146,7 @@ const ProductNewPage = () => {
       }
     };
     load();
-  }, [slugParam]);
+  }, [idParam]);
 
   const handleAddToCart = (quantity = 1) => {
     if (!product) return;
