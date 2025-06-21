@@ -295,7 +295,7 @@ const Products = () => {
           </Alert>
         )}
 
-        {loading ? (
+        {loading || isLoadingBar ? (
           <Skeleton variant="rectangular" width="100%" height={200} />
         ) : (
           <div className="table-responsive mt-3">

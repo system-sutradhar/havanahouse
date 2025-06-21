@@ -11,9 +11,11 @@ import SettingFormPage from '../../../pages/AppSettings/SettingFormPage';
 import { fetchDataFromApi, deleteData } from '../../../utils/api';
 import { MyContext } from '../../../App';
 import logger from '../../../utils/logger';
+import Skeleton from '@mui/material/Skeleton';
 
 const AppSettings = () => {
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [openForm, setOpenForm] = useState(false);
   const [editId, setEditId] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -21,12 +23,14 @@ const AppSettings = () => {
   const ctx = useContext(MyContext);
 
   const loadData = () => {
+    setLoading(true);
     fetchDataFromApi('/api/appSettings')
       .then((res) => Array.isArray(res) && setList(res))
       .catch((err) => {
         logger.error(err);
         ctx.setAlertBox({ open: true, error: true, msg: 'Failed to load' });
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -71,6 +75,9 @@ const AppSettings = () => {
       actions={<AddButton onClick={() => setOpenForm(true)} label="Add Setting" />}
     >
       <Paper className="card shadow border-0 p-3">
+        {loading ? (
+          <Skeleton variant="rectangular" width="100%" height={200} />
+        ) : (
         <BaseTable
           columns={[
             { label: 'Name', field: 'name' },
@@ -92,6 +99,7 @@ const AppSettings = () => {
           onEdit={(row) => { setEditId(row.id); setOpenForm(true); }}
           onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
         />
+        )}
       </Paper>
       <DeleteConfirmDialog
         open={confirmOpen}

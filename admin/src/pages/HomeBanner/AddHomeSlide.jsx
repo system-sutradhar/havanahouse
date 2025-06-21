@@ -14,6 +14,7 @@ import { uploadMedia, deleteMedia } from '../../utils/cloudinaryService';
 import { postData } from '../../utils/api';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
+import LoadingSkeleton from '../../components/common/LoadingSkeleton';
 
 export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-form' }) {
   const theme = useTheme();
@@ -66,6 +67,10 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
       })
       .finally(() => setSaving(false));
   };
+
+  if (saving) {
+    return <LoadingSkeleton rows={8} />;
+  }
 
   return (
     <AdminFormLayout id={formId} onSubmit={handleSubmit}>

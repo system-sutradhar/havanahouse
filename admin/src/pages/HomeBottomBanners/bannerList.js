@@ -18,6 +18,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
+import Skeleton from "@mui/material/Skeleton";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -25,6 +26,7 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const BannersList = () => {
   const [slideList, setSlideList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -32,10 +34,12 @@ const BannersList = () => {
   const context = useContext(MyContext);
 
   const loadSlides = () => {
+    setLoading(true);
     context.setProgress(20);
     fetchDataFromApi("/api/homeBottomBanners").then((res) => {
       setSlideList(res);
       context.setProgress(100);
+      setLoading(false);
     });
   };
 
@@ -46,6 +50,7 @@ const BannersList = () => {
 
   const deleteSlide = () => {
     if (!deleteId) return;
+    setLoading(true);
     context.setProgress(30);
     deleteData(`/api/homeBottomBanners/${deleteId}`).then((res) => {
       context.setProgress(100);
@@ -58,6 +63,7 @@ const BannersList = () => {
     }).finally(() => {
       setConfirmOpen(false);
       setDeleteId(null);
+      setLoading(false);
     });
   };
 
@@ -83,6 +89,9 @@ const BannersList = () => {
       actions={<AddButton onClick={() => setShowForm(true)} label="Add Home Bottom Banner" />}
     >
       <div className="card shadow border-0 p-3 mt-4">
+        {loading ? (
+          <Skeleton variant="rectangular" width="100%" height={200} />
+        ) : (
         <BaseTable
           columns={[
             {
@@ -101,6 +110,7 @@ const BannersList = () => {
             onEdit={(row) => (window.location.href = `/homeBottomBanners/edit/${row.id}`)}
             onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
           />
+        )}
         </div>
       <DeleteConfirmDialog
         open={confirmOpen}

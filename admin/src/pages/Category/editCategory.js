@@ -21,6 +21,7 @@ import { MyContext } from "../../App";
 import { useParams } from "react-router-dom";
 
 import CircularProgress from "@mui/material/CircularProgress";
+import LoadingSkeleton from "../../components/common/LoadingSkeleton";
 import { IoCloseSharp } from "react-icons/io5";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -219,11 +220,11 @@ const EditCategory = () => {
       setIsLoading(true);
 
       editData(`/api/category/${id}`, formFields).then((res) => {
-        // console.log(res);
         setIsLoading(false);
         context.fetchCategory();
 
         deleteData("/api/imageUpload/deleteAllImages");
+        context.setAlertBox({ open: true, error: false, msg: "Category Updated!" });
 
         history("/category");
       });
@@ -236,6 +237,10 @@ const EditCategory = () => {
       return false;
     }
   };
+
+  if (isLoading) {
+    return <LoadingSkeleton rows={8} />;
+  }
 
   return (
     <>
