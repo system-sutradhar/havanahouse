@@ -16,6 +16,8 @@ import { MyContext } from "@/context/ThemeContext";
 import { FaHeart } from "react-icons/fa";
 import { fetchDataFromApi, postData } from "@/utils/api";
 
+const hasValidOptions = (arr) => Array.isArray(arr) && arr.some(val => val && val !== 'N/A');
+
 
 const ProductDetails = ({params}) => {
 
@@ -284,7 +286,7 @@ const ProductDetails = ({params}) => {
 
 
                             {
-                                productData?.productRam?.length !== 0 &&
+                                hasValidOptions(productData?.productRam) &&
                                 <div className='productSize d-flex align-items-center'>
                                     <span>RAM:</span>
                                     <ul className={`list list-inline mb-0 pl-4 ${tabError === true && 'error'}`}>
@@ -302,7 +304,7 @@ const ProductDetails = ({params}) => {
 
 
                             {
-                                productData?.size?.length !== 0 &&
+                                hasValidOptions(productData?.size) &&
                                 <div className='productSize d-flex align-items-center'>
                                     <span>Size:</span>
                                     <ul className={`list list-inline mb-0 pl-4 ${tabError === true && 'error'}`}>
@@ -320,7 +322,7 @@ const ProductDetails = ({params}) => {
 
 
                             {
-                                productData?.productWeight?.length !== 0 &&
+                                hasValidOptions(productData?.productWeight) &&
                                 <div className='productSize d-flex align-items-center'>
                                     <span>Weight:</span>
                                     <ul className={`list list-inline mb-0 pl-4 ${tabError === true && 'error'}`}>
