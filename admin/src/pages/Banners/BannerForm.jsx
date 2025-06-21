@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
-import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import { Grid, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import { IoCloseSharp } from 'react-icons/io5';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
 import { MyContext } from '../../App';
@@ -9,7 +10,7 @@ export default function BannerForm({ uploadUrl, createUrl, onCancel, onSuccess }
   const context = useContext(MyContext);
   const [form, setForm] = useState({ catId: '', subCatId: '', images: [] });
   const [subCats, setSubCats] = useState([]);
-  const [preview, setPreview] = useState('');
+  const [previews, setPreviews] = useState([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -26,17 +27,22 @@ export default function BannerForm({ uploadUrl, createUrl, onCancel, onSuccess }
   };
 
   const handleFile = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
     setSaving(true);
     const data = new FormData();
-    data.append('images', file);
+    files.forEach((f) => data.append('images', f));
     const res = await uploadImage(uploadUrl, data);
-    if (res?.[0]) {
-      setForm(f => ({ ...f, images: [res[0]] }));
-      setPreview(res[0]);
+    if (res?.length) {
+      setForm((f) => ({ ...f, images: [...f.images, ...res] }));
+      setPreviews((p) => [...p, ...res]);
     }
     setSaving(false);
+  };
+
+  const removeImage = (index) => {
+    setForm((f) => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
+    setPreviews((p) => p.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -90,12 +96,22 @@ export default function BannerForm({ uploadUrl, createUrl, onCancel, onSuccess }
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <input type="file" onChange={handleFile} />
-          {preview && (
-            <Box mt={2}>
-              <img src={preview} alt="preview" style={{ maxWidth: '150px' }} />
-            </Box>
-          )}
+          <Box className="imgUploadBox">
+            {previews.map((img, idx) => (
+              <div className="uploadBox" key={idx}>
+                <span className="remove" onClick={() => removeImage(idx)}><IoCloseSharp /></span>
+                <div className="box">
+                  <img src={img} alt="preview" className="w-100" />
+                </div>
+              </div>
+            ))}
+            <div className="uploadBox">
+              <input type="file" multiple onChange={handleFile} />
+              <div className="info">
+                <span>Image Upload</span>
+              </div>
+            </div>
+          </Box>
         </Grid>
       </Grid>
       <Box display="flex" justifyContent="flex-end" mt={3} gap={2}>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IoCloseSharp } from 'react-icons/io5';
 import {
   Grid,
   TextField,
@@ -134,24 +135,35 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
               bgcolor: theme.palette.mode === 'dark' ? '#1e1e1e' : '#fff',
               '&:hover': { borderColor: '#888' },
             }}
+            className="imgUploadBox"
           >
             {preview ? (
-              <Box position="relative" display="inline-block">
-                <img src={preview} alt="preview" width={150} />
-                <CancelButton
-                  onClick={removeImage}
-                  sx={{ position: 'absolute', top: 4, right: 4 }}
-                />
-              </Box>
+              <div className="uploadBox">
+                <span className="remove" onClick={removeImage}>
+                  <IoCloseSharp />
+                </span>
+                <div className="box">
+                  <div className={`overlayPreview position-${form.position}`}> 
+                    {form.overlayText && <span>{form.overlayText}</span>} 
+                    {form.ctaUrl && (
+                      <a href={form.ctaUrl} target="_blank" rel="noreferrer" className="cta">Visit</a>
+                    )}
+                  </div>
+                  <img src={preview} alt="preview" className="w-100" />
+                </div>
+              </div>
             ) : (
-              <Box>
+              <div className="uploadBox">
                 <input
                   type="file"
                   onChange={handleImage}
                   aria-label="Upload Image"
                   tabIndex={4}
                 />
-              </Box>
+                <div className="info">
+                  <span>Image Upload</span>
+                </div>
+              </div>
             )}
           </Box>
         </Grid>
