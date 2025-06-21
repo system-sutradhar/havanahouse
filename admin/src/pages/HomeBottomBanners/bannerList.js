@@ -42,7 +42,7 @@ const BannersList = () => {
   }, []);
 
   const deleteSlide = (id) => {
-    
+    if (!window.confirm("Delete this banner?")) return;
     context.setProgress(30);
     deleteData(`/api/homeBottomBanners/${id}`).then((res) => {
       context.setProgress(100);
@@ -53,7 +53,6 @@ const BannersList = () => {
       });
       loadSlides();
     });
-   
   };
 
   if (showForm) {

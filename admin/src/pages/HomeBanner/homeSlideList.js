@@ -32,6 +32,7 @@ const HomeSlidesList = () => {
   }, []);
 
   const deleteSlide = (id) => {
+    if (!window.confirm("Delete this slide?")) return;
     context.setProgress(30);
     deleteData(`/api/homeBanner/${id}`).then(() => {
       context.setProgress(100);
