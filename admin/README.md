@@ -14,6 +14,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+## Environment Variables
+
+Create a `.env` file in this folder based on `.env.example` and provide your Cloudinary credentials. Without `REACT_APP_CLOUDINARY_CLOUD_NAME` and `REACT_APP_CLOUDINARY_UPLOAD_PRESET`, image uploads will fail.
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\

@@ -2,6 +2,8 @@ import { MdShoppingBag } from "react-icons/md";
 import MenuItem from "@mui/material/MenuItem";
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
+import { AddButton } from "../../components/common/ActionButtons";
+import DeleteConfirmDialog from "../../components/common/DeleteConfirmDialog";
 
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -22,49 +24,23 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import AddProduct from "./addProduct";
+import ProductForm from "./ProductForm";
 
-import { emphasize, styled } from "@mui/material/styles";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Chip from "@mui/material/Chip";
-import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
 import DashboardBox from "../Dashboard/components/dashboardBox";
 import SearchBox from "../../components/SearchBox";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
+import BaseTable from "../../components/common/BaseTable";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import Skeleton from "@mui/material/Skeleton";
+import HomeIcon from '@mui/icons-material/Home';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 
 
 
-//breadcrumb code
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-  const backgroundColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[800];
-  return {
-    backgroundColor,
-    height: theme.spacing(3),
-    color: theme.palette.text.primary,
-    fontWeight: theme.typography.fontWeightRegular,
-    "&:hover, &:focus": {
-      backgroundColor: emphasize(backgroundColor, 0.06),
-    },
-    "&:active": {
-      boxShadow: theme.shadows[1],
-      backgroundColor: emphasize(backgroundColor, 0.12),
-    },
-  };
-});
 
 const Products = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -84,6 +60,8 @@ const Products = () => {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -134,10 +112,11 @@ const Products = () => {
     fetchInitial();
   }, []);
 
-  const deleteProduct = (id) => {
+  const deleteProduct = () => {
+    if (!deleteId) return;
     context.setProgress(40);
     setIsLoadingBar(true);
-    deleteData(`/api/products/${id}`).then((res) => {
+    deleteData(`/api/products/${deleteId}`).then((res) => {
       context.setProgress(100);
       context.setAlertBox({
         open: true,
@@ -148,6 +127,9 @@ const Products = () => {
       loadProducts(page);
       context.fetchCategory();
       setIsLoadingBar(false);
+    }).finally(() => {
+      setConfirmOpen(false);
+      setDeleteId(null);
     });
   };
 
@@ -181,32 +163,27 @@ const Products = () => {
 }
 
 
+  if (showForm) {
+    return (
+      <ProductForm
+        onSuccess={() => {
+          setShowForm(false);
+          loadProducts();
+        }}
+        onCancel={() => setShowForm(false)}
+      />
+    );
+  }
+
   return (
-    <>
-      <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-          <h5 className="mb-0">Product List</h5>
-
-          <div className="ml-auto d-flex align-items-center">
-            <Breadcrumbs
-              aria-label="breadcrumb"
-              className="ml-auto breadcrumbs_"
-            >
-              <StyledBreadcrumb
-                component="a"
-                href="#"
-                label="Dashboard"
-                icon={<HomeIcon fontSize="small" />}
-              />
-
-              <StyledBreadcrumb
-                label="Products"
-                deleteIcon={<ExpandMoreIcon />}
-              />
-            </Breadcrumbs>
-
-          </div>
-        </div>
+    <AdminPageLayout
+      title="Product List"
+      breadcrumbPath={[
+        { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+        { icon: <StorefrontIcon fontSize="inherit" />, label: 'Products', href: '/products' },
+      ]}
+      actions={<AddButton onClick={() => setShowForm(true)} label="Add Product" />}
+    >
 
         <div className="row dashboardBoxWrapperRow dashboardBoxWrapperRowV2 pt-0">
           <div className="col-md-12">
@@ -237,33 +214,7 @@ const Products = () => {
         <div className="card shadow border-0 p-3 mt-4">
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <h3 className="hd mb-0">Best Selling Products</h3>
-            <Box>
-              {!showForm && (
-                <Button
-                  variant="contained"
-                  className="ml-2"
-                  onClick={() => setShowForm(true)}
-                >
-                  Add Product
-                </Button>
-              )}
-              {showForm && (
-                <Button
-                  variant="outlined"
-                  className="ml-2"
-                  onClick={() => setShowForm(false)}
-                >
-                  Close
-                </Button>
-              )}
           </Box>
-        </Box>
-
-        {showForm && (
-          <Box mt={3}>
-            <AddProduct onSuccess={() => { setShowForm(false); loadProducts(); }} />
-          </Box>
-        )}
 
         <Grid container spacing={2} className="cardFilters mt-3">
           <Grid item xs={12} md={3}>
@@ -348,95 +299,46 @@ const Products = () => {
           <Skeleton variant="rectangular" width="100%" height={200} />
         ) : (
           <div className="table-responsive mt-3">
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ width: 300 }}>PRODUCT</TableCell>
-                  <TableCell>CATEGORY</TableCell>
-                  <TableCell>SUB CATEGORY</TableCell>
-                  <TableCell>BRAND</TableCell>
-                  <TableCell>PRICE</TableCell>
-                  <TableCell>RATING</TableCell>
-                  <TableCell>ACTION</TableCell>
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {productList?.products?.length !== 0 &&
-                  productList?.products?.map((item, index) => (
-                    <TableRow hover key={index}>
-                      <TableCell>
-                        <Box display="flex" alignItems="center">
-                          <Avatar
-                            src={item.images[0]}
-                            variant="rounded"
-                            sx={{ width: 56, height: 56, mr: 2 }}
-                          />
-                          <Box>
-                            <h6>{item?.name}</h6>
-                            <p>{item?.description}</p>
-                          </Box>
-                        </Box>
-                      </TableCell>
-
-                      <TableCell>{item?.category?.name}</TableCell>
-                      <TableCell>{item?.subCatName}</TableCell>
-                      <TableCell>{item?.brand}</TableCell>
-                      <TableCell>
-                        <div style={{ width: "70px" }}>
-                          <del className="old">Rs {item?.oldPrice}</del>
-                          <span className="new text-danger">Rs {item?.price}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Rating
-                          name="read-only"
-                          defaultValue={item?.rating}
-                          precision={0.5}
-                          size="small"
-                          readOnly
-                        />
-                      </TableCell>
-
-                      <TableCell>
-                        <Box className="actions" display="flex" alignItems="center">
-                          <Tooltip title="View">
-                            <IconButton
-                              component={Link}
-                              to={`/product/details/${item.id}`}
-                              color="secondary"
-                            >
-                              <FaEye />
-                            </IconButton>
-                          </Tooltip>
-
-                          <Tooltip title="Edit">
-                            <IconButton
-                              component={Link}
-                              to={`/product/edit/${item.id}`}
-                              color="success"
-                            >
-                              <FaPencilAlt />
-                            </IconButton>
-                          </Tooltip>
-
-                          <Tooltip title="Delete">
-                            <span>
-                              <IconButton
-                                color="error"
-                                disabled={item?.isActive === false || item?.isSystem}
-                                onClick={() => deleteProduct(item?.id)}
-                              >
-                                <MdDelete />
-                              </IconButton>
-                            </span>
-                          </Tooltip>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
+            <BaseTable
+              columns={[
+                {
+                  label: 'PRODUCT',
+                  field: 'name',
+                  render: (row) => (
+                    <Box display="flex" alignItems="center">
+                      <Avatar src={row.images[0]} variant="rounded" sx={{ width: 56, height: 56, mr: 2 }} />
+                      <Box>
+                        <h6>{row.name}</h6>
+                        <p>{row.description}</p>
+                      </Box>
+                    </Box>
+                  ),
+                },
+                { label: 'CATEGORY', field: 'category', render: (row) => row.category?.name },
+                { label: 'SUB CATEGORY', field: 'subCatName' },
+                { label: 'BRAND', field: 'brand' },
+                {
+                  label: 'PRICE',
+                  field: 'price',
+                  render: (row) => (
+                    <div style={{ width: '70px' }}>
+                      <del className="old">Rs {row.oldPrice}</del>
+                      <span className="new text-danger">Rs {row.price}</span>
+                    </div>
+                  ),
+                },
+                {
+                  label: 'RATING',
+                  field: 'rating',
+                  render: (row) => (
+                    <Rating name="read-only" defaultValue={row.rating} precision={0.5} size="small" readOnly />
+                  ),
+                },
+              ]}
+              rows={productList?.products || []}
+              onEdit={(row) => (window.location.href = `/product/edit/${row.id}`)}
+              onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
+            />
 
             {productList?.totalPages > 1 && (
               <div className="d-flex tableFooter">
@@ -453,8 +355,12 @@ const Products = () => {
           </div>
         )}
         </div>
-      </div>
-    </>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={deleteProduct}
+      />
+      </AdminPageLayout>
   );
 };
 

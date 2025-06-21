@@ -17,5 +17,7 @@
   --table-header-bg: #f3f6fd;
   --table-row-bg: #fafbff;
   --font-base: 'Poppins', sans-serif;
+  --input-dark-bg: #1e1e1e;
+  --input-dark-border: #444;
 }
 

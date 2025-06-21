@@ -47,6 +47,10 @@ REACT_APP_FIREBASE_PROJECT_ID=<firebase project id>
 REACT_APP_FIREBASE_STORAGE_BUCKET=<firebase storage bucket>
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=<firebase messaging sender id>
 REACT_APP_FIREBASE_APP_ID=<firebase app id>
+REACT_APP_CLOUDINARY_CLOUD_NAME=<cloudinary name>
+REACT_APP_CLOUDINARY_UPLOAD_PRESET=<upload preset>
+# Both Cloudinary variables are required for all image uploads. If missing,
+# uploads will fail with a 401 error.
 ```
 
 ### client/.env
@@ -85,3 +89,19 @@ CLOUDINARY_API_SECRET=<cloudinary secret>
 ```
 
 After configuring the environment variables, start each package as shown above.
+
+## Running Tests
+
+The server includes a small Jest test suite. Run it with:
+
+```bash
+cd server
+npm test
+```
+
+The admin app also contains Jest/React Testing Library tests:
+
+```bash
+cd admin
+npm test
+```

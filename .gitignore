@@ -11,4 +11,5 @@ server/.cache/
 server/.next/
 server/uploads/
 *.env
+*.zip
 

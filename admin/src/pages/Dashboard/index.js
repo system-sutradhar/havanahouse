@@ -1,5 +1,4 @@
 import DashboardBox from "./components/dashboardBox";
-import { HiDotsVertical } from "react-icons/hi";
 import { FaUserCircle } from "react-icons/fa";
 import { IoMdCart } from "react-icons/io";
 import { MdShoppingBag } from "react-icons/md";
@@ -8,8 +7,6 @@ import Menu from "@mui/material/Menu";
 import SearchBox from "../../components/SearchBox";
 import MenuItem from "@mui/material/MenuItem";
 import { useContext, useEffect, useState } from "react";
-import { IoIosTimer } from "react-icons/io";
-import Button from "@mui/material/Button";
 import { Chart } from "react-google-charts";
 
 import InputLabel from "@mui/material/InputLabel";
@@ -17,15 +14,13 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
-import { FaPencilAlt } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import BaseTable from "../../components/common/BaseTable";
 
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
 
 import Rating from "@mui/material/Rating";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
@@ -193,7 +188,7 @@ const Dashboard = () => {
 
 
   return (
-    <>
+    <AdminPageLayout title="Dashboard">
       <div className="right-content w-100">
         <div className="row dashboardBoxWrapperRow dashboard_Box dashboardBoxWrapperRowV2">
           <div className="col-md-12">
@@ -313,92 +308,46 @@ const Dashboard = () => {
           </div>
 
           <div className="table-responsive mt-3">
-            <table className="table table-bordered table-striped v-align">
-              <thead className="thead-dark">
-                <tr>
-                  <th style={{ width: "300px" }}>PRODUCT</th>
-                  <th>CATEGORY</th>
-                  <th>SUB CATEGORY</th>
-                  <th>BRAND</th>
-                  <th>PRICE</th>
-                  <th>RATING</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {productList?.products?.length !== 0 &&
-                  productList?.products?.map((item, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>
-                          <div className="d-flex align-items-center productBox justify-content-around">
-                            <div className="imgWrapper">
-                              <div className="img card shadow m-0">
-                                <LazyLoadImage
-                                  alt={"image"}
-                                  effect="blur"
-                                  className="w-100"
-                                  src={item.images[0]}
-                                />
-                              </div>
-                            </div>
-                            <div className="info pl-3">
-                              <h6>{item?.name}</h6>
-                              <p>{item?.description}</p>
-                            </div>
-                          </div>
-                        </td>
-
-                        <td>{item?.category?.name}</td>
-                        <td>{item?.subCatName}</td>
-                        <td>{item?.brand}</td>
-                        <td>
-                          <div style={{ width: "70px" }}>
-                            <del className="old">Rs {item?.oldPrice}</del>
-                            <span className="new text-danger">
-                              Rs {item?.price}
-                            </span>
-                          </div>
-                        </td>
-                        <td>
-                          <Rating
-                            name="read-only"
-                            defaultValue={item?.rating}
-                            precision={0.5}
-                            size="small"
-                            readOnly
-                          />
-                        </td>
-
-                        <td>
-                          <div className="actions d-flex align-items-center">
-                            <Link to={`/product/details/${item.id}`}>
-                              <Button className="secondary" color="secondary">
-                                <FaEye />
-                              </Button>
-                            </Link>
-
-                            <Link to={`/product/edit/${item.id}`}>
-                              <Button className="success" color="success">
-                                <FaPencilAlt />
-                              </Button>
-                            </Link>
-
-                            <Button
-                              className="error"
-                              color="error"
-                              onClick={() => deleteProduct(item?.id)}
-                            >
-                              <MdDelete />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
+            <BaseTable
+              columns={[
+                {
+                  label: 'PRODUCT',
+                  field: 'name',
+                  render: (row) => (
+                    <Box display="flex" alignItems="center">
+                      <Avatar src={row.images[0]} variant="rounded" sx={{ width: 56, height: 56, mr: 2 }} />
+                      <Box>
+                        <h6>{row.name}</h6>
+                        <p>{row.description}</p>
+                      </Box>
+                    </Box>
+                  ),
+                },
+                { label: 'CATEGORY', field: 'category', render: (row) => row.category?.name },
+                { label: 'SUB CATEGORY', field: 'subCatName' },
+                { label: 'BRAND', field: 'brand' },
+                {
+                  label: 'PRICE',
+                  field: 'price',
+                  render: (row) => (
+                    <div style={{ width: '70px' }}>
+                      <del className="old">Rs {row.oldPrice}</del>
+                      <span className="new text-danger">Rs {row.price}</span>
+                    </div>
+                  ),
+                },
+                {
+                  label: 'RATING',
+                  field: 'rating',
+                  render: (row) => (
+                    <Rating name="read-only" defaultValue={row.rating} precision={0.5} size="small" readOnly />
+                  ),
+                },
+              ]}
+              rows={productList?.products || []}
+              onEdit={(row) => (window.location.href = `/product/edit/${row.id}`)}
+              onDelete={(row) => deleteProduct(row.id)}
+            />
 
             {productList?.totalPages > 1 && (
               <div className="d-flex tableFooter">
@@ -415,7 +364,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </>
+    </AdminPageLayout>
   );
 };
 

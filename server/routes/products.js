@@ -11,16 +11,8 @@ const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
 const mongoose = require("mongoose");
-const { exit } = require("process");
 
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-  cloud_name: process.env.cloudinary_Config_Cloud_Name,
-  api_key: process.env.cloudinary_Config_api_key,
-  api_secret: process.env.cloudinary_Config_api_secret,
-  secure: true,
-});
+const cloudinary = require('../utils/cloudinary');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -29,7 +21,6 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, `${Date.now()}_${file.originalname}`);
     //imagesArr.push(`${Date.now()}_${file.originalname}`)
-    //console.log(file.originalname)
   },
 });
 
@@ -46,7 +37,10 @@ router.post(`/upload`, upload.array("images"), async (req, res) => {
         overwrite: false,
       };
 
-      const result = await cloudinary.uploader.upload(file.path, options);
+      const result = await cloudinary.uploader.upload(file.path, {
+        ...options,
+        resource_type: 'auto',
+      });
       imagesArr.push(result.secure_url);
       fs.unlinkSync(file.path);
     }
@@ -67,7 +61,6 @@ router.post(`/upload`, upload.array("images"), async (req, res) => {
 router.get(`/`, async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.perPage);
-  console.log(Product)
   const totalPosts = await Product.countDocuments();
   const totalPages = Math.ceil(totalPosts / perPage);
 
@@ -433,7 +426,6 @@ router.post(`/create`, async (req, res) => {
   const images_Arr = uploadedImages?.map((item) => {
     item.images?.map((image) => {
       images_Array.push(image);
-      console.log(image);
     });
   });
 
@@ -487,7 +479,6 @@ router.get("/:id", async (req, res) => {
 router.delete("/deleteImage", async (req, res) => {
   const imgUrl = req.query.img;
 
-  // console.log(imgUrl)
 
   const urlArr = imgUrl.split("/");
   const image = urlArr[urlArr.length - 1];
@@ -517,11 +508,9 @@ router.delete("/:id", async (req, res) => {
 
     if (imageName) {
       cloudinary.uploader.destroy(imageName, (error, result) => {
-        // console.log(error, result);
       });
     }
 
-    //  console.log(imageName)
   }
 
   const deletedProduct = await Product.findByIdAndDelete(req.params.id);

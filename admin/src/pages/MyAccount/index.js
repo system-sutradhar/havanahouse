@@ -6,7 +6,10 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { IoMdCloudUpload } from "react-icons/io";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import HomeIcon from "@mui/icons-material/Home";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
+import AdminFormLayout from "../../components/common/AdminFormLayout";
+import { SaveButton } from "../../components/common/ActionButtons";
 import { useNavigate } from "react-router-dom";
 import {
   deleteData,
@@ -301,12 +304,11 @@ const MyAccount = () => {
   };
 
   return (
-    <section className="section myAccountPage right-content w-100">
-      <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-          <h5 className="mb-0">My Account</h5>
-        </div>
-
-        <Box sx={{ width: "100%" }} className="myAccBox card border-0 pl-3 pr-3">
+    <AdminPageLayout
+      title="My Account"
+      breadcrumbPath={[{ label: "Dashboard", icon: <HomeIcon />, href: "/" }, { label: "My Account" }]}
+    >
+      <Box sx={{ width: "100%" }} className="myAccBox card border-0 pl-3 pr-3">
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
               value={value}
@@ -318,7 +320,7 @@ const MyAccount = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
-            <form onSubmit={edituser}>
+            <AdminFormLayout onSubmit={edituser}>
               <div className="row">
                 <div className="col-md-4">
                   <div className="userImage d-flex align-items-center justify-content-center">
@@ -393,19 +395,16 @@ const MyAccount = () => {
                   </div>
 
                   <div className="form-group">
-                    <Button
-                      type="submit"
-                      className="btn-blue btn-lg btn-big"
-                    >
-                      {isLoading === true ? <CircularProgress /> : "Save"}
-                    </Button>
+                    <SaveButton type="submit">
+                      {isLoading === true ? <CircularProgress /> : 'Save'}
+                    </SaveButton>
                   </div>
                 </div>
               </div>
-            </form>
+            </AdminFormLayout>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            <form onSubmit={changePassword}>
+            <AdminFormLayout onSubmit={changePassword}>
               <div className="row">
                 <div className="col-md-12">
                   <div className="row">
@@ -447,20 +446,14 @@ const MyAccount = () => {
                   </div>
 
                   <div className="form-group">
-                    <Button
-                      type="submit"
-                      className="btn-blue bg-red btn-lg btn-big"
-                    >
-                      {" "}
-                      Save
-                    </Button>
+                    <SaveButton type="submit">Save</SaveButton>
                   </div>
                 </div>
               </div>
-            </form>
+            </AdminFormLayout>
           </CustomTabPanel>
         </Box>
-    </section>
+    </AdminPageLayout>
   );
 };
 

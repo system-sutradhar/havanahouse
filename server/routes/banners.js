@@ -5,14 +5,7 @@ const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
 
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-  cloud_name: process.env.cloudinary_Config_Cloud_Name,
-  api_key: process.env.cloudinary_Config_api_key,
-  api_secret: process.env.cloudinary_Config_api_secret,
-  secure: true,
-});
+const cloudinary = require('../utils/cloudinary');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -37,7 +30,10 @@ router.post(`/upload`, upload.array("images"), async (req, res) => {
         overwrite: false,
       };
 
-      const result = await cloudinary.uploader.upload(file.path, options);
+      const result = await cloudinary.uploader.upload(file.path, {
+        ...options,
+        resource_type: 'auto',
+      });
       imagesArr.push(result.secure_url);
       fs.unlinkSync(file.path);
     }
@@ -156,26 +152,35 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const slideItem = await Banner.findByIdAndUpdate(
-    req.params.id,
-    {
-      images: req.body.images,
-      catId: req.body.catId,
-      catName:req.body.catName,
-      subCatId: req.body.subCatId,
-      subCatName:req.body.subCatName
-    },
-    { new: true }
-  );
+  try {
+    const banner = await Banner.findById(req.params.id);
+    if (!banner) {
+      return res.status(404).json({ message: "Banner not found" });
+    }
 
-  if (!slideItem) {
-    return res.status(500).json({
-      message: "Item cannot be updated!",
-      success: false,
-    });
+    const newImages = req.body.images || [];
+    const oldImages = banner.images || [];
+
+    banner.images = newImages;
+    banner.catId = req.body.catId;
+    banner.catName = req.body.catName;
+    banner.subCatId = req.body.subCatId;
+    banner.subCatName = req.body.subCatName;
+
+    const updated = await banner.save();
+
+    const toDelete = oldImages.filter((img) => !newImages.includes(img));
+    await Promise.all(
+      toDelete.map((imgUrl) => {
+        const imageName = imgUrl.split("/").pop().split(".")[0];
+        return cloudinary.uploader.destroy(imageName);
+      })
+    );
+
+    res.send(updated);
+  } catch (error) {
+    res.status(500).json({ message: "Item cannot be updated!", success: false });
   }
-
-  res.send(slideItem);
 });
 
 module.exports = router;

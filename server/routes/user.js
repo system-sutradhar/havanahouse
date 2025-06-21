@@ -9,14 +9,7 @@ const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const fs = require("fs");
 
-const cloudinary = require('cloudinary').v2;
-
-cloudinary.config({
-    cloud_name: process.env.cloudinary_Config_Cloud_Name,
-    api_key: process.env.cloudinary_Config_api_key,
-    api_secret: process.env.cloudinary_Config_api_secret,
-    secure: true
-});
+const cloudinary = require('../utils/cloudinary');
 
 const storage = multer.diskStorage({
 
@@ -102,12 +95,20 @@ router.post(`/signup`, async (req, res) => {
             isAdmin:isAdmin
         });
 
-        const token = jwt.sign({email:result.email, id: result._id}, process.env.JSON_WEB_TOKEN_SECRET_KEY);
+        const token = jwt.sign({ email: result.email, id: result._id }, process.env.JSON_WEB_TOKEN_SECRET_KEY);
+
+        const userData = {
+            id: result._id,
+            name: result.name,
+            phone: result.phone,
+            email: result.email,
+            isAdmin: result.isAdmin,
+        };
 
         res.status(200).json({
-            user:result,
-            token:token,
-            msg:"User Register Successfully"
+            user: userData,
+            token: token,
+            msg: "User Register Successfully"
         })
 
     } catch (error) {
@@ -135,13 +136,20 @@ router.post(`/signin`, async (req, res) => {
             return res.status(400).json({error:true,msg:"Invailid credentials"})
         }
 
-        const token = jwt.sign({email:existingUser.email, id: existingUser._id}, process.env.JSON_WEB_TOKEN_SECRET_KEY);
+        const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.JSON_WEB_TOKEN_SECRET_KEY);
 
+        const userData = {
+            id: existingUser._id,
+            name: existingUser.name,
+            phone: existingUser.phone,
+            email: existingUser.email,
+            isAdmin: existingUser.isAdmin,
+        };
 
        return res.status(200).send({
-            user:existingUser,
-            token:token,
-            msg:"user Authenticated"
+            user: userData,
+            token: token,
+            msg: "user Authenticated"
         })
 
     }catch (error) {

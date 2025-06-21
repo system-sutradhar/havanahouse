@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
+import { AddButton } from "../../components/common/ActionButtons";
+import DeleteConfirmDialog from "../../components/common/DeleteConfirmDialog";
+import AddHomeBannerPage from './AddHomeBannerPage';
 
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -8,46 +11,26 @@ import { MyContext } from "../../App";
 
 import { Link } from "react-router-dom";
 
-import { emphasize, styled } from "@mui/material/styles";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Chip from "@mui/material/Chip";
-import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AppBreadcrumbs from "../../components/common/AppBreadcrumbs";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
-import AddBanner from "./addHomeBanner";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
+import BaseTable from "../../components/common/BaseTable";
+import AdminPageLayout from "../../components/common/AdminPageLayout";
+import HomeIcon from '@mui/icons-material/Home';
+import ImageIcon from '@mui/icons-material/Image';
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 //breadcrumb code
-const StyledBreadcrumb = styled(Chip)(({ theme }) => {
-  const backgroundColor =
-    theme.palette.mode === "light"
-      ? theme.palette.grey[100]
-      : theme.palette.grey[800];
-  return {
-    backgroundColor,
-    height: theme.spacing(3),
-    color: theme.palette.text.primary,
-    fontWeight: theme.typography.fontWeightRegular,
-    "&:hover, &:focus": {
-      backgroundColor: emphasize(backgroundColor, 0.06),
-    },
-    "&:active": {
-      boxShadow: theme.shadows[1],
-      backgroundColor: emphasize(backgroundColor, 0.12),
-    },
-  };
-});
 
 const BannersList = () => {
   const [slideList, setSlideList] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const context = useContext(MyContext);
 
@@ -64,9 +47,10 @@ const BannersList = () => {
     loadSlides();
   }, []);
 
-  const deleteSlide = (id) => {
+  const deleteSlide = () => {
+    if (!deleteId) return;
     context.setProgress(30);
-    deleteData(`/api/banners/${id}`).then(() => {
+    deleteData(`/api/banners/${deleteId}`).then(() => {
       context.setProgress(100);
       context.setAlertBox({
         open: true,
@@ -74,112 +58,63 @@ const BannersList = () => {
         msg: "Banner Deleted!",
       });
       loadSlides();
+    }).finally(() => {
+      setConfirmOpen(false);
+      setDeleteId(null);
     });
   };
 
+  if (showForm) {
+    return (
+      <AddHomeBannerPage
+        onCancel={() => setShowForm(false)}
+        onSuccess={() => {
+          setShowForm(false);
+          loadSlides();
+        }}
+      />
+    );
+  }
+
   return (
-    <>
-      <Container className="right-content" maxWidth={false}>
-        <div className="card shadow border-0 w-100 p-4">
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            flexWrap="wrap"
-          >
-            <h5 className="mb-0">Banner Slide List</h5>
-            <Box display="flex" alignItems="center">
-              <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs_">
-                <StyledBreadcrumb
-                  component="a"
-                  href="#"
-                  label="Dashboard"
-                  icon={<HomeIcon fontSize="small" />}
-                />
-                <StyledBreadcrumb label="Banners" deleteIcon={<ExpandMoreIcon />} />
-              </Breadcrumbs>
-              <Button
-                className="btn-blue ml-3 pl-3 pr-3"
-                onClick={() => setShowForm(!showForm)}
-              >
-                {showForm ? "Close" : "Add Home Banner"}
-              </Button>
-            </Box>
-          </Box>
+    <AdminPageLayout
+      title="Banner Slide List"
+      breadcrumbPath={[
+        { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+        { icon: <ImageIcon fontSize="inherit" />, label: 'Banners', href: '/banners' },
+      ]}
+      actions={<AddButton onClick={() => setShowForm(true)} label="Add Home Banner" />}
+    >
+      <div className="card shadow border-0 p-3 mt-4">
+        <BaseTable
+            columns={[
+              {
+                label: "IMAGE",
+                field: "images",
+                render: (row) => (
+                  <div className="d-flex align-items-center" style={{ width: "200px" }}>
+                    <div className="imgWrapper" style={{ width: "200px", flex: "0 0 200px" }}>
+                      <div className="img card shadow m-0">
+                        <LazyLoadImage alt="image" effect="blur" className="w-100" src={row.images[0]} />
+                      </div>
+                    </div>
+                  </div>
+                ),
+              },
+              { label: "CATEGORY", field: "catName" },
+              { label: "SUB CATEGORY", field: "subCatName" },
+            ]}
+            rows={slideList}
+            onEdit={(row) => (window.location.href = `/banners/edit/${row.id}`)}
+            onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
+          />
         </div>
-
-        {showForm && (
-          <div className="card shadow border-0 p-3 mt-4">
-            <AddBanner onSuccess={() => { setShowForm(false); loadSlides(); }} />
-          </div>
-        )}
-
-        <div className="card shadow border-0 p-3 mt-4">
-          <div className="table-responsive mt-3">
-            <table className="table table-bordered table-striped v-align">
-              <thead className="thead-dark">
-                <tr>
-                  <th style={{ width: "200px" }}>IMAGE</th>
-                  <th>CATEGORY</th>
-                  <th>SUB CATEGORY</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {slideList?.length !== 0 &&
-                  slideList?.map((item, index) => {
-                    return (
-                      <tr key={item.id || index}>
-                        <td>
-                          <div
-                            className="d-flex align-items-center "
-                            style={{ width: "200px" }}
-                          >
-                            <div
-                              className="imgWrapper"
-                              style={{ width: "200px", flex: "0 0 200px" }}
-                            >
-                              <div className="img card shadow m-0">
-                                <LazyLoadImage
-                                  alt={"image"}
-                                  effect="blur"
-                                  className="w-100"
-                                  src={item.images[0]}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td>{item.catName}</td>
-                        <td>{item.subCatName}</td>
-                        <td>
-                          <div className="actions d-flex align-items-center">
-                            <Link to={`/banners/edit/${item.id}`}>
-                              {" "}
-                              <Button className="success" color="success">
-                                <FaPencilAlt />
-                              </Button>
-                            </Link>
-
-                            <Button
-                              className="error"
-                              color="error"
-                              onClick={() => deleteSlide(item.id)}
-                            >
-                              <MdDelete />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </Container>
-    </>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={deleteSlide}
+      />
+    </AdminPageLayout>
   );
 };
 

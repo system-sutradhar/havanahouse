@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import BaseModal from '../../common/BaseModal';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import { MdClose } from 'react-icons/md';
-import FormRow from '../../common/FormRow';
+import { SaveButton, CancelButton } from '../../common/ActionButtons';
+import Grid from '@mui/material/Grid';
+import FormGroup from '@mui/material/FormGroup';
+import AdminFormLayout from '../../common/AdminFormLayout';
 import { postData, editData, fetchDataFromApi } from '../../../utils/api';
 import logger from '../../../utils/logger';
 
@@ -126,65 +123,67 @@ const SettingForm = ({ open, onClose, onSuccess, editId }) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleCancel} fullWidth maxWidth="sm">
-      <DialogTitle className="d-flex justify-content-between align-items-center">
-        {editId ? 'Edit Setting' : 'Add Setting'}
-        <IconButton onClick={handleCancel} aria-label="Close">
-          <MdClose />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent dividers>
-        <FormRow label="Name">
-          <TextField
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            error={Boolean(errors.name)}
-            helperText={errors.name || ''}
-            fullWidth
-          />
-        </FormRow>
-        <FormRow label="Value">
-          <TextField
-            name="value"
-            value={form.value}
-            onChange={handleChange}
-            multiline
-            minRows={3}
-            error={Boolean(errors.value)}
-            helperText={errors.value || ''}
-            fullWidth
-          />
-        </FormRow>
-        <FormRow>
-          <FormControlLabel
-            control={<Switch checked={form.prelogin} onChange={handleToggle} name="prelogin" />}
-            label="Prelogin"
-          />
-          <FormControlLabel
-            control={<Switch checked={form.postlogin} onChange={handleToggle} name="postlogin" />}
-            label="Postlogin"
-          />
-          <FormControlLabel
-            control={<Switch checked={form.desktop} onChange={handleToggle} name="desktop" />}
-            label="Desktop"
-          />
-          <FormControlLabel
-            control={<Switch checked={form.mobile} onChange={handleToggle} name="mobile" />}
-            label="Mobile"
-          />
-        </FormRow>
-      </DialogContent>
-      <DialogActions>
-        <Button variant="outlined" onClick={handleCancel} disabled={saving}>
-          Cancel
-        </Button>
-        <Button variant="contained" onClick={handleSubmit} disabled={saving} className="btn-blue">
-          Save
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <BaseModal
+      open={open}
+      onClose={handleCancel}
+      title={editId ? 'Edit Setting' : 'Add Setting'}
+      actions={
+        <>
+          <CancelButton onClick={handleCancel} disabled={saving} />
+          <SaveButton onClick={handleSubmit} disabled={saving} />
+        </>
+      }
+    >
+      <AdminFormLayout>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <TextField
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              label="Name"
+              required
+              error={Boolean(errors.name)}
+              helperText={errors.name || ''}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              name="value"
+              value={form.value}
+              onChange={handleChange}
+              label="Value"
+              multiline
+              minRows={3}
+              error={Boolean(errors.value)}
+              helperText={errors.value || ''}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormGroup row>
+              <FormControlLabel
+                control={<Switch checked={form.prelogin} onChange={handleToggle} name="prelogin" />}
+                label="Prelogin"
+              />
+              <FormControlLabel
+                control={<Switch checked={form.postlogin} onChange={handleToggle} name="postlogin" />}
+                label="Postlogin"
+              />
+              <FormControlLabel
+                control={<Switch checked={form.desktop} onChange={handleToggle} name="desktop" />}
+                label="Desktop"
+              />
+              <FormControlLabel
+                control={<Switch checked={form.mobile} onChange={handleToggle} name="mobile" />}
+                label="Mobile"
+              />
+            </FormGroup>
+          </Grid>
+        </Grid>
+      </AdminFormLayout>
+    </BaseModal>
   );
 };
 
