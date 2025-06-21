@@ -49,6 +49,8 @@ REACT_APP_FIREBASE_MESSAGING_SENDER_ID=<firebase messaging sender id>
 REACT_APP_FIREBASE_APP_ID=<firebase app id>
 REACT_APP_CLOUDINARY_CLOUD_NAME=<cloudinary name>
 REACT_APP_CLOUDINARY_UPLOAD_PRESET=<upload preset>
+# Both Cloudinary variables are required for all image uploads. If missing,
+# uploads will fail with a 401 error.
 ```
 
 ### client/.env
