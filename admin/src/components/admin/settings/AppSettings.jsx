@@ -6,7 +6,7 @@ import AdminPageLayout from '../../common/AdminPageLayout';
 import BaseTable from '../../common/BaseTable';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import SettingForm from './SettingForm';
-import SettingFormPage from '../../pages/AppSettings/SettingFormPage';
+import SettingFormPage from '../../../pages/AppSettings/SettingFormPage';
 import { fetchDataFromApi, deleteData } from '../../../utils/api';
 import { MyContext } from '../../../App';
 import logger from '../../../utils/logger';
