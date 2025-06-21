@@ -5,7 +5,6 @@ import BaseTable from "../../components/common/BaseTable";
 import { AddButton } from "../../components/common/ActionButtons";
 import AddHomeSlidePage from './AddHomeSlidePage';
 import { MyContext } from "../../App";
-import AddHomeSlide from "./addHomeSlide";
 import HomeIcon from "@mui/icons-material/Home";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
 import { LazyLoadImage } from "react-lazy-load-image-component";
