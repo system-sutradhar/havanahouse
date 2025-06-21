@@ -188,28 +188,35 @@ router.delete('/:id', async (req, res) => {
 
 
 router.put('/:id', async (req, res) => {
+    try {
+        const banner = await HomeBanner.findById(req.params.id);
+        if (!banner) {
+            return res.status(404).json({ message: 'Slide not found!' });
+        }
 
-    const slideItem = await HomeBanner.findByIdAndUpdate(
-        req.params.id,
-        {
-            images: req.body.images,
-            type: req.body.type,
-            overlayText: req.body.overlayText,
-            ctaUrl: req.body.ctaUrl,
-            position: req.body.position,
-        },
-        { new: true }
-    )
+        const newImages = req.body.images || [];
+        const oldImages = banner.images || [];
 
-    if (!slideItem) {
-        return res.status(500).json({
-            message: 'Item cannot be updated!',
-            success: false
-        })
+        banner.images = newImages;
+        banner.type = req.body.type;
+        banner.overlayText = req.body.overlayText;
+        banner.ctaUrl = req.body.ctaUrl;
+        banner.position = req.body.position;
+
+        const updated = await banner.save();
+
+        const toDelete = oldImages.filter(img => !newImages.includes(img));
+        await Promise.all(
+            toDelete.map(imgUrl => {
+                const imageName = imgUrl.split('/').pop().split('.')[0];
+                return cloudinary.uploader.destroy(imageName);
+            })
+        );
+
+        res.send(updated);
+    } catch (error) {
+        res.status(500).json({ message: 'Item cannot be updated!', success: false });
     }
-
-    res.send(slideItem);
-
 })
 
 
