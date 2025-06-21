@@ -9,6 +9,8 @@ import { FaRegHeart } from "react-icons/fa";
 import Head from "next/head";
 import { MdOutlineCompareArrows } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from 'next/link';
 import RelatedProducts from "./RelatedProducts";
 
 import CircularProgress from '@mui/material/CircularProgress';
@@ -240,6 +242,18 @@ const ProductDetails = ({params}) => {
 
             <section className="productDetails section">
                 <div className="container">
+                    {productData && (
+                        <Breadcrumbs aria-label="breadcrumb" className="mb-3">
+                            <Link href="/">Home</Link>
+                            {productData.catName && (
+                                <Link href={`/category/${productData.catId}`}>{productData.catName}</Link>
+                            )}
+                            {productData.subCatName && (
+                                <Link href={`/subcategory/${productData.subCatId}`}>{productData.subCatName}</Link>
+                            )}
+                            <span aria-current="page">{productData.name}</span>
+                        </Breadcrumbs>
+                    )}
                     <div className="row">
                         <div className="col-md-4 pl-5 part1">
                             <ProductZoom images={productData?.images} discount={productData?.discount} />
