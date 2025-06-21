@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import { AddButton } from '../../common/ActionButtons';
+import DeleteConfirmDialog from '../../common/DeleteConfirmDialog';
 import AdminPageLayout from '../../common/AdminPageLayout';
 import BaseTable from '../../common/BaseTable';
 import { MdDelete, MdEdit } from 'react-icons/md';
@@ -15,6 +16,8 @@ const AppSettings = () => {
   const [list, setList] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const ctx = useContext(MyContext);
 
   const loadData = () => {
@@ -30,14 +33,18 @@ const AppSettings = () => {
     loadData();
   }, []);
 
-  const handleDelete = (id) => {
-    if (!window.confirm('Delete this setting?')) return;
-    deleteData(`/api/appSettings/${id}`)
+  const handleDelete = () => {
+    if (!deleteId) return;
+    deleteData(`/api/appSettings/${deleteId}`)
       .then(() => {
         ctx.setAlertBox({ open: true, error: false, msg: 'Deleted!' });
         loadData();
       })
-      .catch((err) => logger.error(err));
+      .catch((err) => logger.error(err))
+      .finally(() => {
+        setConfirmOpen(false);
+        setDeleteId(null);
+      });
   };
 
   const handleSuccess = () => {
@@ -83,9 +90,14 @@ const AppSettings = () => {
           ]}
           rows={list}
           onEdit={(row) => { setEditId(row.id); setOpenForm(true); }}
-          onDelete={(row) => handleDelete(row.id)}
+          onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
         />
       </Paper>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={handleDelete}
+      />
     </AdminPageLayout>
   );
 };

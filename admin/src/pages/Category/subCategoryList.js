@@ -5,6 +5,7 @@ import { IoCloseSharp } from 'react-icons/io5';
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import BaseTable from '../../components/common/BaseTable';
 import { AddButton, CancelButton } from '../../components/common/ActionButtons';
+import DeleteConfirmDialog from '../../components/common/DeleteConfirmDialog';
 import AddSubCat from './addSubCat';
 import { MyContext } from '../../App';
 import { fetchDataFromApi, deleteData } from '../../utils/api';
@@ -14,6 +15,8 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 const SubCategory = () => {
   const [catData, setCatData] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const context = useContext(MyContext);
 
   const loadCategories = () => {
@@ -29,12 +32,16 @@ const SubCategory = () => {
     loadCategories();
   }, []);
 
-  const deleteSubCat = (id) => {
+  const deleteSubCat = () => {
+    if (!deleteId) return;
     context.setProgress(30);
-    deleteData(`/api/subCat/${id}`).then(() => {
+    deleteData(`/api/subCat/${deleteId}`).then(() => {
       context.setProgress(100);
       loadCategories();
       context.setAlertBox({ open: true, error: false, msg: 'Subcategory Deleted!' });
+    }).finally(() => {
+      setConfirmOpen(false);
+      setDeleteId(null);
     });
   };
 
@@ -99,7 +106,7 @@ const SubCategory = () => {
                   {row.children.map((sub) => (
                     <span key={sub._id} className='badge badge-primary mx-1'>
                       {sub.name}{' '}
-                      <IoCloseSharp className='cursor' onClick={() => deleteSubCat(sub._id)} />
+                      <IoCloseSharp className='cursor' onClick={() => { setDeleteId(sub._id); setConfirmOpen(true); }} />
                     </span>
                   ))}
                 </>
@@ -109,6 +116,11 @@ const SubCategory = () => {
           rows={rows}
         />
       </div>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={deleteSubCat}
+      />
     </AdminPageLayout>
   );
 };

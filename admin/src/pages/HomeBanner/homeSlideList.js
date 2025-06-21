@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AdminPageLayout from "../../components/common/AdminPageLayout";
 import BaseTable from "../../components/common/BaseTable";
 import { AddButton } from "../../components/common/ActionButtons";
+import DeleteConfirmDialog from "../../components/common/DeleteConfirmDialog";
 import AddHomeSlidePage from './AddHomeSlidePage';
 import { MyContext } from "../../App";
 import HomeIcon from "@mui/icons-material/Home";
@@ -14,6 +15,8 @@ import { deleteData, fetchDataFromApi } from "../../utils/api";
 const HomeSlidesList = () => {
   const [slideList, setSlideList] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const navigate = useNavigate();
 
   const context = useContext(MyContext);
@@ -31,10 +34,10 @@ const HomeSlidesList = () => {
     loadSlides();
   }, []);
 
-  const deleteSlide = (id) => {
-    if (!window.confirm("Delete this slide?")) return;
+  const deleteSlide = () => {
+    if (!deleteId) return;
     context.setProgress(30);
-    deleteData(`/api/homeBanner/${id}`).then(() => {
+    deleteData(`/api/homeBanner/${deleteId}`).then(() => {
       context.setProgress(100);
       loadSlides();
       context.setProgress({
@@ -42,6 +45,9 @@ const HomeSlidesList = () => {
         error: false,
         msg: "Slide Deleted!",
       });
+    }).finally(() => {
+      setConfirmOpen(false);
+      setDeleteId(null);
     });
   };
 
@@ -83,9 +89,14 @@ const HomeSlidesList = () => {
           columns={columns}
           rows={slideList}
           onEdit={(row) => navigate(`/homeBannerSlide/edit/${row.id}`)}
-          onDelete={(row) => deleteSlide(row.id)}
+          onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
         />
       </div>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={deleteSlide}
+      />
     </AdminPageLayout>
   );
 };

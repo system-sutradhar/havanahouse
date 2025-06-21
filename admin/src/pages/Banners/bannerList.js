@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { AddButton } from "../../components/common/ActionButtons";
+import DeleteConfirmDialog from "../../components/common/DeleteConfirmDialog";
 import AddHomeBannerPage from './AddHomeBannerPage';
 
 import { FaPencilAlt } from "react-icons/fa";
@@ -28,6 +29,8 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const BannersList = () => {
   const [slideList, setSlideList] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const context = useContext(MyContext);
 
@@ -44,9 +47,10 @@ const BannersList = () => {
     loadSlides();
   }, []);
 
-  const deleteSlide = (id) => {
+  const deleteSlide = () => {
+    if (!deleteId) return;
     context.setProgress(30);
-    deleteData(`/api/banners/${id}`).then(() => {
+    deleteData(`/api/banners/${deleteId}`).then(() => {
       context.setProgress(100);
       context.setAlertBox({
         open: true,
@@ -54,6 +58,9 @@ const BannersList = () => {
         msg: "Banner Deleted!",
       });
       loadSlides();
+    }).finally(() => {
+      setConfirmOpen(false);
+      setDeleteId(null);
     });
   };
 
@@ -99,9 +106,14 @@ const BannersList = () => {
             ]}
             rows={slideList}
             onEdit={(row) => (window.location.href = `/banners/edit/${row.id}`)}
-            onDelete={(row) => deleteSlide(row.id)}
+            onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
           />
         </div>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={deleteSlide}
+      />
     </AdminPageLayout>
   );
 };

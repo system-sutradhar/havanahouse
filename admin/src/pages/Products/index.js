@@ -3,6 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { AddButton } from "../../components/common/ActionButtons";
+import DeleteConfirmDialog from "../../components/common/DeleteConfirmDialog";
 
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -59,6 +60,8 @@ const Products = () => {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -109,10 +112,11 @@ const Products = () => {
     fetchInitial();
   }, []);
 
-  const deleteProduct = (id) => {
+  const deleteProduct = () => {
+    if (!deleteId) return;
     context.setProgress(40);
     setIsLoadingBar(true);
-    deleteData(`/api/products/${id}`).then((res) => {
+    deleteData(`/api/products/${deleteId}`).then((res) => {
       context.setProgress(100);
       context.setAlertBox({
         open: true,
@@ -123,6 +127,9 @@ const Products = () => {
       loadProducts(page);
       context.fetchCategory();
       setIsLoadingBar(false);
+    }).finally(() => {
+      setConfirmOpen(false);
+      setDeleteId(null);
     });
   };
 
@@ -330,7 +337,7 @@ const Products = () => {
               ]}
               rows={productList?.products || []}
               onEdit={(row) => (window.location.href = `/product/edit/${row.id}`)}
-              onDelete={(row) => deleteProduct(row.id)}
+              onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
             />
 
             {productList?.totalPages > 1 && (
@@ -348,6 +355,11 @@ const Products = () => {
           </div>
         )}
         </div>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+        onConfirm={deleteProduct}
+      />
       </AdminPageLayout>
   );
 };

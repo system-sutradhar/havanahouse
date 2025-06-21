@@ -8,6 +8,7 @@ import AdminPageLayout from '../../components/common/AdminPageLayout';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
 import BaseTable from '../../components/common/BaseTable';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
+import DeleteConfirmDialog from '../../components/common/DeleteConfirmDialog';
 import { fetchDataFromApi, postData, editData, deleteData } from '../../utils/api';
 import { MyContext } from '../../App';
 
@@ -16,6 +17,8 @@ const AddProductRAMS = () => {
   const [form, setForm] = useState('');
   const [editId, setEditId] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteRow, setDeleteRow] = useState(null);
   const inputRef = useRef();
   const ctx = useContext(MyContext);
 
@@ -51,9 +54,14 @@ const AddProductRAMS = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleDelete = (row) => {
-    if (!window.confirm('Delete this item?')) return;
-    deleteData(`/api/productRAMS/${row.id}`).then(load);
+  const handleDelete = () => {
+    if (!deleteRow) return;
+    deleteData(`/api/productRAMS/${deleteRow.id}`).then(() => {
+      load();
+    }).finally(() => {
+      setConfirmOpen(false);
+      setDeleteRow(null);
+    });
   };
 
   return (
@@ -89,9 +97,14 @@ const AddProductRAMS = () => {
           columns={[{ label: 'Product RAM', field: 'productRam' }]}
           rows={list}
           onEdit={handleEdit}
-          onDelete={handleDelete}
+          onDelete={(row) => { setDeleteRow(row); setConfirmOpen(true); }}
         />
       </div>
+      <DeleteConfirmDialog
+        open={confirmOpen}
+        onCancel={() => { setConfirmOpen(false); setDeleteRow(null); }}
+        onConfirm={handleDelete}
+      />
     </AdminPageLayout>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AddButton, CancelButton } from '../../components/common/ActionButtons';
+import DeleteConfirmDialog from '../../components/common/DeleteConfirmDialog';
 
 import { MyContext } from "../../App";
 
@@ -23,6 +24,8 @@ const Category = () => {
     const [catData, setCatData] = useState([]);
     const [isLoadingBar, setIsLoadingBar] = useState(false);
     const [showForm, setShowForm] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
     const context = useContext(MyContext);
 
     const loadCategories = () => {
@@ -38,11 +41,11 @@ const Category = () => {
         loadCategories();
     }, []);
 
-    const deleteCat = (id) => {
-        
+    const deleteCat = () => {
+        if (!deleteId) return;
         setIsLoadingBar(true);
         context.setProgress(30);
-        deleteData(`/api/category/${id}`).then(res => {
+        deleteData(`/api/category/${deleteId}`).then(res => {
             context.setProgress(100);
             loadCategories();
             context.setProgress({
@@ -51,6 +54,9 @@ const Category = () => {
                 msg: "Category Deleted!"
             })
             setIsLoadingBar(false);
+        }).finally(() => {
+            setConfirmOpen(false);
+            setDeleteId(null);
         })
     }
 
@@ -105,9 +111,14 @@ const Category = () => {
                     ]}
                     rows={catData?.categoryList?.slice(0).reverse() || []}
                     onEdit={(row) => (window.location.href = `/category/edit/${row._id}`)}
-                    onDelete={(row) => deleteCat(row._id)}
+                    onDelete={(row) => { setDeleteId(row._id); setConfirmOpen(true); }}
                 />
             </div>
+            <DeleteConfirmDialog
+                open={confirmOpen}
+                onCancel={() => { setConfirmOpen(false); setDeleteId(null); }}
+                onConfirm={deleteCat}
+            />
         </AdminPageLayout>
     );
 }
