@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import BaseModal from '../../common/BaseModal';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -10,6 +10,7 @@ import AdminFormLayout from '../../common/AdminFormLayout';
 import { postData, editData, fetchDataFromApi } from '../../../utils/api';
 import LoadingSkeleton from '../../common/LoadingSkeleton';
 import logger from '../../../utils/logger';
+import { MyContext } from '../../../App';
 
 const DEFAULT_DATA = {
   name: '',
@@ -24,6 +25,7 @@ const SettingForm = ({ open, onClose, onSuccess, editId }) => {
   const [form, setForm] = useState(DEFAULT_DATA);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const ctx = useContext(MyContext);
 
   useEffect(() => {
     if (editId) {
