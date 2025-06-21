@@ -20,7 +20,7 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart, themeColors }) => 
     name,
     brand,
     price,
-    mrp,
+    oldPrice,
     discount,
     rating,
     reviewCount,
@@ -33,9 +33,11 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart, themeColors }) => 
     complianceNotes,
   } = product || {};
 
+  const saveAmount = oldPrice && price ? oldPrice - price : 0;
+
   return (
     <div className={styles.productInfo}>
-      <h1 className={styles.productTitle} style={{ color: themeColors?.primaryColor }}>
+      <h1 className={styles.productTitle} style={{ color: themeColors?.primary }}>
         {name}
       </h1>
       {badgeIcons.length > 0 && (
@@ -54,9 +56,12 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart, themeColors }) => 
 
       <div className={styles.productPrice + ' mb-3'}>
         <span className={styles.priceCurrent}>₹{price}</span>
-        {mrp && <span className={styles.priceMrp}>₹{mrp}</span>}
+        {oldPrice && <span className={styles.priceMrp}>₹{oldPrice}</span>}
         {discount && (
           <span className={styles.priceDiscount}>({discount}% OFF)</span>
+        )}
+        {saveAmount > 0 && (
+          <span className={styles.saveAmount}>You Save ₹{saveAmount}</span>
         )}
       </div>
 
@@ -70,10 +75,10 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart, themeColors }) => 
           aria-label="Add to cart"
           onClick={() => onAddToCart(quantity)}
           sx={{
-            bgcolor: themeColors?.buttonBg || 'primary.main',
-            color: themeColors?.buttonText || '#fff',
+            bgcolor: themeColors?.button || 'primary.main',
+            color: themeColors?.text || '#fff',
             '&:hover': {
-              bgcolor: themeColors?.primaryColor || 'primary.dark',
+              bgcolor: themeColors?.primary || 'primary.dark',
             },
           }}
         >
@@ -96,28 +101,34 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart, themeColors }) => 
       </div>
 
       <div className="mb-2">
-        <ul className="list-unstyled mb-2">
-          {origin && (
-            <li>
-              <strong>Origin:</strong> {origin}
-            </li>
-          )}
-          {wrapperType && (
-            <li>
-              <strong>Wrapper:</strong> {wrapperType}
-            </li>
-          )}
-          {strength && (
-            <li>
-              <strong>Strength:</strong> {strength}
-            </li>
-          )}
-          {boxType && (
-            <li>
-              <strong>Box Type:</strong> {boxType}
-            </li>
-          )}
-        </ul>
+        <table className={styles.specTable} aria-label="Cigar specifications">
+          <tbody>
+            {origin && (
+              <tr>
+                <th scope="row">Origin</th>
+                <td>{origin}</td>
+              </tr>
+            )}
+            {wrapperType && (
+              <tr>
+                <th scope="row">Wrapper</th>
+                <td>{wrapperType}</td>
+              </tr>
+            )}
+            {strength && (
+              <tr>
+                <th scope="row">Strength</th>
+                <td>{strength}</td>
+              </tr>
+            )}
+            {boxType && (
+              <tr>
+                <th scope="row">Box Type</th>
+                <td>{boxType}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
         {complianceNotes && (
           <p className="text-danger small">{complianceNotes}</p>
         )}

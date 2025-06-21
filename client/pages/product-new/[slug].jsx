@@ -43,27 +43,38 @@ const ImageGallery = ({ images, discount }) => (
   <ProductZoom images={images} discount={discount} />
 );
 
-const PriceDisplay = ({ price, mrp, discount, themeColors }) => (
-  <Typography variant="h5" sx={{ mb: 1, color: themeColors?.primaryColor }}>
-    {mrp && (
-      <Typography component="span" sx={{ textDecoration: 'line-through', mr: 1 }}>
-        ₹{mrp}
-      </Typography>
-    )}
-    ₹{price}
-    {discount && (
-      <Typography component="span" color="error" sx={{ ml: 1 }}>
-        ({discount}% OFF)
-      </Typography>
-    )}
-  </Typography>
-);
+const PriceDisplay = ({ price, oldPrice, discount, themeColors }) => {
+  const save = oldPrice && price ? oldPrice - price : 0;
+  return (
+    <Typography variant="h5" sx={{ mb: 1, color: themeColors?.primary }}>
+      {oldPrice && (
+        <Typography component="span" sx={{ textDecoration: 'line-through', mr: 1 }}>
+          ₹{oldPrice}
+        </Typography>
+      )}
+      ₹{price}
+      {discount && (
+        <Typography component="span" color="error" sx={{ ml: 1 }}>
+          ({discount}% OFF)
+        </Typography>
+      )}
+      {save > 0 && (
+        <Typography
+          component="span"
+          sx={{ ml: 1, color: '#d32f2f', fontWeight: 500 }}
+        >
+          You Save ₹{save}
+        </Typography>
+      )}
+    </Typography>
+  );
+};
 
 const AddToCartSection = ({ product, isAddedToMyList, onAddToCart, themeColors }) => (
   <>
     <PriceDisplay
       price={product.price}
-      mrp={product.mrp}
+      oldPrice={product.oldPrice}
       discount={product.discount}
       themeColors={themeColors}
     />
@@ -109,8 +120,14 @@ const ProductNewPage = () => {
         setMuiTheme(
           createTheme({
             palette: {
-              primary: { main: colors.primaryColor },
-              secondary: { main: colors.secondaryColor },
+              primary: { main: colors.primary },
+              secondary: { main: colors.accent },
+              background: {
+                default: colors.background || '#fff',
+              },
+              text: {
+                primary: colors.text || '#000',
+              },
             },
           })
         );
@@ -180,7 +197,7 @@ const ProductNewPage = () => {
             </Link>
           {product.catName && (
             <Link
-              href="/#"
+              href={`/category/${product.catId}`}
               itemProp="itemListElement"
               itemScope
               itemType="https://schema.org/ListItem"
@@ -189,9 +206,28 @@ const ProductNewPage = () => {
               <meta itemProp="position" content="2" />
             </Link>
           )}
-          <span aria-current="page" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+          {product.subCatName && (
+            <Link
+              href={`/subcategory/${product.subCatId}`}
+              itemProp="itemListElement"
+              itemScope
+              itemType="https://schema.org/ListItem"
+            >
+              <span itemProp="name">{product.subCatName}</span>
+              <meta itemProp="position" content="3" />
+            </Link>
+          )}
+          <span
+            aria-current="page"
+            itemProp="itemListElement"
+            itemScope
+            itemType="https://schema.org/ListItem"
+          >
             <span itemProp="name">{product.name}</span>
-            <meta itemProp="position" content="3" />
+            <meta
+              itemProp="position"
+              content={product.subCatName ? '4' : '3'}
+            />
           </span>
         </Breadcrumbs>
         </BreadcrumbWrapper>

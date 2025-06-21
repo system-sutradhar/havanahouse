@@ -15,16 +15,16 @@ const Bar = styled.div`
 const StickyAddToCart = ({ onAddToCart, show = false, themeColors }) => {
   if (!show) return null;
   return (
-    <Bar bg={themeColors?.primaryColor}>
+    <Bar bg={themeColors?.primary}>
       <Button
         fullWidth
         variant="contained"
         onClick={() => onAddToCart(1)}
         sx={{
-          bgcolor: themeColors?.buttonBg || 'primary.main',
-          color: themeColors?.buttonText || '#fff',
+          bgcolor: themeColors?.button || 'primary.main',
+          color: themeColors?.text || '#fff',
           '&:hover': {
-            bgcolor: themeColors?.primaryColor || 'primary.dark',
+            bgcolor: themeColors?.primary || 'primary.dark',
           },
         }}
         aria-label="Add to cart"

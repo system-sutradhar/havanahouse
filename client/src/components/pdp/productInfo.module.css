@@ -29,6 +29,28 @@
   margin-left: 8px;
 }
 
+.saveAmount {
+  color: #d32f2f;
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+.specTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+}
+
+.specTable th {
+  text-align: left;
+  padding-right: 10px;
+  font-weight: 600;
+}
+
+.specTable td {
+  padding-bottom: 4px;
+}
+
 .icon-button {
   background: none;
   border: none;
