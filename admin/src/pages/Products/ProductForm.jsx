@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { Box, Grid, TextField, MenuItem, Rating, Select } from '@mui/material';
+import { Box, Grid, TextField, MenuItem, Rating, Select, Autocomplete } from '@mui/material';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
@@ -65,6 +65,8 @@ export default function ProductForm({
   const [originOptions, setOriginOptions] = useState([]);
   const [wrapperTypeOptions, setWrapperTypeOptions] = useState([]);
   const [strengthOptions, setStrengthOptions] = useState([]);
+  const [binderOptions, setBinderOptions] = useState([]);
+  const [fillerOptions, setFillerOptions] = useState([]);
   const [form, setForm] = useState(initialValues);
   const [saving, setSaving] = useState(false);
 
@@ -90,22 +92,28 @@ export default function ProductForm({
     fetchDataFromApi('/api/productWeight').then((res) =>
       setWeightList(Array.isArray(res) ? res : [])
     );
-    fetchDataFromApi('/api/cigar-meta?type=boxType').then((res) =>
+    fetchDataFromApi('/api/attributes/boxType').then((res) =>
       setBoxTypes(Array.isArray(res) ? res : [])
     );
-    fetchDataFromApi('/api/cigar-meta?type=origin').then((res) =>
+    fetchDataFromApi('/api/attributes/origin').then((res) =>
       setOriginOptions(Array.isArray(res) ? res : [])
     );
-    fetchDataFromApi('/api/cigar-meta?type=wrapperType').then((res) =>
+    fetchDataFromApi('/api/attributes/wrapperType').then((res) =>
       setWrapperTypeOptions(Array.isArray(res) ? res : [])
     );
-    fetchDataFromApi('/api/cigar-meta?type=strength').then((res) =>
+    fetchDataFromApi('/api/attributes/strength').then((res) =>
       setStrengthOptions(Array.isArray(res) ? res : [])
     );
-    fetchDataFromApi('/api/cigar-meta?type=badgeIcon').then((res) =>
+    fetchDataFromApi('/api/attributes/binder').then((res) =>
+      setBinderOptions(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/attributes/filler').then((res) =>
+      setFillerOptions(Array.isArray(res) ? res : [])
+    );
+    fetchDataFromApi('/api/attributes/badgeIcon').then((res) =>
       setBadgeOptions(Array.isArray(res) ? res : [])
     );
-    fetchDataFromApi('/api/cigar-meta?type=trustLabel').then((res) =>
+    fetchDataFromApi('/api/attributes/trustLabel').then((res) =>
       setTrustOptions(Array.isArray(res) ? res : [])
     );
   }, []);
@@ -188,34 +196,59 @@ export default function ProductForm({
             <TextField name="lengthInInches" value={form.lengthInInches} onChange={handleChange} label="Length (inches)" fullWidth type="number" />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField name="binder" value={form.binder} onChange={handleChange} label="Binder" fullWidth />
+            <Autocomplete
+              options={binderOptions}
+              getOptionLabel={(o) => o.label || ''}
+              value={binderOptions.find((opt) => opt.label === form.binder) || null}
+              onChange={(_, val) => setForm((p) => ({ ...p, binder: val ? val.label : '' }))}
+              renderInput={(params) => <TextField {...params} label="Binder" placeholder="Select Binder" />}
+              fullWidth
+              freeSolo
+            />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField name="filler" value={form.filler} onChange={handleChange} label="Filler" fullWidth />
+            <Autocomplete
+              options={fillerOptions}
+              getOptionLabel={(o) => o.label || ''}
+              value={fillerOptions.find((opt) => opt.label === form.filler) || null}
+              onChange={(_, val) => setForm((p) => ({ ...p, filler: val ? val.label : '' }))}
+              renderInput={(params) => <TextField {...params} label="Filler" placeholder="Select Filler" />}
+              fullWidth
+              freeSolo
+            />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField select name="origin" value={form.origin} onChange={handleChange} label="Origin" fullWidth>
-              <MenuItem value="">None</MenuItem>
-              {originOptions.map((item) => (
-                <MenuItem key={item.id} value={item.value}>{item.value}</MenuItem>
-              ))}
-            </TextField>
+            <Autocomplete
+              options={originOptions}
+              getOptionLabel={(o) => o.label || ''}
+              value={originOptions.find((opt) => opt.label === form.origin) || null}
+              onChange={(_, val) => setForm((p) => ({ ...p, origin: val ? val.label : '' }))}
+              renderInput={(params) => <TextField {...params} label="Origin" placeholder="Select Origin" />}
+              fullWidth
+              freeSolo
+            />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField select name="wrapperType" value={form.wrapperType} onChange={handleChange} label="Wrapper Type" fullWidth>
-              <MenuItem value="">None</MenuItem>
-              {wrapperTypeOptions.map((item) => (
-                <MenuItem key={item.id} value={item.value}>{item.value}</MenuItem>
-              ))}
-            </TextField>
+            <Autocomplete
+              options={wrapperTypeOptions}
+              getOptionLabel={(o) => o.label || ''}
+              value={wrapperTypeOptions.find((opt) => opt.label === form.wrapperType) || null}
+              onChange={(_, val) => setForm((p) => ({ ...p, wrapperType: val ? val.label : '' }))}
+              renderInput={(params) => <TextField {...params} label="Wrapper Type" placeholder="Select Wrapper" />}
+              fullWidth
+              freeSolo
+            />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField select name="strength" value={form.strength} onChange={handleChange} label="Strength" fullWidth>
-              <MenuItem value="">None</MenuItem>
-              {strengthOptions.map((item) => (
-                <MenuItem key={item.id} value={item.value}>{item.value}</MenuItem>
-              ))}
-            </TextField>
+            <Autocomplete
+              options={strengthOptions}
+              getOptionLabel={(o) => o.label || ''}
+              value={strengthOptions.find((opt) => opt.label === form.strength) || null}
+              onChange={(_, val) => setForm((p) => ({ ...p, strength: val ? val.label : '' }))}
+              renderInput={(params) => <TextField {...params} label="Strength" placeholder="Select Strength" />}
+              fullWidth
+              freeSolo
+            />
           </Grid>
           <Grid item xs={12} md={6}>
             <TagsInput value={form.flavorNotes} onChange={(val) => setForm((p) => ({ ...p, flavorNotes: val }))} name="flavorNotes" placeHolder="Flavor Notes" />
@@ -227,12 +260,15 @@ export default function ProductForm({
             <TextField name="pairingSuggestions" value={Array.isArray(form.pairingSuggestions) ? form.pairingSuggestions.join(',') : form.pairingSuggestions} onChange={handleMultiChange} label="Pairing Suggestions" fullWidth multiline />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField select name="boxType" value={form.boxType} onChange={handleChange} label="Box Type" fullWidth>
-              <MenuItem value="">None</MenuItem>
-              {boxTypes.map((item) => (
-                <MenuItem key={item.id} value={item.value}>{item.value}</MenuItem>
-              ))}
-            </TextField>
+            <Autocomplete
+              options={boxTypes}
+              getOptionLabel={(o) => o.label || ''}
+              value={boxTypes.find((opt) => opt.label === form.boxType) || null}
+              onChange={(_, val) => setForm((p) => ({ ...p, boxType: val ? val.label : '' }))}
+              renderInput={(params) => <TextField {...params} label="Box Type" placeholder="Select Box Type" />}
+              fullWidth
+              freeSolo
+            />
           </Grid>
           <Grid item xs={12} md={6}>
             <TagsInput value={form.badgeIcons} onChange={(val) => setForm((p) => ({ ...p, badgeIcons: val }))} name="badgeIcons" placeHolder="Badge Icons" />
