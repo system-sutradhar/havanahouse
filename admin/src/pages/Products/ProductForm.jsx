@@ -6,9 +6,8 @@ import AdminFormLayout from '../../components/common/AdminFormLayout';
 import HomeIcon from '@mui/icons-material/Home';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { MyContext } from '../../App';
-import { uploadMedia } from '../../utils/cloudinaryService';
 import { postData, fetchDataFromApi } from '../../utils/api';
-import SingleImageUpload from '../../components/common/SingleImageUpload';
+import MultiMediaUpload from '../../components/common/MultiMediaUpload';
 
 export default function ProductForm({ onSuccess, onCancel }) {
   const context = useContext(MyContext);
@@ -32,9 +31,8 @@ export default function ProductForm({ onSuccess, onCancel }) {
     productWeight: [],
     location: '',
     rating: 0,
-    image: null,
+    media: [],
   });
-  const [preview, setPreview] = useState('');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -70,20 +68,13 @@ export default function ProductForm({ onSuccess, onCancel }) {
     }));
   };
 
-  const handleImage = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setPreview(URL.createObjectURL(file));
-    const res = await uploadMedia(file).catch(() => null);
-    if (res) {
-      setForm((prev) => ({ ...prev, image: res.url }));
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setSaving(true);
-    postData('/api/products/create', form)
+    const payload = { ...form, images: form.media.map((m) => m.url) };
+    delete payload.media;
+    postData('/api/products/create', payload)
       .then(() => {
         if (onSuccess) onSuccess();
       })
@@ -210,13 +201,9 @@ export default function ProductForm({ onSuccess, onCancel }) {
             <Rating name="rating" value={form.rating} onChange={(e, val) => setForm((p)=>({...p, rating: val}))} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <SingleImageUpload
-              preview={preview}
-              onChange={handleImage}
-              onRemove={() => {
-                setPreview('');
-                setForm((p) => ({ ...p, image: null }));
-              }}
+            <MultiMediaUpload
+              value={form.media}
+              onChange={(list) => setForm((p) => ({ ...p, media: list }))}
             />
           </Grid>
         </Grid>

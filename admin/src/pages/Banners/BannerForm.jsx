@@ -1,16 +1,15 @@
 import { useState, useContext, useEffect } from 'react';
-import { Grid, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
-import { IoCloseSharp } from 'react-icons/io5';
+import { Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
 import { MyContext } from '../../App';
-import { uploadImage, postData } from '../../utils/api';
+import { postData } from '../../utils/api';
+import MultiMediaUpload from '../../components/common/MultiMediaUpload';
 
-export default function BannerForm({ uploadUrl, createUrl, onCancel, onSuccess }) {
+export default function BannerForm({ createUrl, onCancel, onSuccess }) {
   const context = useContext(MyContext);
-  const [form, setForm] = useState({ catId: '', subCatId: '', images: [] });
+  const [form, setForm] = useState({ catId: '', subCatId: '', media: [] });
   const [subCats, setSubCats] = useState([]);
-  const [previews, setPreviews] = useState([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -26,31 +25,13 @@ export default function BannerForm({ uploadUrl, createUrl, onCancel, onSuccess }
     setForm(f => ({ ...f, [name]: value }));
   };
 
-  const handleFile = async (e) => {
-    const files = Array.from(e.target.files || []);
-    if (!files.length) return;
-    setSaving(true);
-    const data = new FormData();
-    files.forEach((f) => data.append('images', f));
-    const res = await uploadImage(uploadUrl, data);
-    if (res?.length) {
-      setForm((f) => ({ ...f, images: [...f.images, ...res] }));
-      setPreviews((p) => [...p, ...res]);
-    }
-    setSaving(false);
-  };
-
-  const removeImage = (index) => {
-    setForm((f) => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
-    setPreviews((p) => p.filter((_, i) => i !== index));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.images.length) return;
+    if (!form.media.length) return;
     setSaving(true);
     await postData(createUrl, {
-      images: form.images,
+      images: form.media.map((m) => m.url),
       catId: form.catId,
       subCatId: form.subCatId,
     });
@@ -96,22 +77,10 @@ export default function BannerForm({ uploadUrl, createUrl, onCancel, onSuccess }
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Box className="imgUploadBox">
-            {previews.map((img, idx) => (
-              <div className="uploadBox" key={idx}>
-                <span className="remove" onClick={() => removeImage(idx)}><IoCloseSharp /></span>
-                <div className="box">
-                  <img src={img} alt="preview" className="w-100" />
-                </div>
-              </div>
-            ))}
-            <div className="uploadBox">
-              <input type="file" multiple onChange={handleFile} />
-              <div className="info">
-                <span>Image Upload</span>
-              </div>
-            </div>
-          </Box>
+          <MultiMediaUpload
+            value={form.media}
+            onChange={(list) => setForm((f) => ({ ...f, media: list }))}
+          />
         </Grid>
       </Grid>
       <Box display="flex" justifyContent="flex-end" mt={3} gap={2}>

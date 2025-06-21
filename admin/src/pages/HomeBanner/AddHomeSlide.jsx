@@ -21,6 +21,7 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
   const [image, setImage] = useState(null);
   const [publicId, setPublicId] = useState('');
   const [preview, setPreview] = useState('');
+  const [previewType, setPreviewType] = useState('image');
   const [saving, setSaving] = useState(false);
 
   const handleChange = (e) => {
@@ -38,6 +39,7 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
       setImage(res.url);
       setPublicId(res.public_id);
       setPreview(res.url);
+      setPreviewType(file.type.startsWith('video') ? 'video' : 'image');
     }
   };
 
@@ -46,6 +48,7 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
     setImage(null);
     setPublicId('');
     setPreview('');
+    setPreviewType('image');
   };
 
   const handleSubmit = (e) => {
@@ -149,7 +152,11 @@ export default function AddHomeSlide({ onSuccess, onClose, formId = 'add-slide-f
                       <a href={form.ctaUrl} target="_blank" rel="noreferrer" className="cta">Visit</a>
                     )}
                   </div>
-                  <img src={preview} alt="preview" className="w-100" />
+                  {previewType === 'video' ? (
+                    <video src={preview} className="w-100" controls />
+                  ) : (
+                    <img src={preview} alt="preview" className="w-100" />
+                  )}
                 </div>
               </div>
             ) : (

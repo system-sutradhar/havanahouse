@@ -16,7 +16,6 @@ export default function AddHomeSideBannerPage({ onCancel, onSuccess }) {
       actions={<CancelButton onClick={onCancel} />}
     >
       <BannerForm
-        uploadUrl="/api/homeSideBanners/upload"
         createUrl="/api/homeSideBanners/create"
         onSuccess={onSuccess}
         onCancel={onCancel}

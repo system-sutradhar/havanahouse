@@ -16,7 +16,6 @@ export default function AddHomeBottomBannerPage({ onCancel, onSuccess }) {
       actions={<CancelButton onClick={onCancel} />}
     >
       <BannerForm
-        uploadUrl="/api/homeBottomBanners/upload"
         createUrl="/api/homeBottomBanners/create"
         onSuccess={onSuccess}
         onCancel={onCancel}

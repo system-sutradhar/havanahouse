@@ -37,7 +37,10 @@ router.post(`/upload`, upload.array("images"), async (req, res) => {
         overwrite: false,
       };
 
-      const result = await cloudinary.uploader.upload(file.path, options);
+      const result = await cloudinary.uploader.upload(file.path, {
+        ...options,
+        resource_type: 'auto',
+      });
       imagesArr.push(result.secure_url);
       fs.unlinkSync(file.path);
     }
