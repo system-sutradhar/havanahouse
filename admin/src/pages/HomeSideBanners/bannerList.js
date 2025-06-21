@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AddButton } from "../../components/common/ActionButtons";
+import AddHomeSideBannerPage from './AddHomeSideBannerPage';
 
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -55,6 +56,18 @@ const BannersList = () => {
    
   };
 
+  if (showForm) {
+    return (
+      <AddHomeSideBannerPage
+        onCancel={() => setShowForm(false)}
+        onSuccess={() => {
+          setShowForm(false);
+          loadSlides();
+        }}
+      />
+    );
+  }
+
   return (
     <AdminPageLayout
       title="Home Side Banner List"
@@ -62,24 +75,12 @@ const BannersList = () => {
         { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
         { icon: <ImageIcon fontSize="inherit" />, label: 'Banners', href: '/banners' },
       ]}
-      actions={
-        <AddButton
-          onClick={() => setShowForm(!showForm)}
-          label={showForm ? 'Close' : 'Add Home Side Banner'}
-        />
-      }
+      actions={<AddButton onClick={() => setShowForm(true)} label="Add Home Side Banner" />}
     >
-
-        {showForm && (
-          <div className="card shadow border-0 p-3 mt-4">
-            <AddHomeSideBanner onSuccess={() => { setShowForm(false); loadSlides(); }} />
-          </div>
-        )}
-
-        <div className="card shadow border-0 p-3 mt-4">
-          <BaseTable
-            columns={[
-              {
+      <div className="card shadow border-0 p-3 mt-4">
+        <BaseTable
+          columns={[
+            {
                 label: 'IMAGE',
                 field: 'images',
                 render: (row) => (
@@ -96,7 +97,7 @@ const BannersList = () => {
             onDelete={(row) => deleteSlide(row.id)}
           />
         </div>
-      </AdminPageLayout>
+    </AdminPageLayout>
   );
 };
 

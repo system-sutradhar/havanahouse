@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { AddButton } from "../../components/common/ActionButtons";
+import AddHomeBannerPage from './AddHomeBannerPage';
 
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -57,30 +58,29 @@ const BannersList = () => {
     });
   };
 
+  if (showForm) {
+    return (
+      <AddHomeBannerPage
+        onCancel={() => setShowForm(false)}
+        onSuccess={() => {
+          setShowForm(false);
+          loadSlides();
+        }}
+      />
+    );
+  }
+
   return (
-    <>
-      <AdminPageLayout
-        title="Banner Slide List"
-        breadcrumbPath={[
-          { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
-          { icon: <ImageIcon fontSize="inherit" />, label: 'Banners', href: '/banners' },
-        ]}
-        actions={
-          <AddButton
-            onClick={() => setShowForm(!showForm)}
-            label={showForm ? 'Close' : 'Add Home Banner'}
-          />
-        }
-      >
-
-        {showForm && (
-          <div className="card shadow border-0 p-3 mt-4">
-            <AddBanner onSuccess={() => { setShowForm(false); loadSlides(); }} />
-          </div>
-        )}
-
-        <div className="card shadow border-0 p-3 mt-4">
-          <BaseTable
+    <AdminPageLayout
+      title="Banner Slide List"
+      breadcrumbPath={[
+        { icon: <HomeIcon fontSize="inherit" />, label: 'Dashboard', href: '/' },
+        { icon: <ImageIcon fontSize="inherit" />, label: 'Banners', href: '/banners' },
+      ]}
+      actions={<AddButton onClick={() => setShowForm(true)} label="Add Home Banner" />}
+    >
+      <div className="card shadow border-0 p-3 mt-4">
+        <BaseTable
             columns={[
               {
                 label: "IMAGE",
@@ -103,8 +103,7 @@ const BannersList = () => {
             onDelete={(row) => deleteSlide(row.id)}
           />
         </div>
-      </AdminPageLayout>
-    </>
+    </AdminPageLayout>
   );
 };
 

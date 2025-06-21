@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BaseModal from "../../components/common/BaseModal";
 import AdminPageLayout from "../../components/common/AdminPageLayout";
 import BaseTable from "../../components/common/BaseTable";
-import { AddButton, CancelButton } from "../../components/common/ActionButtons";
+import { AddButton } from "../../components/common/ActionButtons";
+import AddHomeSlidePage from './AddHomeSlidePage';
 import { MyContext } from "../../App";
 import AddHomeSlide from "./addHomeSlide";
 import HomeIcon from "@mui/icons-material/Home";
@@ -14,7 +14,7 @@ import { deleteData, fetchDataFromApi } from "../../utils/api";
 
 const HomeSlidesList = () => {
   const [slideList, setSlideList] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
 
   const context = useContext(MyContext);
@@ -57,6 +57,18 @@ const HomeSlidesList = () => {
     { label: "Position", render: (row) => row.position && row.position.replace(/-/g, " ") },
   ];
 
+  if (showForm) {
+    return (
+      <AddHomeSlidePage
+        onCancel={() => setShowForm(false)}
+        onSuccess={() => {
+          setShowForm(false);
+          loadSlides();
+        }}
+      />
+    );
+  }
+
   return (
     <AdminPageLayout
       title="Home Banner Slide List"
@@ -64,30 +76,8 @@ const HomeSlidesList = () => {
         { icon: <HomeIcon />, label: "Dashboard", href: "/" },
         { icon: <SlideshowIcon />, label: "Home Slides", href: "/homeBannerSlide" },
       ]}
-      actions={<AddButton label="Add Home Slide" onClick={() => setOpenModal(true)} />}
+      actions={<AddButton label="Add Home Slide" onClick={() => setShowForm(true)} />}
     >
-      <BaseModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        title="Add Home Slide"
-        actions={
-          <>
-            <CancelButton onClick={() => setOpenModal(false)} />
-            <AddButton label="Publish" form="add-slide-form" type="submit" />
-          </>
-        }
-      >
-        <AddHomeSlide
-          onSuccess={() => {
-            setOpenModal(false);
-            loadSlides();
-          }}
-          onClose={() => setOpenModal(false)}
-          formId="add-slide-form"
-          hideActions
-        />
-      </BaseModal>
-
       <div className="card shadow border-0 p-3 mt-4">
         <BaseTable
           columns={columns}
