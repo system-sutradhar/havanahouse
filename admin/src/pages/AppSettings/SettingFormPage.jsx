@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
+import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
