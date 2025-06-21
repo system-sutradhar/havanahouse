@@ -280,7 +280,6 @@ const AddBanner = ({ onSuccess }) => {
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
                         className="w-100"
-                        required
                       >
                         <MenuItem value="">
                           <em>None</em>
@@ -311,7 +310,6 @@ const AddBanner = ({ onSuccess }) => {
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
                         className="w-100"
-                        required
                       >
                         <MenuItem value="">
                           <em>None</em>
