@@ -76,7 +76,7 @@ const BreadcrumbWrapper = styled.div`
 
 const ProductNewPage = () => {
   const router = useRouter();
-  const { id } = router.query || {};
+  const { slug } = router.query || {};
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -88,10 +88,10 @@ const ProductNewPage = () => {
   const theme = createTheme();
 
   useEffect(() => {
-    if (!id) return;
+    if (!slug) return;
     const load = async () => {
       try {
-        const prod = await fetchDataFromApi(`/api/products/${id}`);
+        const prod = await fetchDataFromApi(`/api/products/slug/${slug}`);
         if (!prod || prod.status === false) {
           setFound(false);
           return;

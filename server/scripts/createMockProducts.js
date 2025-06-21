@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 require('dotenv/config');
 const { Product } = require('../models/products');
 const Category = require('../models/category');
+const slugify = require('slugify');
 
 async function run() {
   try {
@@ -108,7 +109,11 @@ async function run() {
     ];
 
     for (const data of products) {
-      const p = new Product({ ...common, ...data });
+      const p = new Product({
+        ...common,
+        ...data,
+        slug: slugify(data.name, { lower: true }),
+      });
       await p.save();
       console.log('Inserted product ID:', p.id);
     }

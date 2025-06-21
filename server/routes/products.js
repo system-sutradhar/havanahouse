@@ -9,6 +9,7 @@ const { ImageUpload } = require("../models/imageUpload.js");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const slugify = require("slugify");
 const fs = require("fs");
 const mongoose = require("mongoose");
 
@@ -383,6 +384,7 @@ router.post(`/recentlyViewd`, async (req, res) => {
     product = new RecentlyViewd({
       prodId: req.body.id,
       name: req.body.name,
+      slug: slugify(req.body.slug || req.body.name, { lower: true }),
       description: req.body.description,
       images: req.body.images,
       brand: req.body.brand,
@@ -431,6 +433,7 @@ router.post(`/create`, async (req, res) => {
 
   product = new Product({
     name: req.body.name,
+    slug: slugify(req.body.slug || req.body.name, { lower: true }),
     description: req.body.description,
     images: images_Array,
     brand: req.body.brand,
@@ -476,6 +479,14 @@ router.post(`/create`, async (req, res) => {
   }
 
   res.status(201).json(product);
+});
+
+router.get('/slug/:slug', async (req, res) => {
+  const product = await Product.findOne({ slug: req.params.slug }).populate('category');
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+  res.status(200).json(product);
 });
 
 router.get("/:id", async (req, res) => {
@@ -559,6 +570,7 @@ router.put("/:id", async (req, res) => {
     req.params.id,
     {
       name: req.body.name,
+      slug: slugify(req.body.slug || req.body.name, { lower: true }),
       subCat: req.body.subCat,
       description: req.body.description,
       images: req.body.images,

@@ -18,6 +18,7 @@ export default function EditProduct() {
       if (res) {
         setData({
           name: res.name || '',
+          slug: res.slug || '',
           description: res.description || '',
           brand: res.brand || '',
           price: res.price || '',

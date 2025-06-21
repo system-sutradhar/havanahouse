@@ -21,6 +21,7 @@ export default function ProductForm({
   ],
   initialValues = {
     name: '',
+    slug: '',
     description: '',
     brand: '',
     price: '',
@@ -157,6 +158,9 @@ export default function ProductForm({
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <TextField name="name" value={form.name} onChange={handleChange} label="Name" fullWidth required />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField name="slug" value={form.slug} onChange={handleChange} label="Slug" fullWidth required />
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField name="brand" value={form.brand} onChange={handleChange} label="Brand" fullWidth required />

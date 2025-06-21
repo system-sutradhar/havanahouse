@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   subCatId: { type: String, default: "" },
   subCat: { type: String, default: "" },
   subCatName: { type: String, default: "" },
+  slug: { type: String, unique: true, lowercase: true },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
