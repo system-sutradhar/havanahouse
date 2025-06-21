@@ -4,6 +4,7 @@ import { CancelButton, SaveButton } from '../../components/common/ActionButtons'
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import AdminFormLayout from '../../components/common/AdminFormLayout';
 import { uploadMedia } from '../../utils/cloudinaryService';
+import SingleImageUpload from '../../components/common/SingleImageUpload';
 import { postData } from '../../utils/api';
 import HomeIcon from '@mui/icons-material/Home';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -59,12 +60,14 @@ export default function NotificationForm({ onCancel, onSuccess }) {
             />
           </Grid>
           <Grid item xs={12}>
-            <input type='file' accept='image/*' onChange={handleFile} />
-            {preview && (
-              <Box mt={2}>
-                <img src={preview} alt='preview' width={100} loading='lazy' />
-              </Box>
-            )}
+            <SingleImageUpload
+              preview={preview}
+              onChange={handleFile}
+              onRemove={() => {
+                setPreview(null);
+                setImage('');
+              }}
+            />
           </Grid>
         </Grid>
         <Box display='flex' justifyContent='flex-end' mt={3} gap={2}>

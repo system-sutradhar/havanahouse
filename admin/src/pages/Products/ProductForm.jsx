@@ -8,6 +8,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import { MyContext } from '../../App';
 import { uploadMedia } from '../../utils/cloudinaryService';
 import { postData, fetchDataFromApi } from '../../utils/api';
+import SingleImageUpload from '../../components/common/SingleImageUpload';
 
 export default function ProductForm({ onSuccess, onCancel }) {
   const context = useContext(MyContext);
@@ -209,12 +210,14 @@ export default function ProductForm({ onSuccess, onCancel }) {
             <Rating name="rating" value={form.rating} onChange={(e, val) => setForm((p)=>({...p, rating: val}))} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <input type="file" onChange={handleImage} />
-            {preview && (
-              <Box mt={2}>
-                <img src={preview} alt="preview" width={100} loading="lazy" />
-              </Box>
-            )}
+            <SingleImageUpload
+              preview={preview}
+              onChange={handleImage}
+              onRemove={() => {
+                setPreview('');
+                setForm((p) => ({ ...p, image: null }));
+              }}
+            />
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="flex-end" mt={3} gap={2}>
