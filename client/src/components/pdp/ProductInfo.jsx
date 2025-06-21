@@ -28,6 +28,10 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart, themeColors }) => 
     wrapperType,
     strength,
     boxType,
+    ringGauge,
+    lengthInInches,
+    binder,
+    filler,
     badgeIcons = [],
     trustLabels = [],
     complianceNotes,
@@ -119,6 +123,30 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart, themeColors }) => 
               <tr>
                 <th scope="row">Strength</th>
                 <td>{strength}</td>
+              </tr>
+            )}
+            {ringGauge && (
+              <tr>
+                <th scope="row">Ring Gauge</th>
+                <td>{ringGauge}</td>
+              </tr>
+            )}
+            {lengthInInches && (
+              <tr>
+                <th scope="row">Length (in)</th>
+                <td>{lengthInInches}</td>
+              </tr>
+            )}
+            {binder && (
+              <tr>
+                <th scope="row">Binder</th>
+                <td>{binder}</td>
+              </tr>
+            )}
+            {filler && (
+              <tr>
+                <th scope="row">Filler</th>
+                <td>{filler}</td>
               </tr>
             )}
             {boxType && (
