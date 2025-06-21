@@ -9,6 +9,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import BaseTable from '../../components/common/BaseTable';
 
 import { deleteData, fetchDataFromApi } from "../../utils/api";
+import Skeleton from '@mui/material/Skeleton';
 import CategoryForm from "./CategoryForm";
 import AdminPageLayout from '../../components/common/AdminPageLayout';
 import HomeIcon from '@mui/icons-material/Home';
@@ -29,10 +30,12 @@ const Category = () => {
     const context = useContext(MyContext);
 
     const loadCategories = () => {
+        setIsLoadingBar(true);
         context.setProgress(20)
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
             context.setProgress(100);
+            setIsLoadingBar(false);
         })
     }
 
@@ -48,7 +51,7 @@ const Category = () => {
         deleteData(`/api/category/${deleteId}`).then(res => {
             context.setProgress(100);
             loadCategories();
-            context.setProgress({
+            context.setAlertBox({
                 open: true,
                 error: false,
                 msg: "Category Deleted!"
@@ -91,6 +94,9 @@ const Category = () => {
             actions={<AddButton onClick={() => setShowForm(true)} label="Add Category" />}
         >
             <div className="card shadow border-0 p-3 mt-4">
+                {isLoadingBar ? (
+                    <Skeleton variant="rectangular" width="100%" height={200} />
+                ) : (
                 <BaseTable
                     columns={[
                         {
@@ -113,6 +119,7 @@ const Category = () => {
                     onEdit={(row) => (window.location.href = `/category/edit/${row._id}`)}
                     onDelete={(row) => { setDeleteId(row._id); setConfirmOpen(true); }}
                 />
+                )}
             </div>
             <DeleteConfirmDialog
                 open={confirmOpen}

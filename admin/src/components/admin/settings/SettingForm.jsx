@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import FormGroup from '@mui/material/FormGroup';
 import AdminFormLayout from '../../common/AdminFormLayout';
 import { postData, editData, fetchDataFromApi } from '../../../utils/api';
+import LoadingSkeleton from '../../common/LoadingSkeleton';
 import logger from '../../../utils/logger';
 
 const DEFAULT_DATA = {
@@ -108,6 +109,7 @@ const SettingForm = ({ open, onClose, onSuccess, editId }) => {
     req
       .then(() => {
         if (onSuccess) onSuccess();
+        else ctx.setAlertBox({ open: true, error: false, msg: 'Saved!' });
       })
       .catch((err) => logger.error(err))
       .finally(() => {
@@ -121,6 +123,10 @@ const SettingForm = ({ open, onClose, onSuccess, editId }) => {
     }
     if (onClose) onClose();
   };
+
+  if (saving) {
+    return <LoadingSkeleton rows={8} />;
+  }
 
   return (
     <BaseModal

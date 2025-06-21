@@ -11,9 +11,11 @@ import SlideshowIcon from "@mui/icons-material/Slideshow";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
+import Skeleton from "@mui/material/Skeleton";
 
 const HomeSlidesList = () => {
   const [slideList, setSlideList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -22,10 +24,12 @@ const HomeSlidesList = () => {
   const context = useContext(MyContext);
 
   const loadSlides = () => {
+    setLoading(true);
     context.setProgress(20);
     fetchDataFromApi("/api/homeBanner").then((res) => {
       setSlideList(res);
       context.setProgress(100);
+      setLoading(false);
     });
   };
 
@@ -36,6 +40,7 @@ const HomeSlidesList = () => {
 
   const deleteSlide = () => {
     if (!deleteId) return;
+    setLoading(true);
     context.setProgress(30);
     deleteData(`/api/homeBanner/${deleteId}`).then(() => {
       context.setProgress(100);
@@ -48,6 +53,7 @@ const HomeSlidesList = () => {
     }).finally(() => {
       setConfirmOpen(false);
       setDeleteId(null);
+      setLoading(false);
     });
   };
 
@@ -85,12 +91,16 @@ const HomeSlidesList = () => {
       actions={<AddButton label="Add Home Slide" onClick={() => setShowForm(true)} />}
     >
       <div className="card shadow border-0 p-3 mt-4">
+        {loading ? (
+          <Skeleton variant="rectangular" width="100%" height={200} />
+        ) : (
         <BaseTable
           columns={columns}
           rows={slideList}
           onEdit={(row) => navigate(`/homeBannerSlide/edit/${row.id}`)}
           onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
         />
+        )}
       </div>
       <DeleteConfirmDialog
         open={confirmOpen}

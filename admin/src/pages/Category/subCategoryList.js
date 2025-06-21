@@ -11,19 +11,23 @@ import { MyContext } from '../../App';
 import { fetchDataFromApi, deleteData } from '../../utils/api';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import Skeleton from '@mui/material/Skeleton';
 
 const SubCategory = () => {
   const [catData, setCatData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const context = useContext(MyContext);
 
   const loadCategories = () => {
+    setLoading(true);
     context.setProgress(20);
     fetchDataFromApi('/api/category').then((res) => {
       setCatData(res);
       context.setProgress(100);
+      setLoading(false);
     });
   };
 
@@ -34,6 +38,7 @@ const SubCategory = () => {
 
   const deleteSubCat = () => {
     if (!deleteId) return;
+    setLoading(true);
     context.setProgress(30);
     deleteData(`/api/subCat/${deleteId}`).then(() => {
       context.setProgress(100);
@@ -42,6 +47,7 @@ const SubCategory = () => {
     }).finally(() => {
       setConfirmOpen(false);
       setDeleteId(null);
+      setLoading(false);
     });
   };
 
@@ -84,6 +90,9 @@ const SubCategory = () => {
       }
     >
       <div className='card shadow border-0 p-3 mt-4'>
+        {loading ? (
+          <Skeleton variant='rectangular' width='100%' height={200} />
+        ) : (
         <BaseTable
           columns={[
             {
@@ -115,6 +124,7 @@ const SubCategory = () => {
           ]}
           rows={rows}
         />
+        )}
       </div>
       <DeleteConfirmDialog
         open={confirmOpen}

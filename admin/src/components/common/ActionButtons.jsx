@@ -14,7 +14,7 @@ export const CancelButton = (props) => (
 );
 
 export const DeleteButton = (props) => (
-  <Button variant="text" color="error" sx={{ ml: 1 }} {...props}>
+  <Button variant="contained" color="error" sx={{ ml: 1 }} {...props}>
     Delete
   </Button>
 );
