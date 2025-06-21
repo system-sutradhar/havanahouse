@@ -112,7 +112,7 @@ const ProductNewPage = () => {
       }
     };
     load();
-  }, [id]);
+  }, [slug]);
 
   const handleAddToCart = (quantity = 1) => {
     if (!product) return;

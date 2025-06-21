@@ -482,7 +482,10 @@ router.post(`/create`, async (req, res) => {
 });
 
 router.get('/slug/:slug', async (req, res) => {
-  const product = await Product.findOne({ slug: req.params.slug }).populate('category');
+  let product = await Product.findOne({ slug: req.params.slug }).populate('category');
+  if (!product && mongoose.isValidObjectId(req.params.slug)) {
+    product = await Product.findById(req.params.slug).populate('category');
+  }
   if (!product) {
     return res.status(404).json({ message: 'Product not found' });
   }
