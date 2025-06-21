@@ -62,6 +62,18 @@ const Notifications = () => {
       .catch((err) => logger.error(err));
   };
 
+  if (showForm) {
+    return (
+      <NotificationForm
+        onCancel={() => setShowForm(false)}
+        onSuccess={() => {
+          setShowForm(false);
+          load();
+        }}
+      />
+    );
+  }
+
   return (
     <AdminPageLayout
       title="Notifications"
@@ -71,15 +83,6 @@ const Notifications = () => {
       ]}
       actions={<AddButton onClick={() => setShowForm(true)} label="Add Notification" />}
     >
-      {showForm && (
-        <NotificationForm
-          onCancel={() => setShowForm(false)}
-          onSuccess={() => {
-            setShowForm(false);
-            load();
-          }}
-        />
-      )}
 
       <div className="card shadow border-0 p-3 mt-4">
         <BaseTable
