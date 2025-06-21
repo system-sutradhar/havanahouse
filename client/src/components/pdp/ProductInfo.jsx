@@ -12,7 +12,7 @@ import QuantityBox from '@/Components/QuantityBox';
 import { MyContext } from '@/context/ThemeContext';
 import styles from './productInfo.module.css';
 
-const ProductInfo = ({ product, isAddedToMyList, onAddToCart }) => {
+const ProductInfo = ({ product, isAddedToMyList, onAddToCart, themeColors }) => {
   const [quantity, setQuantity] = useState(1);
   const context = useContext(MyContext);
 
@@ -35,7 +35,9 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart }) => {
 
   return (
     <div className={styles.productInfo}>
-      <h1 className={styles.productTitle}>{name}</h1>
+      <h1 className={styles.productTitle} style={{ color: themeColors?.primaryColor }}>
+        {name}
+      </h1>
       {badgeIcons.length > 0 && (
         <Stack direction="row" spacing={1} className="mb-2" flexWrap="wrap">
           {badgeIcons.map((b) => (
@@ -67,6 +69,13 @@ const ProductInfo = ({ product, isAddedToMyList, onAddToCart }) => {
           variant="contained"
           aria-label="Add to cart"
           onClick={() => onAddToCart(quantity)}
+          sx={{
+            bgcolor: themeColors?.buttonBg || 'primary.main',
+            color: themeColors?.buttonText || '#fff',
+            '&:hover': {
+              bgcolor: themeColors?.primaryColor || 'primary.dark',
+            },
+          }}
         >
           Add to Cart
         </Button>

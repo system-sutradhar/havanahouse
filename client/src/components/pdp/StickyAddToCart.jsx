@@ -3,21 +3,30 @@ import Button from '@mui/material/Button';
 import { styled } from 'styled-components';
 
 const Bar = styled.div`
-  position: sticky;
+  position: fixed;
   bottom: 0;
-  background: #fff;
+  left: 0;
+  right: 0;
+  background: ${(p) => p.bg || '#fff'};
   padding: 0.5rem;
-  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1200;
 `;
-
-const StickyAddToCart = ({ onAddToCart }) => {
+const StickyAddToCart = ({ onAddToCart, show = false, themeColors }) => {
+  if (!show) return null;
   return (
-    <Bar>
+    <Bar bg={themeColors?.primaryColor}>
       <Button
         fullWidth
         variant="contained"
-        color="primary"
         onClick={() => onAddToCart(1)}
+        sx={{
+          bgcolor: themeColors?.buttonBg || 'primary.main',
+          color: themeColors?.buttonText || '#fff',
+          '&:hover': {
+            bgcolor: themeColors?.primaryColor || 'primary.dark',
+          },
+        }}
         aria-label="Add to cart"
       >
         Add to Cart

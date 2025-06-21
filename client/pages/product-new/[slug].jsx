@@ -29,6 +29,7 @@ import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import DefaultLayout from '@/Components/DefaultLayout';
+import { brandThemes } from '@/styles/brandThemes';
 
 function TabPanel({ value, index, children }) {
   return (
@@ -42,8 +43,8 @@ const ImageGallery = ({ images, discount }) => (
   <ProductZoom images={images} discount={discount} />
 );
 
-const PriceDisplay = ({ price, mrp, discount }) => (
-  <Typography variant="h5" sx={{ mb: 1 }}>
+const PriceDisplay = ({ price, mrp, discount, themeColors }) => (
+  <Typography variant="h5" sx={{ mb: 1, color: themeColors?.primaryColor }}>
     {mrp && (
       <Typography component="span" sx={{ textDecoration: 'line-through', mr: 1 }}>
         ₹{mrp}
@@ -58,13 +59,19 @@ const PriceDisplay = ({ price, mrp, discount }) => (
   </Typography>
 );
 
-const AddToCartSection = ({ product, isAddedToMyList, onAddToCart }) => (
+const AddToCartSection = ({ product, isAddedToMyList, onAddToCart, themeColors }) => (
   <>
-    <PriceDisplay price={product.price} mrp={product.mrp} discount={product.discount} />
+    <PriceDisplay
+      price={product.price}
+      mrp={product.mrp}
+      discount={product.discount}
+      themeColors={themeColors}
+    />
     <ProductInfo
       product={product}
       isAddedToMyList={isAddedToMyList}
       onAddToCart={onAddToCart}
+      themeColors={themeColors}
     />
   </>
 );
@@ -72,6 +79,7 @@ const AddToCartSection = ({ product, isAddedToMyList, onAddToCart }) => (
 
 const BreadcrumbWrapper = styled.div`
   margin-bottom: 1rem;
+  width: 100%;
 `;
 
 const ProductNewPage = () => {
@@ -85,7 +93,7 @@ const ProductNewPage = () => {
   const [tab, setTab] = useState(0);
   const context = useContext(MyContext);
   const isMobile = useMediaQuery('(max-width:600px)');
-  const theme = createTheme();
+  const [muiTheme, setMuiTheme] = useState(createTheme());
 
   useEffect(() => {
     if (!slugParam) return;
@@ -97,6 +105,15 @@ const ProductNewPage = () => {
           return;
         }
         setProduct(prod);
+        const colors = brandThemes[prod.brand] || brandThemes.default;
+        setMuiTheme(
+          createTheme({
+            palette: {
+              primary: { main: colors.primaryColor },
+              secondary: { main: colors.secondaryColor },
+            },
+          })
+        );
         const rel = await fetchDataFromApi(`/api/products?subCatId=${prod.subCatId}`);
         setRelated(rel?.products?.filter((p) => p.id !== prod.id) || []);
         const rev = await fetchDataFromApi(`/api/productReviews?productId=${prod.id}`);
@@ -137,8 +154,10 @@ const ProductNewPage = () => {
     );
   }
 
+  const themeColors = brandThemes[product.brand] || brandThemes.default;
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <DefaultLayout>
         <SeoHead
@@ -149,7 +168,12 @@ const ProductNewPage = () => {
         <StructuredData product={product} />
         <GoogleTagManager />
         <BreadcrumbWrapper>
-          <Breadcrumbs aria-label="breadcrumb" itemScope itemType="https://schema.org/BreadcrumbList">
+          <Breadcrumbs
+            aria-label="breadcrumb"
+            itemScope
+            itemType="https://schema.org/BreadcrumbList"
+            sx={{ mb: 2 }}
+          >
             <Link href="/" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
               <span itemProp="name">Home</span>
               <meta itemProp="position" content="1" />
@@ -188,6 +212,7 @@ const ProductNewPage = () => {
                     product={product}
                     isAddedToMyList={isInWishlist}
                     onAddToCart={handleAddToCart}
+                    themeColors={themeColors}
                   />
                   <DeliveryChecker />
                   <TrustBadges />
@@ -239,6 +264,7 @@ const ProductNewPage = () => {
                   product={product}
                   isAddedToMyList={isInWishlist}
                   onAddToCart={handleAddToCart}
+                  themeColors={themeColors}
                 />
                 <DeliveryChecker />
                 <TrustBadges />
@@ -265,7 +291,7 @@ const ProductNewPage = () => {
       )}
 
         <RelatedProducts currentProductId={product.id} data={related} />
-        <StickyAddToCart onAddToCart={handleAddToCart} />
+        <StickyAddToCart onAddToCart={handleAddToCart} show={isMobile} themeColors={themeColors} />
       </DefaultLayout>
     </ThemeProvider>
   );
