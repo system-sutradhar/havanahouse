@@ -25,6 +25,10 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Grid from '@mui/material/Grid';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import DefaultLayout from '@/Components/DefaultLayout';
 
 function TabPanel({ value, index, children }) {
   return (
@@ -34,14 +38,37 @@ function TabPanel({ value, index, children }) {
   );
 }
 
-const PdpContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  @media (min-width: 768px) {
-    flex-direction: row;
-    gap: 32px;
-  }
-`;
+const ImageGallery = ({ images, discount }) => (
+  <ProductZoom images={images} discount={discount} />
+);
+
+const PriceDisplay = ({ price, mrp, discount }) => (
+  <Typography variant="h5" sx={{ mb: 1 }}>
+    {mrp && (
+      <Typography component="span" sx={{ textDecoration: 'line-through', mr: 1 }}>
+        ₹{mrp}
+      </Typography>
+    )}
+    ₹{price}
+    {discount && (
+      <Typography component="span" color="error" sx={{ ml: 1 }}>
+        ({discount}% OFF)
+      </Typography>
+    )}
+  </Typography>
+);
+
+const AddToCartSection = ({ product, isAddedToMyList, onAddToCart }) => (
+  <>
+    <PriceDisplay price={product.price} mrp={product.mrp} discount={product.discount} />
+    <ProductInfo
+      product={product}
+      isAddedToMyList={isAddedToMyList}
+      onAddToCart={onAddToCart}
+    />
+  </>
+);
+
 
 const BreadcrumbWrapper = styled.div`
   margin-bottom: 1rem;
@@ -58,6 +85,7 @@ const ProductNewPage = () => {
   const [tab, setTab] = useState(0);
   const context = useContext(MyContext);
   const isMobile = useMediaQuery('(max-width:600px)');
+  const theme = createTheme();
 
   useEffect(() => {
     if (!slug) return;
@@ -110,20 +138,22 @@ const ProductNewPage = () => {
   }
 
   return (
-    <>
-      <SeoHead
-        title={product.name}
-        description={product.description}
-        image={product.images?.[0]}
-      />
-      <StructuredData product={product} />
-      <GoogleTagManager />
-      <BreadcrumbWrapper>
-        <Breadcrumbs aria-label="breadcrumb" itemScope itemType="https://schema.org/BreadcrumbList">
-          <Link href="/" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <span itemProp="name">Home</span>
-            <meta itemProp="position" content="1" />
-          </Link>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <DefaultLayout>
+        <SeoHead
+          title={product.name}
+          description={product.description}
+          image={product.images?.[0]}
+        />
+        <StructuredData product={product} />
+        <GoogleTagManager />
+        <BreadcrumbWrapper>
+          <Breadcrumbs aria-label="breadcrumb" itemScope itemType="https://schema.org/BreadcrumbList">
+            <Link href="/" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <span itemProp="name">Home</span>
+              <meta itemProp="position" content="1" />
+            </Link>
           {product.catName && (
             <Link
               href={`/#`}
@@ -151,7 +181,7 @@ const ProductNewPage = () => {
             <meta itemProp="position" content="4" />
           </span>
         </Breadcrumbs>
-      </BreadcrumbWrapper>
+        </BreadcrumbWrapper>
 
       {isMobile ? (
         <div>
@@ -160,20 +190,20 @@ const ProductNewPage = () => {
               <Typography>Description</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <PdpContainer>
-                <div className="flex-grow-1">
-                  <ProductZoom images={product.images} discount={product.discount} />
-                </div>
-                <div className="flex-grow-1">
-                  <ProductInfo
+              <Grid container spacing={4}>
+                <Grid item xs={12} md={6}>
+                  <ImageGallery images={product.images} discount={product.discount} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <AddToCartSection
                     product={product}
                     isAddedToMyList={isInWishlist}
                     onAddToCart={handleAddToCart}
                   />
                   <DeliveryChecker />
                   <TrustBadges />
-                </div>
-              </PdpContainer>
+                </Grid>
+              </Grid>
               {product.description && <Typography sx={{ mt: 2 }}>{product.description}</Typography>}
             </AccordionDetails>
           </Accordion>
@@ -211,20 +241,20 @@ const ProductNewPage = () => {
             <Tab label="Delivery Info" id="tab-2" />
           </Tabs>
           <TabPanel value={tab} index={0}>
-            <PdpContainer>
-              <div className="flex-grow-1">
-                <ProductZoom images={product.images} discount={product.discount} />
-              </div>
-              <div className="flex-grow-1">
-                <ProductInfo
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={6}>
+                <ImageGallery images={product.images} discount={product.discount} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <AddToCartSection
                   product={product}
                   isAddedToMyList={isInWishlist}
                   onAddToCart={handleAddToCart}
                 />
                 <DeliveryChecker />
                 <TrustBadges />
-              </div>
-            </PdpContainer>
+              </Grid>
+            </Grid>
             {product.description && <Typography sx={{ mt: 2 }}>{product.description}</Typography>}
           </TabPanel>
           <TabPanel value={tab} index={1}>
@@ -245,9 +275,10 @@ const ProductNewPage = () => {
         </>
       )}
 
-      <RelatedProducts currentProductId={product.id} data={related} />
-      <StickyAddToCart onAddToCart={handleAddToCart} />
-    </>
+        <RelatedProducts currentProductId={product.id} data={related} />
+        <StickyAddToCart onAddToCart={handleAddToCart} />
+      </DefaultLayout>
+    </ThemeProvider>
   );
 };
 
