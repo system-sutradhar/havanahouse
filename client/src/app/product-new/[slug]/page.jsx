@@ -72,7 +72,7 @@ export default function ProductNewPage() {
       />
 
       {tab === 0 && (
-        <div className="row mt-4">
+        <div className="row mt-4 tab-panel">
           <div className="col-md-6">
             <ProductImageGallery images={product.images} name={product.name} />
           </div>

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
+import { FaMagnifyingGlassPlus } from "react-icons/fa6";
 import Skeleton from "@mui/material/Skeleton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -8,7 +9,7 @@ import "swiper/css/navigation";
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 
-const fallbackImg = "https://res.cloudinary.com/dvs2xu1r1/image/upload/v1744460942/1744460941314_rc_front.jpg";
+const fallbackImg = "http://localhost:3000/_next/static/media/pdp_default.56352841.png";
 
 const ImageWithSkeleton = ({ src, alt, onClick, className }) => {
   const [loaded, setLoaded] = useState(false);
@@ -76,7 +77,7 @@ const ProductImageGallery = ({ images = [], name = "" }) => {
           ))}
         </Swiper>
       </div>
-      <div className="main-image flex-fill">
+      <div className="main-image flex-fill position-relative">
         <Swiper
           slidesPerView={1}
           spaceBetween={0}
@@ -87,14 +88,19 @@ const ProductImageGallery = ({ images = [], name = "" }) => {
         >
           {images.map((img, idx) => (
             <SwiperSlide key={idx}>
-              <InnerImageZoom
-                src={img}
-                zoomSrc={img}
-                alt={`${name} image ${idx + 1}`}
-                zoomType="hover"
-                zoomScale={1}
-                zoomPreload={true}
-              />
+              <div className="zoom-wrap">
+                <InnerImageZoom
+                  src={img}
+                  zoomSrc={img}
+                  alt={`${name} image ${idx + 1}`}
+                  zoomType="hover"
+                  zoomScale={1}
+                  zoomPreload={true}
+                />
+                <span className="zoom-icon">
+                  <FaMagnifyingGlassPlus />
+                </span>
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>

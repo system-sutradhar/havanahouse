@@ -1021,8 +1021,9 @@ footer .socials a:hover {
 }
 .pdp-header-info .product-title {
   font-family: var(--font-heading);
-  color: #1a1a1a;
-  font-size: 24px;
+  color: var(--color-primary-text);
+  font-size: 22px;
+  font-weight: bold;
   margin: 8px 0 0 0;
 }
 .pdp-header-info .code-rating {
@@ -1033,10 +1034,10 @@ footer .socials a:hover {
 }
 .pdp-header-info .product-code {
   color: var(--color-muted-text);
-  font-size: 14px;
+  font-size: 13px;
 }
 .pdp-header-info .rating-block {
-  color: #e6b422;
+  color: var(--color-accent-gold);
   font-size: 14px;
 }
 
@@ -1109,6 +1110,8 @@ footer .socials a:hover {
 }
 .thumbnail-column {
   width: 90px;
+  padding-right: 8px;
+  box-sizing: border-box;
 }
 .thumbnail-column .thumb-item {
   border: 2px solid transparent;
@@ -1126,12 +1129,40 @@ footer .socials a:hover {
   width: 100%;
   height: auto;
   display: block;
+  object-fit: contain;
+}
+.main-image .zoom-wrap {
+  position: relative;
+}
+.main-image .zoom-icon {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.tab-panel {
+  padding: 16px 0;
 }
 @media (max-width: 768px) {
   .product-gallery {
     flex-direction: column;
   }
   .thumbnail-column {
-    display: none;
+    width: 100%;
+    display: flex;
+    margin-top: 8px;
+    overflow-x: auto;
   }
+  .thumbnail-column .thumb-item {
+    margin-right: 8px;
+  }
+}
 }
