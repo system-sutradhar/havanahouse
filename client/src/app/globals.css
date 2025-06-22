@@ -1056,7 +1056,6 @@ footer .socials a:hover {
 .pdp-tab-nav .MuiTab-root {
   text-transform: none;
   font-weight: 600;
-  color: var(--color-primary-text);
 }
 .pdp-tab-nav .MuiTabs-indicator {
   background-color: var(--color-accent-gold);
@@ -1067,9 +1066,18 @@ footer .socials a:hover {
 
 @media (max-width: 767px) {
   .pdp-tab-nav {
-    display: none;
+    position: fixed;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    display: block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    background: #303030;
+    z-index: 15;
+    transition: top .3s cubic-bezier(.5,0,1,0);
   }
   .pdp-tab-nav.sticky {
-    display: block;
+    top: 72px;
+    transition: top .3s cubic-bezier(0,1,.5,1);
   }
 }
