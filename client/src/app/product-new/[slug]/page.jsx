@@ -1,21 +1,19 @@
-import { useRouter } from 'next/router';
+"use client";
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import BreadcrumbNav from '@/Components/pdp/Breadcrumbs';
 import ProductHeaderInfo from '@/Components/pdp/ProductHeaderInfo';
 import ProductTabNav from '@/Components/pdp/ProductTabNav';
 import { fetchDataFromApi } from '@/utils/api';
 
-const ProductNewPage = () => {
-  const router = useRouter();
-  const { slug } = router.query || {};
+export default function ProductNewPage() {
+  const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [tab, setTab] = useState(0);
 
   useEffect(() => {
     if (!slug) return;
-    fetchDataFromApi(`/api/products/slug/${slug}`).then((res) => {
-      setProduct(res);
-    });
+    fetchDataFromApi(`/api/products/slug/${slug}`).then((res) => setProduct(res));
   }, [slug]);
 
   if (!product) {
@@ -45,6 +43,4 @@ const ProductNewPage = () => {
       {/* Additional PDP content can go here */}
     </div>
   );
-};
-
-export default ProductNewPage;
+}
