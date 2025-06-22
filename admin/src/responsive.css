@@ -24,7 +24,6 @@
 
 
   .main .content{width: 100% !important; flex: 0 0 100% !important;}
-  .right-content{padding: 60px 15px !important;}
 
   .dashboardBoxWrapper{white-space: nowrap !important; overflow-x: scroll; overflow-y: hidden; display: block !important; margin-bottom: 20px !important;}
   .dashboardBoxWrapper::-webkit-scrollbar{display: none !important;}

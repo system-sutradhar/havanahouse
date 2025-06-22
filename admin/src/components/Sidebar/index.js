@@ -63,20 +63,21 @@ const Sidebar = () => {
       <div className="sidebar">
         <ul>
           <li>
-            <NavLink to="/" end className={({ isActive }) => (isActive ? "is-active" : "")}>
-              <Button
-                className={`w-100 ${activeTab === 0 ? "active" : ""}`}
-                onClick={() => {
-                  isOpenSubmenu(0);
-                  context.setIsOpenNav(false);
-                }}
-              >
-                <span className="icon">
-                  <MdDashboard />
-                </span>
-                Dashboard
-              </Button>
-            </NavLink>
+            <Button
+              component={NavLink}
+              to="/"
+              end
+              className={`w-100 ${activeTab === 0 ? "active" : ""}`}
+              onClick={() => {
+                isOpenSubmenu(0);
+                context.setIsOpenNav(false);
+              }}
+            >
+              <span className="icon">
+                <MdDashboard />
+              </span>
+              Dashboard
+            </Button>
           </li>
 
           <li>
@@ -268,60 +269,59 @@ const Sidebar = () => {
           </li>
 
           <li>
-            <NavLink to="/orders" end className={({ isActive }) => (isActive ? "is-active" : "")}>
-              <Button
-                className={`w-100 ${
-                  activeTab === 4 && isToggleSubmenu === true ? "active" : ""
-                }`}
-                onClick={() => {
-                  isOpenSubmenu(4);
-                  context.setIsOpenNav(false);
-                }}
-              >
-                <span className="icon">
-                  {" "}
-                  <FaClipboardCheck fontSize="small" />
-                </span>
-                Orders
-              </Button>
-            </NavLink>
+            <Button
+              component={NavLink}
+              to="/orders"
+              end
+              className={`w-100 ${
+                activeTab === 4 && isToggleSubmenu === true ? "active" : ""
+              }`}
+              onClick={() => {
+                isOpenSubmenu(4);
+                context.setIsOpenNav(false);
+              }}
+            >
+              <span className="icon">
+                {" "}
+                <FaClipboardCheck fontSize="small" />
+              </span>
+              Orders
+            </Button>
           </li>
 
           <li>
-            <NavLink
+            <Button
+              component={NavLink}
               to="/appSettings"
               end
-              className={({ isActive }) => (isActive ? "is-active" : "")}
+              className={`w-100 ${activeTab === 5 ? "active" : ""}`}
               onClick={() => {
                 setActiveTab(5);
                 context.setIsOpenNav(false);
               }}
             >
-              <Button className={`w-100 ${activeTab === 5 ? "active" : ""}`}>
-                <span className="icon">
-                  <IoIosSettings />
-                </span>
-                App Settings
-              </Button>
-            </NavLink>
+              <span className="icon">
+                <IoIosSettings />
+              </span>
+              App Settings
+            </Button>
           </li>
           <li>
-            <NavLink
+            <Button
+              component={NavLink}
               to="/notifications"
               end
-              className={({ isActive }) => (isActive ? "is-active" : "")}
+              className={`w-100 ${activeTab === 6 ? "active" : ""}`}
               onClick={() => {
                 setActiveTab(6);
                 context.setIsOpenNav(false);
               }}
             >
-              <Button className={`w-100 ${activeTab === 6 ? "active" : ""}`}>
-                <span className="icon">
-                  <FaBell />
-                </span>
-                Notifications
-              </Button>
-            </NavLink>
+              <span className="icon">
+                <FaBell />
+              </span>
+              Notifications
+            </Button>
           </li>
         </ul>
 
