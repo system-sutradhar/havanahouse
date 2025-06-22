@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import BreadcrumbNav from '@/Components/pdp/Breadcrumbs';
 import ProductHeaderInfo from '@/Components/pdp/ProductHeaderInfo';
 import ProductTabNav from '@/Components/pdp/ProductTabNav';
+import Skeleton from '@mui/material/Skeleton';
 import { fetchDataFromApi } from '@/utils/api';
 
 export default function ProductNewPage() {
@@ -28,12 +29,19 @@ export default function ProductNewPage() {
   }, []);
 
   if (!product) {
-    return <div className="container py-5">Loading...</div>;
+    return (
+      <div className="container py-5">
+        <Skeleton width="40%" height={30} />
+        <Skeleton width="60%" height={20} className="mt-2" />
+        <Skeleton width="100%" height={40} className="mt-3" />
+      </div>
+    );
   }
 
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
     product.catName ? { label: product.catName, href: `/category/${product.catId}` } : null,
+    product.subCatName ? { label: product.subCatName, href: `/subcategory/${product.subCatId}` } : null,
     { label: product.name }
   ].filter(Boolean);
 
@@ -44,6 +52,7 @@ export default function ProductNewPage() {
         title={product.name}
         rating={product.rating}
         reviews={product.reviews?.length || 0}
+        code={product.id}
       />
       <ProductTabNav
         value={tab}

@@ -51,7 +51,7 @@ body {
 .bg-blue{background: var(--primary-color)}
 
 .container {
-  max-width: 100%;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   /* padding: 0 1rem; */
 }
@@ -72,7 +72,7 @@ a:hover {
   .container-md,
   .container-sm,
   .container-xl {
-    max-width: 100%;
+    max-width: var(--container-max-width);
   }
 }
 
@@ -1011,27 +1011,33 @@ footer .socials a:hover {
 .product-breadcrumbs a,
 .product-breadcrumbs span {
   color: var(--color-muted-text);
-  font-size: 12px;
+  font-size: 13px;
 }
 .product-breadcrumbs a:hover {
   text-decoration: underline;
 }
 .pdp-header-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: block;
 }
 .pdp-header-info .product-title {
   font-family: var(--font-heading);
-  color: var(--color-black);
+  color: #1a1a1a;
   font-size: 24px;
-  margin: 0;
+  margin: 8px 0 0 0;
+}
+.pdp-header-info .code-rating {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
 .pdp-header-info .product-code {
   color: var(--color-muted-text);
+  font-size: 14px;
 }
 .pdp-header-info .rating-block {
-  color: var(--color-accent-gold);
+  color: #e6b422;
+  font-size: 14px;
 }
 
 .pdp-tabs-row .list-inline-item button {
@@ -1055,17 +1061,19 @@ footer .socials a:hover {
   position: sticky;
   top: 0;
   z-index: 5;
-  background: var(--color-primary-bg);
+  background: #fff;
 }
 .pdp-tab-nav .MuiTab-root {
   text-transform: none;
   font-weight: 600;
+  font-size: 15px;
 }
 .pdp-tab-nav .MuiTabs-indicator {
   background-color: var(--color-accent-gold);
 }
 .pdp-tab-nav .MuiTab-root.Mui-selected {
   color: var(--color-highlight);
+  transition: color 0.3s ease;
 }
 
 @media (max-width: 767px) {
@@ -1076,12 +1084,18 @@ footer .socials a:hover {
     width: 100%;
     display: block;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    background: var(--color-header-bg);
+    background: #fff;
     z-index: 15;
     transition: top .3s cubic-bezier(.5,0,1,0);
   }
   .pdp-tab-nav.sticky {
     top: 72px;
     transition: top .3s cubic-bezier(0,1,.5,1);
+  }
+  .pdp-header-info .product-title {
+    font-size: 18px;
+  }
+  .pdp-tab-nav .MuiTab-root {
+    font-size: 13px;
   }
 }
