@@ -1165,4 +1165,36 @@ footer .socials a:hover {
     margin-right: 8px;
   }
 }
+.about-product-content {
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+.about-product-content .section-title {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.spec-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.spec-table th {
+  text-align: left;
+  font-weight: 600;
+  padding: 4px 8px 4px 0;
+  font-family: var(--font-heading);
+}
+.spec-table td {
+  padding: 4px 0;
+}
+.tag-badge {
+  background: var(--color-accent-gold);
+  color: #000;
+  border-radius: 20px;
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 12px;
+  margin-right: 6px;
+  margin-bottom: 6px;
 }

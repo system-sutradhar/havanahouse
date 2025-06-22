@@ -5,6 +5,7 @@ import BreadcrumbNav from '@/Components/pdp/Breadcrumbs';
 import ProductHeaderInfo from '@/Components/pdp/ProductHeaderInfo';
 import ProductTabNav from '@/Components/pdp/ProductTabNav';
 import ProductImageGallery from '@/Components/pdp/ProductImageGallery';
+import AboutProductContent from '@/Components/pdp/AboutProductContent';
 import Skeleton from '@mui/material/Skeleton';
 import { fetchDataFromApi } from '@/utils/api';
 
@@ -77,8 +78,7 @@ export default function ProductNewPage() {
             <ProductImageGallery images={product.images} name={product.name} />
           </div>
           <div className="col-md-6">
-            {/* Product details placeholder */}
-            <p>{product.description}</p>
+            <AboutProductContent product={product} />
           </div>
         </div>
       )}
