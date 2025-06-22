@@ -1219,3 +1219,32 @@ footer .socials a:hover {
   margin-right: 6px;
   margin-bottom: 6px;
 }
+.add-cart-box .price {
+  font-weight: bold;
+  font-size: 22px;
+}
+.add-cart-box .old-price {
+  text-decoration: line-through;
+  color: var(--color-muted-text);
+}
+.add-cart-btn {
+  background: var(--color-accent-gold);
+  color: #000;
+  font-weight: 600;
+}
+.sticky-add-cart {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 9999;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+  padding: 8px 10px;
+  display: none;
+}
+@media (max-width: 768px) {
+  .sticky-add-cart {
+    display: block;
+  }
+}

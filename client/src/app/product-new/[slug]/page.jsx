@@ -5,7 +5,8 @@ import BreadcrumbNav from '@/Components/pdp/Breadcrumbs';
 import ProductHeaderInfo from '@/Components/pdp/ProductHeaderInfo';
 import ProductTabNav from '@/Components/pdp/ProductTabNav';
 import ProductImageGallery from '@/Components/pdp/ProductImageGallery';
-import AboutProductContent from '@/Components/pdp/AboutProductContent';
+import ProductInfoSection from '@/Components/pdp/ProductInfoSection';
+import StickyAddToCart from '@/Components/pdp/StickyAddToCart';
 import Skeleton from '@mui/material/Skeleton';
 import { fetchDataFromApi } from '@/utils/api';
 
@@ -78,10 +79,11 @@ export default function ProductNewPage() {
             <ProductImageGallery images={product.images} name={product.name} />
           </div>
           <div className="col-md-6">
-            <AboutProductContent product={product} />
+            <ProductInfoSection product={product} />
           </div>
         </div>
       )}
+      <StickyAddToCart product={product} />
     </div>
   );
 }
