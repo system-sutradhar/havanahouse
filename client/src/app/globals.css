@@ -1004,7 +1004,9 @@ footer .socials a:hover {
     width: 100%;
     text-align: center;
   }
-}.product-breadcrumbs a,
+
+.product-breadcrumbs{margin-bottom:1rem;}
+.product-breadcrumbs a,
 .product-breadcrumbs span {
   color: var(--color-muted-text);
   font-size: 12px;
@@ -1072,7 +1074,7 @@ footer .socials a:hover {
     width: 100%;
     display: block;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    background: #303030;
+    background: var(--color-header-bg);
     z-index: 15;
     transition: top .3s cubic-bezier(.5,0,1,0);
   }
