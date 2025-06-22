@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { Box, Grid, TextField, MenuItem, Rating, Select, Autocomplete } from '@mui/material';
 import { SaveButton, CancelButton } from '../../components/common/ActionButtons';
 import AdminPageLayout from '../../components/common/AdminPageLayout';
@@ -83,40 +83,41 @@ export default function ProductForm({
     setSubCats(arr);
   }, [context.catData]);
 
+  const attrsLoaded = useRef(false);
+
   useEffect(() => {
-    fetchDataFromApi('/api/productRAMS').then((res) =>
-      setRamsList(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/productSIZE').then((res) =>
-      setSizeList(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/productWeight').then((res) =>
-      setWeightList(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/attributes/boxType').then((res) =>
-      setBoxTypes(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/attributes/origin').then((res) =>
-      setOriginOptions(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/attributes/wrapperType').then((res) =>
-      setWrapperTypeOptions(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/attributes/strength').then((res) =>
-      setStrengthOptions(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/attributes/binder').then((res) =>
-      setBinderOptions(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/attributes/filler').then((res) =>
-      setFillerOptions(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/attributes/badgeIcon').then((res) =>
-      setBadgeOptions(Array.isArray(res) ? res : [])
-    );
-    fetchDataFromApi('/api/attributes/trustLabel').then((res) =>
-      setTrustOptions(Array.isArray(res) ? res : [])
-    );
+    if (attrsLoaded.current) return;
+    attrsLoaded.current = true;
+
+    const load = async () => {
+      const [rams, sizes, weights, boxT, origins, wrappers, strengths, binders, fillers, badges, trusts] = await Promise.all([
+        fetchDataFromApi('/api/productRAMS'),
+        fetchDataFromApi('/api/productSIZE'),
+        fetchDataFromApi('/api/productWeight'),
+        fetchDataFromApi('/api/attributes/boxType'),
+        fetchDataFromApi('/api/attributes/origin'),
+        fetchDataFromApi('/api/attributes/wrapperType'),
+        fetchDataFromApi('/api/attributes/strength'),
+        fetchDataFromApi('/api/attributes/binder'),
+        fetchDataFromApi('/api/attributes/filler'),
+        fetchDataFromApi('/api/attributes/badgeIcon'),
+        fetchDataFromApi('/api/attributes/trustLabel'),
+      ]);
+
+      setRamsList(Array.isArray(rams) ? rams : []);
+      setSizeList(Array.isArray(sizes) ? sizes : []);
+      setWeightList(Array.isArray(weights) ? weights : []);
+      setBoxTypes(Array.isArray(boxT) ? boxT : []);
+      setOriginOptions(Array.isArray(origins) ? origins : []);
+      setWrapperTypeOptions(Array.isArray(wrappers) ? wrappers : []);
+      setStrengthOptions(Array.isArray(strengths) ? strengths : []);
+      setBinderOptions(Array.isArray(binders) ? binders : []);
+      setFillerOptions(Array.isArray(fillers) ? fillers : []);
+      setBadgeOptions(Array.isArray(badges) ? badges : []);
+      setTrustOptions(Array.isArray(trusts) ? trusts : []);
+    };
+
+    load();
   }, []);
 
   const handleChange = (e) => {

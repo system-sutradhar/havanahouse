@@ -1,77 +1,107 @@
 import axios from "axios";
 import logger from "./logger";
 
-const token=localStorage.getItem("token");
-
-const params={
+const getHeaders = () => {
+  const token = localStorage.getItem("token") || "";
+  return {
     headers: {
-        'Authorization': `Bearer ${token}`, // Include your API key in the Authorization header
-        'Content-Type': 'application/json', // Adjust the content type as needed
-      },
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+};
 
-} 
+const handleError = (error) => {
+  logger.error(error);
+  if (error?.response?.status === 401) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  }
+  return error;
+};
 
 export const fetchDataFromApi = async (url) => {
-    try {
-        const { data } = await axios.get(process.env.REACT_APP_BASE_URL + url,params)
-        return data;
-    } catch (error) {
-        logger.error(error);
-        return error;
-    }
-}
-
+  try {
+    const { data } = await axios.get(
+      process.env.REACT_APP_BASE_URL + url,
+      getHeaders()
+    );
+    return data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
 
 export const uploadImage = async (url, formData) => {
-    const { res } = await axios.post(process.env.REACT_APP_BASE_URL + url , formData)
-    return res;
-}
+  try {
+    const { data } = await axios.post(
+      process.env.REACT_APP_BASE_URL + url,
+      formData,
+      getHeaders()
+    );
+    return data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
 export const postData = async (url, formData) => {
+  try {
+    const response = await fetch(process.env.REACT_APP_BASE_URL + url, {
+      method: "POST",
+      headers: getHeaders().headers,
+      body: JSON.stringify(formData),
+    });
 
-    try {
-        const response = await fetch(process.env.REACT_APP_BASE_URL + url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`, // Include your API key in the Authorization header
-                'Content-Type': 'application/json', // Adjust the content type as needed
-              },
-           
-            body: JSON.stringify(formData)
-        });
-
-
-      
-
-        if (response.ok) {
-            const data = await response.json();
-            //console.log(data)
-            return data;
-        } else {
-            const errorData = await response.json();
-            return errorData;
-        }
-
-    } catch (error) {
-        logger.error('Error:', error);
+    if (response.ok) {
+      return await response.json();
     }
+    if (response.status === 401) {
+      handleError({ response: { status: 401 } });
+    }
+    return await response.json();
+  } catch (error) {
+    return handleError(error);
+  }
+};
 
+export const editData = async (url, updatedData) => {
+  try {
+    const { data } = await axios.put(
+      `${process.env.REACT_APP_BASE_URL}${url}`,
+      updatedData,
+      getHeaders()
+    );
+    return data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
 
-}
+export const deleteData = async (url) => {
+  try {
+    const { data } = await axios.delete(
+      `${process.env.REACT_APP_BASE_URL}${url}`,
+      getHeaders()
+    );
+    return data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
 
-
-export const editData = async (url, updatedData ) => {
-    const { res } = await axios.put(`${process.env.REACT_APP_BASE_URL}${url}`,updatedData)
-    return res;
-}
-
-export const deleteData = async (url ) => {
-    const { res } = await axios.delete(`${process.env.REACT_APP_BASE_URL}${url}`,params)
-    return res;
-}
-
-
-export const deleteImages = async (url,image ) => {
-    const { res } = await axios.delete(`${process.env.REACT_APP_BASE_URL}${url}`,image);
-    return res;
-}
+export const deleteImages = async (url, image) => {
+  try {
+    const { data } = await axios.delete(
+      `${process.env.REACT_APP_BASE_URL}${url}`,
+      {
+        ...getHeaders(),
+        data: image,
+      }
+    );
+    return data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
