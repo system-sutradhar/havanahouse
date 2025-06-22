@@ -1060,19 +1060,15 @@ footer .socials a:hover {
 .pdp-tab-nav.sticky {
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translate(-50%, -10px);
-  width: 100%;
-  max-width: var(--container-max-width);
-  opacity: 0;
-  z-index: 9999;
+  left: 0;
+  right: 0;
   background: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  z-index: 9999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 6px 10px;
 }
 .pdp-tab-nav.sticky.visible {
-  transform: translate(-50%, 0);
-  opacity: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 .pdp-tab-nav .MuiTab-root {
   text-transform: none;
