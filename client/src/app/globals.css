@@ -1004,4 +1004,31 @@ footer .socials a:hover {
     width: 100%;
     text-align: center;
   }
+}.product-breadcrumbs a,
+.product-breadcrumbs span {
+  color: #000;
+}
+.product-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.pdp-header h2 {
+  font-size: 26px;
+}
+
+.pdp-tabs-row .list-inline-item button {
+  padding: 6px 25px !important;
+  border: 1px solid rgba(0,0,0,0.2) !important;
+  text-transform: capitalize !important;
+  border-radius: 30px !important;
+  color: #000 !important;
+}
+
+.pdp-tabs-row .list-inline-item button.active {
+  background: #6d4aae !important;
+  color: #fff !important;
+}
+
+.pdp-tabs-row .sku {
+  font-weight: 600;
 }

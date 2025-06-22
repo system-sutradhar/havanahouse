@@ -243,7 +243,8 @@ const ProductDetails = ({params}) => {
             <section className="productDetails section">
                 <div className="container">
                     {productData && (
-                        <Breadcrumbs aria-label="breadcrumb" className="mb-3">
+                        <>
+                        <Breadcrumbs aria-label="breadcrumb" className="mb-3 product-breadcrumbs">
                             <Link href="/">Home</Link>
                             {productData.catName && (
                                 <Link href={`/category/${productData.catId}`}>{productData.catName}</Link>
@@ -253,31 +254,41 @@ const ProductDetails = ({params}) => {
                             )}
                             <span aria-current="page">{productData.name}</span>
                         </Breadcrumbs>
-                    )}
-                    <div className="row">
-                        <div className="col-md-4 pl-5 part1">
-                            <ProductZoom images={productData?.images} discount={productData?.discount} />
+
+                        <div className="pdp-header d-flex justify-content-between align-items-center mb-3">
+                            <h2 className="pdp-title text-capitalize mb-0">{productData.name}</h2>
+                            <Rating name="read-only" value={parseInt(productData?.rating)} precision={0.5} readOnly size="small" />
                         </div>
 
-                        <div className="col-md-7 pl-5 pr-5 part2">
-                            <h2 className="hd text-capitalize">{productData?.name}</h2>
-                            <ul className="list list-inline d-flex align-items-center">
-                                <li className="list-inline-item">
-                                    <div className="d-flex align-items-center">
-                                        <span className="text-light mr-2">Brands : </span>
-                                        <span>{productData?.brand}</span>
-                                    </div>
-                                </li>
+                        <div className="pdp-tabs-row d-flex justify-content-between align-items-center mb-4">
+                            <div className="customTabs">
+                                <ul className="list list-inline mb-0">
+                                    {['About Product','Description','Additional Details','Accessories','Facts','Similar Products','Reviews & questions','Video'].map((label, index) => (
+                                        <li className="list-inline-item" key={index}>
+                                            <Button className={`${activeTabs === index ? 'active' : ''}`} onClick={() => setActiveTabs(index)}>{label}</Button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <span className="sku text-muted">SKU: {productData.id}</span>
+                        </div>
+                        </>
+                    )}
+                    {activeTabs === 0 && (
+                        <div className="row">
+                            <div className="col-md-4 pl-5 part1">
+                                <ProductZoom images={productData?.images} discount={productData?.discount} />
+                            </div>
 
-                                <li className="list-inline-item">
-                                    <div className="d-flex align-items-center">
-                                        <Rating name="read-only" value={parseInt(productData?.rating)} precision={0.5} readOnly size="small" />
-
-                                        <span className="text-light cursor ml-2" onClick={gotoReviews}>{reviewsData?.length} Review</span>
-                                    </div>
-                                </li>
-
-                            </ul>
+                            <div className="col-md-7 pl-5 pr-5 part2">
+                                <ul className="list list-inline d-flex align-items-center">
+                                    <li className="list-inline-item">
+                                        <div className="d-flex align-items-center">
+                                            <span className="text-light mr-2">Brands : </span>
+                                            <span>{productData?.brand}</span>
+                                        </div>
+                                    </li>
+                                </ul>
 
 
 
@@ -394,51 +405,30 @@ const ProductDetails = ({params}) => {
 
                     <br />
 
-
-
                     <div className='card mt-5 p-5 detailsPageTabs'>
-                        <div className='customTabs'>
-                            <ul className='list list-inline'>
-                                <li className='list-inline-item'>
-                                    <Button className={`${activeTabs === 0 && 'active'}`}
-                                        onClick={() => {
-                                            setActiveTabs(0)
-                                        }}
-                                    >Description</Button>
-                                </li>
-                                <li className='list-inline-item'>
-                                    <Button className={`${activeTabs === 1 && 'active'}`}
-                                        onClick={() => {
-                                            setActiveTabs(1)
-
-                                        }}
-                                    >Additional info</Button>
-                                </li>
-                                <li className='list-inline-item'>
-                                    <Button className={`${activeTabs === 2 && 'active'}`}
-                                        onClick={() => {
-                                            setActiveTabs(2)
-
-                                        }}
-                                    >Reviews ({reviewsData?.length})</Button>
-                                </li>
-
-                            </ul>
-
-
-                            <br />
 
                             {
-                                activeTabs === 0 &&
+                                activeTabs === 1 &&
                                 <div className='tabContent'>
                                     {productData?.description}
                                 </div>
 
                             }
 
+                            {
+                                activeTabs === 3 && (
+                                    <div className='tabContent'>Accessories information coming soon.</div>
+                                )
+                            }
 
                             {
-                                activeTabs === 1 &&
+                                activeTabs === 4 && (
+                                    <div className='tabContent'>Facts coming soon.</div>
+                                )
+                            }
+
+                            {
+                                activeTabs === 6 &&
 
                                 <div className='tabContent'>
                                     <div className='table-responsive'>
@@ -486,7 +476,7 @@ const ProductDetails = ({params}) => {
 
 
                             {
-                                activeTabs === 2 &&
+                                activeTabs === 6 &&
 
                                 <div className='tabContent'>
                                     <div className='row'>
@@ -565,6 +555,11 @@ const ProductDetails = ({params}) => {
                                 </div>
                             }
 
+                            {activeTabs === 7 && (
+                                <div className='tabContent'>Video coming soon.</div>
+                            )}
+
+
 
 
 
@@ -575,7 +570,9 @@ const ProductDetails = ({params}) => {
                     <br />
 
                     {
-                        relatedProductData?.length !== 0 && <RelatedProducts title="RELATED PRODUCTS" data={relatedProductData} />
+                        activeTabs === 5 && relatedProductData?.length !== 0 && (
+                            <RelatedProducts title="SIMILAR PRODUCTS" data={relatedProductData} />
+                        )
                     }
 
 
