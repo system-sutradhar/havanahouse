@@ -9,16 +9,12 @@ import { FaRegHeart } from "react-icons/fa";
 import Head from "next/head";
 import { MdOutlineCompareArrows } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from 'next/link';
 import RelatedProducts from "./RelatedProducts";
 
 import CircularProgress from '@mui/material/CircularProgress';
 import { MyContext } from "@/context/ThemeContext";
 import { FaHeart } from "react-icons/fa";
 import { fetchDataFromApi, postData } from "@/utils/api";
-
-const hasValidOptions = (arr) => Array.isArray(arr) && arr.some(val => val && val !== 'N/A');
 
 
 const ProductDetails = ({params}) => {
@@ -242,53 +238,30 @@ const ProductDetails = ({params}) => {
 
             <section className="productDetails section">
                 <div className="container">
-                    {productData && (
-                        <>
-                        <Breadcrumbs aria-label="breadcrumb" className="mb-3 product-breadcrumbs">
-                            <Link href="/">Home</Link>
-                            {productData.catName && (
-                                <Link href={`/category/${productData.catId}`}>{productData.catName}</Link>
-                            )}
-                            {productData.subCatName && (
-                                <Link href={`/subcategory/${productData.subCatId}`}>{productData.subCatName}</Link>
-                            )}
-                            <span aria-current="page">{productData.name}</span>
-                        </Breadcrumbs>
-
-                        <div className="pdp-header d-flex justify-content-between align-items-center mb-3">
-                            <h2 className="pdp-title text-capitalize mb-0">{productData.name}</h2>
-                            <Rating name="read-only" value={parseInt(productData?.rating)} precision={0.5} readOnly size="small" />
+                    <div className="row">
+                        <div className="col-md-4 pl-5 part1">
+                            <ProductZoom images={productData?.images} discount={productData?.discount} />
                         </div>
 
-                        <div className="pdp-tabs-row d-flex justify-content-between align-items-center mb-4">
-                            <div className="customTabs">
-                                <ul className="list list-inline mb-0">
-                                    {['About Product','Description','Additional Details','Accessories','Facts','Similar Products','Reviews & questions','Video'].map((label, index) => (
-                                        <li className="list-inline-item" key={index}>
-                                            <Button className={`${activeTabs === index ? 'active' : ''}`} onClick={() => setActiveTabs(index)}>{label}</Button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <span className="sku text-muted">SKU: {productData.id}</span>
-                        </div>
-                        </>
-                    )}
-                    {activeTabs === 0 && (
-                        <div className="row">
-                            <div className="col-md-4 pl-5 part1">
-                                <ProductZoom images={productData?.images} discount={productData?.discount} />
-                            </div>
+                        <div className="col-md-7 pl-5 pr-5 part2">
+                            <h2 className="hd text-capitalize">{productData?.name}</h2>
+                            <ul className="list list-inline d-flex align-items-center">
+                                <li className="list-inline-item">
+                                    <div className="d-flex align-items-center">
+                                        <span className="text-light mr-2">Brands : </span>
+                                        <span>{productData?.brand}</span>
+                                    </div>
+                                </li>
 
-                            <div className="col-md-7 pl-5 pr-5 part2">
-                                <ul className="list list-inline d-flex align-items-center">
-                                    <li className="list-inline-item">
-                                        <div className="d-flex align-items-center">
-                                            <span className="text-light mr-2">Brands : </span>
-                                            <span>{productData?.brand}</span>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <li className="list-inline-item">
+                                    <div className="d-flex align-items-center">
+                                        <Rating name="read-only" value={parseInt(productData?.rating)} precision={0.5} readOnly size="small" />
+
+                                        <span className="text-light cursor ml-2" onClick={gotoReviews}>{reviewsData?.length} Review</span>
+                                    </div>
+                                </li>
+
+                            </ul>
 
 
 
@@ -311,7 +284,7 @@ const ProductDetails = ({params}) => {
 
 
                             {
-                                hasValidOptions(productData?.productRam) &&
+                                productData?.productRam?.length !== 0 &&
                                 <div className='productSize d-flex align-items-center'>
                                     <span>RAM:</span>
                                     <ul className={`list list-inline mb-0 pl-4 ${tabError === true && 'error'}`}>
@@ -329,7 +302,7 @@ const ProductDetails = ({params}) => {
 
 
                             {
-                                hasValidOptions(productData?.size) &&
+                                productData?.size?.length !== 0 &&
                                 <div className='productSize d-flex align-items-center'>
                                     <span>Size:</span>
                                     <ul className={`list list-inline mb-0 pl-4 ${tabError === true && 'error'}`}>
@@ -347,7 +320,7 @@ const ProductDetails = ({params}) => {
 
 
                             {
-                                hasValidOptions(productData?.productWeight) &&
+                                productData?.productWeight?.length !== 0 &&
                                 <div className='productSize d-flex align-items-center'>
                                     <span>Weight:</span>
                                     <ul className={`list list-inline mb-0 pl-4 ${tabError === true && 'error'}`}>
@@ -405,67 +378,140 @@ const ProductDetails = ({params}) => {
 
                     <br />
 
+
+
                     <div className='card mt-5 p-5 detailsPageTabs'>
+                        <div className='customTabs'>
+                            <ul className='list list-inline'>
+                                <li className='list-inline-item'>
+                                    <Button className={`${activeTabs === 0 && 'active'}`}
+                                        onClick={() => {
+                                            setActiveTabs(0)
+                                        }}
+                                    >Description</Button>
+                                </li>
+                                <li className='list-inline-item'>
+                                    <Button className={`${activeTabs === 1 && 'active'}`}
+                                        onClick={() => {
+                                            setActiveTabs(1)
+
+                                        }}
+                                    >Additional info</Button>
+                                </li>
+                                <li className='list-inline-item'>
+                                    <Button className={`${activeTabs === 2 && 'active'}`}
+                                        onClick={() => {
+                                            setActiveTabs(2)
+
+                                        }}
+                                    >Reviews ({reviewsData?.length})</Button>
+                                </li>
+
+                            </ul>
+
+
+                            <br />
 
                             {
-                                activeTabs === 1 &&
+                                activeTabs === 0 &&
                                 <div className='tabContent'>
                                     {productData?.description}
                                 </div>
 
                             }
 
-                            {
-                                activeTabs === 3 && (
-                                    <div className='tabContent'>Accessories information coming soon.</div>
-                                )
-                            }
 
                             {
-                                activeTabs === 4 && (
-                                    <div className='tabContent'>Facts coming soon.</div>
-                                )
-                            }
-
-                            {
-                                activeTabs === 6 &&
+                                activeTabs === 1 &&
 
                                 <div className='tabContent'>
                                     <div className='table-responsive'>
-                                        <h3>Cigar Specifications</h3>
                                         <table className='table table-bordered'>
                                             <tbody>
-                                                {Object.entries({
-                                                    ...(productData?.ringGauge ? { ringGauge: productData.ringGauge } : {}),
-                                                    ...(productData?.lengthInInches ? { lengthInInches: productData.lengthInInches } : {}),
-                                                   ...(productData?.binder ? { binder: productData.binder } : {}),
-                                                   ...(productData?.filler ? { filler: productData.filler } : {}),
-                                                   ...(productData?.origin ? { origin: productData.origin } : {}),
-                                                   ...(productData?.wrapperType ? { wrapperType: productData.wrapperType } : {}),
-                                                   ...(productData?.strength ? { strength: productData.strength } : {}),
-                                                   ...(Array.isArray(productData?.flavorNotes) && productData.flavorNotes.length
-                                                       ? { flavorNotes: productData.flavorNotes }
-                                                       : {}),
-                                                   ...(productData?.boxType ? { boxType: productData.boxType } : {}),
-                                                    ...(Array.isArray(productData?.badgeIcons) && productData.badgeIcons.length
-                                                        ? { badgeIcons: productData.badgeIcons }
-                                                        : {}),
-                                                    ...(Array.isArray(productData?.trustLabels) && productData.trustLabels.length
-                                                        ? { trustLabels: productData.trustLabels }
-                                                        : {}),
-                                                    ...(productData?.complianceNotes ? { complianceNotes: productData.complianceNotes } : {}),
-                                                    ...(Array.isArray(productData?.tastingNotes) && productData.tastingNotes.length
-                                                        ? { tastingNotes: productData.tastingNotes }
-                                                        : {}),
-                                                    ...(Array.isArray(productData?.pairingSuggestions) && productData.pairingSuggestions.length
-                                                        ? { pairingSuggestions: productData.pairingSuggestions }
-                                                        : {})
-                                                }).map(([k, v]) => (
-                                                    <tr key={k}>
-                                                        <th>{k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}</th>
-                                                        <td><p>{Array.isArray(v) ? v.join(', ') : v}</p></td>
-                                                    </tr>
-                                                ))}
+                                                <tr className="stand-up">
+                                                    <th>Stand Up</th>
+                                                    <td>
+                                                        <p>35″L x 24″W x 37-45″H(front to back wheel)</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="folded-wo-wheels">
+                                                    <th>Folded (w/o wheels)</th>
+                                                    <td>
+                                                        <p>32.5″L x 18.5″W x 16.5″H</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="folded-w-wheels">
+                                                    <th>Folded (w/ wheels)</th>
+                                                    <td>
+                                                        <p>32.5″L x 24″W x 18.5″H</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="door-pass-through">
+                                                    <th>Door Pass Through</th>
+                                                    <td>
+                                                        <p>24</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="frame">
+                                                    <th>Frame</th>
+                                                    <td>
+                                                        <p>Aluminum</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="weight-wo-wheels">
+                                                    <th>Weight (w/o wheels)</th>
+                                                    <td>
+                                                        <p>20 LBS</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="weight-capacity">
+                                                    <th>Weight Capacity</th>
+                                                    <td>
+                                                        <p>60 LBS</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="width">
+                                                    <th>Width</th>
+                                                    <td>
+                                                        <p>24″</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="handle-height-ground-to-handle">
+                                                    <th>Handle height (ground to handle)</th>
+                                                    <td>
+                                                        <p>37-45″</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="wheels">
+                                                    <th>Wheels</th>
+                                                    <td>
+                                                        <p>12″ air / wide track slick tread</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="seat-back-height">
+                                                    <th>Seat back height</th>
+                                                    <td>
+                                                        <p>21.5″</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="head-room-inside-canopy">
+                                                    <th>Head room (inside canopy)</th>
+                                                    <td>
+                                                        <p>25″</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="pa_color">
+                                                    <th>Color</th>
+                                                    <td>
+                                                        <p>Black, Blue, Red, White</p>
+                                                    </td>
+                                                </tr>
+                                                <tr className="pa_size">
+                                                    <th>Size</th>
+                                                    <td>
+                                                        <p>M, S</p>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -476,7 +522,7 @@ const ProductDetails = ({params}) => {
 
 
                             {
-                                activeTabs === 6 &&
+                                activeTabs === 2 &&
 
                                 <div className='tabContent'>
                                     <div className='row'>
@@ -555,11 +601,6 @@ const ProductDetails = ({params}) => {
                                 </div>
                             }
 
-                            {activeTabs === 7 && (
-                                <div className='tabContent'>Video coming soon.</div>
-                            )}
-
-
 
 
 
@@ -570,9 +611,7 @@ const ProductDetails = ({params}) => {
                     <br />
 
                     {
-                        activeTabs === 5 && relatedProductData?.length !== 0 && (
-                            <RelatedProducts title="SIMILAR PRODUCTS" data={relatedProductData} />
-                        )
+                        relatedProductData?.length !== 0 && <RelatedProducts title="RELATED PRODUCTS" data={relatedProductData} />
                     }
 
 
