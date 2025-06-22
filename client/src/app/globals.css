@@ -1012,9 +1012,14 @@ footer .socials a:hover {
 .product-breadcrumbs a:hover {
   text-decoration: underline;
 }
+.pdp-header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 .pdp-header-info .product-title {
   font-family: var(--font-heading);
-  color: var(--color-primary-text);
+  color: var(--color-black);
   font-size: 24px;
   margin: 0;
 }
@@ -1052,4 +1057,7 @@ footer .socials a:hover {
 }
 .pdp-tab-nav .MuiTabs-indicator {
   background-color: var(--color-accent-gold);
+}
+.pdp-tab-nav .MuiTab-root.Mui-selected {
+  color: var(--color-highlight);
 }
