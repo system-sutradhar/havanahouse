@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import {
   Grid,
@@ -20,31 +20,44 @@ export default function SlideForm({
   onSuccess,
   onClose,
   formId = 'add-slide-form',
-  initialValues = { overlayText: '', ctaUrl: '', position: 'center', image: '' },
+  initialValues,
   requestUrl = '/api/homeBanner/create',
   requestFn,
 }) {
   const theme = useTheme();
+
+  const defaultValues = useMemo(
+    () =>
+      initialValues || {
+        overlayText: '',
+        ctaUrl: '',
+        position: 'center',
+        image: '',
+      },
+    [initialValues]
+  );
+
   const [form, setForm] = useState({
-    overlayText: initialValues.overlayText,
-    ctaUrl: initialValues.ctaUrl,
-    position: initialValues.position || 'center',
+    overlayText: defaultValues.overlayText,
+    ctaUrl: defaultValues.ctaUrl,
+    position: defaultValues.position || 'center',
   });
-  const [image, setImage] = useState(initialValues.image || null);
+  const [image, setImage] = useState(defaultValues.image || null);
   const [publicId, setPublicId] = useState('');
   const [preview, setPreview] = useState(initialValues.image || '');
   const [previewType, setPreviewType] = useState('image');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    if (!initialValues) return;
     setForm({
-      overlayText: initialValues.overlayText,
-      ctaUrl: initialValues.ctaUrl,
-      position: initialValues.position || 'center',
+      overlayText: defaultValues.overlayText,
+      ctaUrl: defaultValues.ctaUrl,
+      position: defaultValues.position || 'center',
     });
-    setImage(initialValues.image || null);
-    setPreview(initialValues.image || '');
-  }, [initialValues]);
+    setImage(defaultValues.image || null);
+    setPreview(defaultValues.image || '');
+  }, [defaultValues]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
