@@ -1058,39 +1058,44 @@ footer .socials a:hover {
   border-bottom: 1px solid var(--color-border);
 }
 .pdp-tab-nav.sticky {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 5;
+  left: 50%;
+  transform: translate(-50%, -10px);
+  width: 100%;
+  max-width: var(--container-max-width);
+  opacity: 0;
+  z-index: 9999;
   background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+.pdp-tab-nav.sticky.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
 }
 .pdp-tab-nav .MuiTab-root {
   text-transform: none;
   font-weight: 600;
   font-size: 15px;
+  margin-right: 12px;
 }
 .pdp-tab-nav .MuiTabs-indicator {
   background-color: var(--color-accent-gold);
 }
 .pdp-tab-nav .MuiTab-root.Mui-selected {
-  color: var(--color-highlight);
+  color: var(--color-accent-gold);
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-accent-gold);
   transition: color 0.3s ease;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .pdp-tab-nav {
-    position: fixed;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    display: block;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    background: #fff;
-    z-index: 15;
-    transition: top .3s cubic-bezier(.5,0,1,0);
-  }
-  .pdp-tab-nav.sticky {
-    top: 72px;
-    transition: top .3s cubic-bezier(0,1,.5,1);
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
   }
   .pdp-header-info .product-title {
     font-size: 18px;

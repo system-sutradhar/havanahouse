@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import BreadcrumbNav from '@/Components/pdp/Breadcrumbs';
 import ProductHeaderInfo from '@/Components/pdp/ProductHeaderInfo';
@@ -12,6 +12,7 @@ export default function ProductNewPage() {
   const [product, setProduct] = useState(null);
   const [tab, setTab] = useState(0);
   const [showStickyTabs, setShowStickyTabs] = useState(false);
+  const headerRef = useRef(null);
 
   useEffect(() => {
     if (!slug) return;
@@ -19,13 +20,14 @@ export default function ProductNewPage() {
   }, [slug]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerWidth <= 767) {
-        setShowStickyTabs(window.scrollY > 100);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth >= 992) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyTabs(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    if (headerRef.current) observer.observe(headerRef.current);
+    return () => observer.disconnect();
   }, []);
 
   if (!product) {
@@ -48,12 +50,14 @@ export default function ProductNewPage() {
   return (
     <div className="container py-3">
       <BreadcrumbNav items={breadcrumbItems} />
-      <ProductHeaderInfo
-        title={product.name}
-        rating={product.rating}
-        reviews={product.reviews?.length || 0}
-        code={product.id}
-      />
+      <div ref={headerRef} className="product-title-section">
+        <ProductHeaderInfo
+          title={product.name}
+          rating={product.rating}
+          reviews={product.reviews?.length || 0}
+          code={product.id}
+        />
+      </div>
       <ProductTabNav
         value={tab}
         onChange={setTab}

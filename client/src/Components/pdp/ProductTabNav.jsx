@@ -9,7 +9,7 @@ const ProductTabNav = ({ value = 0, onChange, tabs = [], sticky = false }) => {
   };
 
   return (
-    <Box className={`pdp-tab-nav${sticky ? ' sticky' : ''}`}>
+    <Box className={`pdp-tab-nav${sticky ? ' sticky visible' : ''}`}>
       <Tabs
         value={value}
         onChange={handleChange}
