@@ -10,11 +10,22 @@ export default function ProductNewPage() {
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [tab, setTab] = useState(0);
+  const [showStickyTabs, setShowStickyTabs] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
     fetchDataFromApi(`/api/products/slug/${slug}`).then((res) => setProduct(res));
   }, [slug]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerWidth <= 767) {
+        setShowStickyTabs(window.scrollY > 100);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   if (!product) {
     return <div className="container py-5">Loading...</div>;
@@ -31,7 +42,6 @@ export default function ProductNewPage() {
       <BreadcrumbNav items={breadcrumbItems} />
       <ProductHeaderInfo
         title={product.name}
-        code={product.id}
         rating={product.rating}
         reviews={product.reviews?.length || 0}
       />
@@ -39,6 +49,7 @@ export default function ProductNewPage() {
         value={tab}
         onChange={setTab}
         tabs={['About the product', 'Characteristics', 'Reviews', 'Delivery Info']}
+        sticky={showStickyTabs}
       />
       {/* Additional PDP content can go here */}
     </div>

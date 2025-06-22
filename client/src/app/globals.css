@@ -1043,12 +1043,15 @@ footer .socials a:hover {
   color: #fff !important;
 }
 
-.pdp-tabs-row .sku {
-  font-weight: 600;
-}
 .pdp-tab-nav {
   overflow-x: auto;
   border-bottom: 1px solid var(--color-border);
+}
+.pdp-tab-nav.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--color-primary-bg);
 }
 .pdp-tab-nav .MuiTab-root {
   text-transform: none;
@@ -1060,4 +1063,13 @@ footer .socials a:hover {
 }
 .pdp-tab-nav .MuiTab-root.Mui-selected {
   color: var(--color-highlight);
+}
+
+@media (max-width: 767px) {
+  .pdp-tab-nav {
+    display: none;
+  }
+  .pdp-tab-nav.sticky {
+    display: block;
+  }
 }
