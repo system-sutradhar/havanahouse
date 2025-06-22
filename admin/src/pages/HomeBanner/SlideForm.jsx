@@ -44,7 +44,7 @@ export default function SlideForm({
   });
   const [image, setImage] = useState(defaultValues.image || null);
   const [publicId, setPublicId] = useState('');
-  const [preview, setPreview] = useState(initialValues.image || '');
+  const [preview, setPreview] = useState(initialValues?.image || '');
   const [previewType, setPreviewType] = useState('image');
   const [saving, setSaving] = useState(false);
 
