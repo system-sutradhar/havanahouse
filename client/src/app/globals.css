@@ -1100,3 +1100,38 @@ footer .socials a:hover {
     font-size: 13px;
   }
 }
+
+.product-gallery {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+.thumbnail-column {
+  width: 90px;
+}
+.thumbnail-column .thumb-item {
+  border: 2px solid transparent;
+  margin-bottom: 10px;
+  cursor: pointer;
+  height: 70px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+.thumbnail-column .thumb-item.selected {
+  border-color: #d4af37;
+}
+.main-image img,
+.main-image .InnerImageZoom {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+@media (max-width: 768px) {
+  .product-gallery {
+    flex-direction: column;
+  }
+  .thumbnail-column {
+    display: none;
+  }
+}
