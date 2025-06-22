@@ -1114,6 +1114,12 @@ footer .socials a:hover {
   margin-right: 12px;
   box-sizing: border-box;
 }
+.thumb-swiper {
+  height: 400px;
+}
+.thumb-swiper .swiper-wrapper {
+  height: 100%;
+}
 .thumbnail-column .thumb-item {
   border: 2px solid transparent;
   margin-bottom: 10px;
@@ -1169,6 +1175,12 @@ footer .socials a:hover {
     display: flex;
     margin-top: 8px;
     overflow-x: auto;
+  }
+  .thumb-swiper {
+    height: auto;
+  }
+  .thumb-swiper .swiper-wrapper {
+    height: auto;
   }
   .thumbnail-column .thumb-item {
     margin-right: 8px;
