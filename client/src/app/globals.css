@@ -1021,7 +1021,6 @@ footer .socials a:hover {
 }
 .pdp-header-info .product-title {
   font-family: var(--font-heading);
-  color: var(--color-primary-text);
   font-size: 22px;
   font-weight: bold;
   margin: 8px 0 0 0;
@@ -1107,10 +1106,12 @@ footer .socials a:hover {
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   overflow: hidden;
+  display: flex;
+  gap: 12px;
 }
 .thumbnail-column {
   width: 90px;
-  padding-right: 8px;
+  margin-right: 12px;
   box-sizing: border-box;
 }
 .thumbnail-column .thumb-item {
@@ -1133,6 +1134,14 @@ footer .socials a:hover {
 }
 .main-image .zoom-wrap {
   position: relative;
+}
+.main-image .zoom-wrap img,
+.main-image .zoom-wrap .InnerImageZoom {
+  transition: transform 0.3s ease;
+}
+.main-image .zoom-wrap:hover img,
+.main-image .zoom-wrap:hover .InnerImageZoom {
+  transform: scale(1.05);
 }
 .main-image .zoom-icon {
   position: absolute;

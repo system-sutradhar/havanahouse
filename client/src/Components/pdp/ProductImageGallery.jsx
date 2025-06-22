@@ -50,7 +50,7 @@ const ProductImageGallery = ({ images = [], name = "" }) => {
 
   return (
     <div className="product-gallery d-flex">
-      <div className="thumbnail-column me-3 d-none d-md-block">
+      <div className="thumbnail-column d-none d-md-block">
         <Swiper
           direction="vertical"
           slidesPerView={5}

@@ -11,7 +11,7 @@ const ProductHeaderInfo = ({ title, rating = 0, reviews = 0, code }) => {
       <div className="code-rating d-flex justify-content-between align-items-center mt-1">
         {code && (
           <Typography variant="body2" className="product-code me-3">
-            Code: {code}
+            <strong>SKU ID:</strong> {code}
           </Typography>
         )}
         <div className="d-flex align-items-center rating-block">
