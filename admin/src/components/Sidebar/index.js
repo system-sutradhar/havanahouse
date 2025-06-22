@@ -24,14 +24,8 @@ const Sidebar = () => {
   const context = useContext(MyContext);
 
   const isOpenSubmenu = (index) => {
-    if (activeTab === index) {
-      // toggle current submenu
-      setIsToggleSubmenu(!isToggleSubmenu);
-    } else {
-      // open the newly selected submenu while closing others
-      setActiveTab(index);
-      setIsToggleSubmenu(true);
-    }
+    setActiveTab(index);
+    setIsToggleSubmenu(!isToggleSubmenu);
   };
   const history = useNavigate();
 
@@ -63,21 +57,20 @@ const Sidebar = () => {
       <div className="sidebar">
         <ul>
           <li>
-            <Button
-              component={NavLink}
-              to="/"
-              end
-              className={`w-100 ${activeTab === 0 ? "active" : ""}`}
-              onClick={() => {
-                isOpenSubmenu(0);
-                context.setIsOpenNav(false);
-              }}
-            >
-              <span className="icon">
-                <MdDashboard />
-              </span>
-              Dashboard
-            </Button>
+            <NavLink exact activeClassName="is-active" to="/">
+              <Button
+                className={`w-100 ${activeTab === 0 ? "active" : ""}`}
+                onClick={() => {
+                  isOpenSubmenu(0);
+                  context.setIsOpenNav(false);
+                }}
+              >
+                <span className="icon">
+                  <MdDashboard />
+                </span>
+                Dashboard
+              </Button>
+            </NavLink>
           </li>
 
           <li>
@@ -90,7 +83,7 @@ const Sidebar = () => {
               <span className="icon">
                 <TbSlideshow />
               </span>
-              Banners
+              Home Banner Slides
               <span className="arrow">
                 <FaAngleRight />
               </span>
@@ -105,42 +98,12 @@ const Sidebar = () => {
               <ul className="submenu">
                 <li>
                   <NavLink
+                    exact
+                    activeClassName="is-active"
                     to="/homeBannerSlide"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Home Slides
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/banners"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Home Banners
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/homeSideBanners"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Side Banners
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/homeBottomBanners"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
-                    onClick={() => context.setIsOpenNav(false)}
-                  >
-                    Bottom Banners
                   </NavLink>
                 </li>
               </ul>
@@ -215,9 +178,9 @@ const Sidebar = () => {
               <ul className="submenu">
                 <li>
                   <NavLink
+                    exact
+                    activeClassName="is-active"
                     to="/products"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Product List
@@ -226,9 +189,9 @@ const Sidebar = () => {
 
                 <li>
                   <NavLink
+                    exact
+                    activeClassName="is-active"
                     to="/product/upload"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Product Upload
@@ -236,9 +199,9 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
+                    exact
+                    activeClassName="is-active"
                     to="/productRAMS/add"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Add Product RAMS
@@ -246,9 +209,9 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
+                    exact
+                    activeClassName="is-active"
                     to="/productWEIGHT/add"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Add Product WEIGHT
@@ -256,9 +219,9 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
+                    exact
+                    activeClassName="is-active"
                     to="/productSIZE/add"
-                    end
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
                     onClick={() => context.setIsOpenNav(false)}
                   >
                     Add Product SIZE
@@ -269,59 +232,169 @@ const Sidebar = () => {
           </li>
 
           <li>
-            <Button
-              component={NavLink}
-              to="/orders"
-              end
-              className={`w-100 ${
-                activeTab === 4 && isToggleSubmenu === true ? "active" : ""
-              }`}
-              onClick={() => {
-                isOpenSubmenu(4);
-                context.setIsOpenNav(false);
-              }}
-            >
-              <span className="icon">
-                {" "}
-                <FaClipboardCheck fontSize="small" />
-              </span>
-              Orders
-            </Button>
+            <NavLink exact activeClassName="is-active" to="/orders">
+              <Button
+                className={`w-100 ${
+                  activeTab === 4 && isToggleSubmenu === true ? "active" : ""
+                }`}
+                onClick={() => {
+                  isOpenSubmenu(4);
+                  context.setIsOpenNav(false);
+                }}
+              >
+                <span className="icon">
+                  {" "}
+                  <FaClipboardCheck fontSize="small" />
+                </span>
+                Orders
+              </Button>
+            </NavLink>
           </li>
 
           <li>
             <Button
-              component={NavLink}
-              to="/appSettings"
-              end
-              className={`w-100 ${activeTab === 5 ? "active" : ""}`}
-              onClick={() => {
-                setActiveTab(5);
-                context.setIsOpenNav(false);
-              }}
+              className={`w-100 ${
+                activeTab === 5 && isToggleSubmenu === true ? "active" : ""
+              }`}
+              onClick={() => isOpenSubmenu(5)}
             >
               <span className="icon">
-                <IoIosSettings />
+                <TbSlideshow />
               </span>
-              App Settings
+              Home Banners
+              <span className="arrow">
+                <FaAngleRight />
+              </span>
             </Button>
+            <div
+              className={`submenuWrapper ${
+                activeTab === 5 && isToggleSubmenu === true
+                  ? "colapse"
+                  : "colapsed"
+              }`}
+            >
+              <ul className="submenu">
+                <li>
+                  <NavLink
+                    exact
+                    activeClassName="is-active"
+                    to="/banners"
+                    onClick={() => context.setIsOpenNav(false)}
+                  >
+                    Banners List
+                  </NavLink>
+                </li>
+
+              </ul>
+            </div>
           </li>
+
           <li>
             <Button
-              component={NavLink}
-              to="/notifications"
-              end
-              className={`w-100 ${activeTab === 6 ? "active" : ""}`}
+              className={`w-100 ${
+                activeTab === 6 && isToggleSubmenu === true ? "active" : ""
+              }`}
+              onClick={() => isOpenSubmenu(6)}
+            >
+              <span className="icon">
+                <TbSlideshow />
+              </span>
+              Home Side Banners
+              <span className="arrow">
+                <FaAngleRight />
+              </span>
+            </Button>
+            <div
+              className={`submenuWrapper ${
+                activeTab === 6 && isToggleSubmenu === true
+                  ? "colapse"
+                  : "colapsed"
+              }`}
+            >
+              <ul className="submenu">
+                <li>
+                  <NavLink
+                    exact
+                    activeClassName="is-active"
+                    to="/homeSideBanners"
+                    onClick={() => context.setIsOpenNav(false)}
+                  >
+                    Banners List
+                  </NavLink>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li>
+            <Button
+              className={`w-100 ${
+                activeTab === 7 && isToggleSubmenu === true ? "active" : ""
+              }`}
+              onClick={() => isOpenSubmenu(7)}
+            >
+              <span className="icon">
+                <TbSlideshow />
+              </span>
+              Home Bottom Banners
+              <span className="arrow">
+                <FaAngleRight />
+              </span>
+            </Button>
+            <div
+              className={`submenuWrapper ${
+                activeTab === 7 && isToggleSubmenu === true
+                  ? "colapse"
+                  : "colapsed"
+              }`}
+            >
+              <ul className="submenu">
+                <li>
+                  <NavLink
+                    exact
+                    activeClassName="is-active"
+                    to="/homeBottomBanners"
+                    onClick={() => context.setIsOpenNav(false)}
+                  >
+                    Banners List
+                  </NavLink>
+                </li>
+
+              </ul>
+            </div>
+          </li>
+          <li>
+            <NavLink
+              exact
+              activeClassName="is-active"
+              to="/appSettings"
               onClick={() => {
-                setActiveTab(6);
+                setActiveTab(8);
                 context.setIsOpenNav(false);
               }}
             >
-              <span className="icon">
-                <FaBell />
-              </span>
-              Notifications
-            </Button>
+              <Button className={`w-100 ${activeTab === 8 ? "active" : ""}`}>
+                <span className="icon">
+                  <IoIosSettings />
+                </span>
+                App Settings
+              </Button>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              exact
+              activeClassName="is-active"
+              to="/notifications"
+              onClick={() => context.setIsOpenNav(false)}
+            >
+              <Button className="w-100">
+                <span className="icon">
+                  <FaBell />
+                </span>
+                Notifications
+              </Button>
+            </NavLink>
           </li>
         </ul>
 
