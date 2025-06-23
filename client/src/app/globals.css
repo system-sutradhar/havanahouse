@@ -820,8 +820,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .banner-img {
-  object-fit: cover !important;
-  object-position: center !important;
+  object-fit: contain;
+  object-position: center;
 }
 
 footer {
