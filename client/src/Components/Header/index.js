@@ -350,6 +350,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import { MyContext } from "@/context/ThemeContext";
 import { getProductImage } from '@/utils/imageFallback';
+import { fetchDataFromApi } from "@/utils/api";
 import "../../app/header.css";
 
 
