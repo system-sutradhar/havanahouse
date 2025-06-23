@@ -44,7 +44,8 @@
   width: 100%;
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 10px;
+  padding-left: var(--header-footer-padding);
+  padding-right: var(--header-footer-padding);
 }
 
 /* Notifcation section */

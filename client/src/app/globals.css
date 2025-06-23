@@ -58,6 +58,13 @@ body {
   padding-right: var(--container-side-padding);
 }
 
+@media (max-width: 767px) {
+  .container {
+    padding-left: var(--container-side-padding-mobile);
+    padding-right: var(--container-side-padding-mobile);
+  }
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-color);

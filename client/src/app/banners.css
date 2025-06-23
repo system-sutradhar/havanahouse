@@ -25,9 +25,9 @@
   
   /* Image inside the slide */
   .banner-slide .banner-img {
-    width: auto;
-    height: auto;
-    object-fit: inherit;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   
   /* Optional: Swiper navigation buttons styling */

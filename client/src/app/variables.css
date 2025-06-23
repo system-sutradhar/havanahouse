@@ -12,8 +12,10 @@
     --color-mega-hover: var(--color-highlight);
 
     --font-body: 'Arial', sans-serif;
-    --container-max-width: 100%;
-    --container-side-padding: 15px;
+    --container-max-width: 1366px;
+    --container-side-padding: 32px;
+    --container-side-padding-mobile: 16px;
+    --header-footer-padding: 32px;
 
     /* Common Colors */
     --color-black: #000;
