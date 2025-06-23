@@ -9,7 +9,7 @@ import { FaAngleDown } from "react-icons/fa6";
 import Head from "next/head";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductItem from '@/Components/ProductItem';
 import Pagination from '@mui/material/Pagination';
@@ -28,6 +28,7 @@ const PlpPage = () => {
     const openDropdown = Boolean(anchorEl);
     const [isOpenFilter, setIsOpenFilter] = useState(false);
     const [subCat, setSubCat] = useState("");
+    const lastQueryRef = useRef("");
 
     const context = useContext(MyContext);
     const searchParams = useSearchParams();
@@ -43,12 +44,15 @@ const PlpPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        if (!query) return;
+        if (!query || query === lastQueryRef.current) return;
+        lastQueryRef.current = query;
         setisLoading(true);
-        fetchDataFromApi(`/api/search?q=${encodeURIComponent(query)}`).then((res) => {
+        fetchDataFromApi(`/api/search?q=${encodeURIComponent(query)}`)
+          .then((res) => {
             setProductData(res);
             setisLoading(false);
-        }).catch(() => setisLoading(false));
+          })
+          .catch(() => setisLoading(false));
     }, [query]);
 
 

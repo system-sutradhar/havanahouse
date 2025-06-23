@@ -341,6 +341,7 @@
 
 'use client'
 import React, { useContext, useState, useEffect, useRef } from "react";
+import useDebounce from "@/hooks/useDebounce";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -356,6 +357,8 @@ const Header = () => {
   const [searchInput, setSearchInput] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const debouncedInput = useDebounce(searchInput, 300);
   const [showNotification, setShowNotification] = useState(true);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -399,9 +402,22 @@ const Header = () => {
       .catch((err) => console.error("Failed to load notification", err));
   }, []);
 
+  // fetch suggestions when search input changes
+  useEffect(() => {
+    if (!debouncedInput || debouncedInput.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+    fetchDataFromApi(`/api/search/suggest?q=${encodeURIComponent(debouncedInput)}`)
+      .then((res) => {
+        if (Array.isArray(res)) setSuggestions(res);
+      })
+      .catch(() => setSuggestions([]));
+  }, [debouncedInput]);
+
   const searchProducts = () => {
     if (searchInput.trim()) {
-      router.push(`/plp?q=${encodeURIComponent(searchInput.trim())}`);
+      router.push(`/search?q=${encodeURIComponent(searchInput.trim())}`);
     }
   };
 
@@ -482,6 +498,15 @@ const Header = () => {
             >
               {isLoading ? <CircularProgress size={18} /> : <FaSearch />}
             </button>
+            {suggestions.length > 0 && (
+              <ul className="suggestion-list">
+                {suggestions.map((s, i) => (
+                  <li key={i} onClick={() => { setSearchInput(s); setSuggestions([]); }}>
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Icons */}
@@ -660,6 +685,15 @@ const Header = () => {
             <FaSearch onClick={() => setIsSearchOpen(!isSearchOpen)} />
           )}
         </button>
+        {suggestions.length > 0 && (
+          <ul className="suggestion-list">
+            {suggestions.map((s, i) => (
+              <li key={i} onClick={() => { setSearchInput(s); setSuggestions([]); }}>
+                {s}
+              </li>
+            ))}
+          </ul>
+        )}
         </div>
 
       {isMobileNavOpen && (

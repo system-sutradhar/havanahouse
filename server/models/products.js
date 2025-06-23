@@ -42,6 +42,15 @@ const productSchema = new mongoose.Schema({
   dateCreated: { type: Date, default: Date.now },
 });
 
+// Create a text index for efficient search across key fields
+productSchema.index({
+  name: "text",
+  brand: "text",
+  description: "text",
+  catName: "text",
+  subCatName: "text",
+});
+
 productSchema.virtual("id").get(function () {
   return this._id.toHexString();
 });
