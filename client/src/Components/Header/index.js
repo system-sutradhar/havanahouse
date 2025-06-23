@@ -401,15 +401,7 @@ const Header = () => {
 
   const searchProducts = () => {
     if (searchInput.trim()) {
-      setIsLoading(true);
-      fetch(`/api/search?q=${searchInput}`)
-        .then((res) => res.json())
-        .then((data) => {
-          context.setSearchData(data);
-          setIsLoading(false);
-          router.push("/search");
-        })
-        .catch(() => setIsLoading(false));
+      router.push(`/plp?q=${encodeURIComponent(searchInput.trim())}`);
     }
   };
 
@@ -467,6 +459,7 @@ const Header = () => {
           {/* Search */}
           <div className={`search-bar ${isSearchOpen ? "expanded" : ""}`}>
             <input
+              className="search-input"
               type="text"
               placeholder="Search cigars, brands, categories..."
               value={searchInput}
@@ -477,6 +470,7 @@ const Header = () => {
               aria-label="Search products"
             />
             <button
+              className="search-btn"
               onClick={() => {
                 if (isSearchOpen && searchInput) {
                   searchProducts();
@@ -645,6 +639,7 @@ const Header = () => {
       {/* 🔍 Mobile Search (Below Header) */}
         <div className="mobile-search-bar">
           <input
+            className="search-input"
             type="text"
             placeholder="Search cigars, brands, categories..."
             value={searchInput}
@@ -655,6 +650,7 @@ const Header = () => {
             aria-label="Search products"
           />
         <button
+          className="search-btn"
           onClick={searchProducts}
           aria-label="Search"
         >

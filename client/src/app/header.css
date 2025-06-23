@@ -164,36 +164,38 @@
 .search-bar {
   display: flex;
   align-items: center;
-  background: #fff;
-  border: 2px solid #111;
+  background: var(--color-white);
+  border: 1px solid var(--color-accent-gold);
   margin: 0 20px;
-  border-radius: 50px;
+  border-radius: 8px;
   transition: max-width 0.3s ease, border-color 0.3s ease;
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
   overflow: hidden;
+  height: 44px;
 }
 
 .search-bar.expanded {
   max-width: 100%;
 }
 
-.search-bar input {
+.search-bar .search-input {
   border: none;
   outline: none;
-  font-size: 14px;
+  font-size: 16px;
   flex: 1;
-  padding: 10px 12px;
+  padding: 8px 12px;
   font-family: var(--font-body);
-  color: #111;
+  color: var(--color-dark-text);
   background: transparent;
 }
 
-.search-bar input::placeholder {
+.search-bar .search-input::placeholder {
   color: #777;
+  font-style: italic;
 }
 
-.search-bar button {
+.search-bar .search-btn {
   background: none;
   border: none;
   padding: 6px;
@@ -202,9 +204,9 @@
   align-items: center;
 }
 
-.search-bar button svg {
+.search-bar .search-btn svg {
   font-size: 16px;
-  color: #111;
+  color: var(--color-accent-gold);
 }
 
 .action-icons {
@@ -254,42 +256,44 @@
 .mobile-search-bar {
   display: flex;
   align-items: center;
-  background: #fff;
-  border: 2px solid #000;
-  border-radius: 30px;
+  background: var(--color-white);
+  border: 1px solid var(--color-accent-gold);
+  border-radius: 8px;
   margin: 12px auto;
   padding: 6px 12px;
-  width: calc(100% - 40px);
-  max-width: 480px;
+  width: calc(100% - 32px);
+  max-width: 500px;
   transition: all 0.3s ease;
+  height: 44px;
 }
 
-.mobile-search-bar input {
+.mobile-search-bar .search-input {
   border: none;
   flex: 1;
-  font-size: 14px;
-  padding: 10px;
+  font-size: 16px;
+  padding: 8px;
   outline: none;
   background: transparent;
-  color: #000;
+  color: var(--color-dark-text);
 }
 
-.mobile-search-bar input::placeholder {
+.mobile-search-bar .search-input::placeholder {
   color: #888;
+  font-style: italic;
 }
 
-.mobile-search-bar button {
+.mobile-search-bar .search-btn {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 16px;
-  color: #000;
+  color: var(--color-accent-gold);
   padding: 6px;
 }
 
-.mobile-search-bar button svg {
+.mobile-search-bar .search-btn svg {
   font-size: 16px;
-  color: #111;
+  color: var(--color-accent-gold);
 }
 /* 🖥️ Hide mobile search on desktop */
 @media (min-width: 992px) {
