@@ -24,8 +24,12 @@ const Sidebar = () => {
   const context = useContext(MyContext);
 
   const isOpenSubmenu = (index) => {
-    setActiveTab(index);
-    setIsToggleSubmenu(!isToggleSubmenu);
+    if (activeTab === index) {
+      setIsToggleSubmenu(!isToggleSubmenu);
+    } else {
+      setActiveTab(index);
+      setIsToggleSubmenu(true);
+    }
   };
   const history = useNavigate();
 
