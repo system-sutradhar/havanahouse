@@ -51,9 +51,11 @@ body {
 .bg-blue{background: var(--primary-color)}
 
 .container {
+  width: 100%;
   max-width: var(--container-max-width);
   margin: 0 auto;
-  /* padding: 0 1rem; */
+  padding-left: var(--container-side-padding);
+  padding-right: var(--container-side-padding);
 }
 
 /* Typography */

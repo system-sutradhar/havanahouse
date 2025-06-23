@@ -279,7 +279,7 @@
 /* Centered content inside header */
 .asos-container {
   box-sizing: border-box;
-  max-width: 1366px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 0 32px;
   width: 100%;
@@ -293,7 +293,7 @@
 
 /* Inner max width container (align everything) */
 .asos-container {
-  max-width: 1366px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 0 32px;
   width: 100%;
