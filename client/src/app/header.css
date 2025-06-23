@@ -168,12 +168,13 @@
   margin: 0 20px;
   border-radius: 50px;
   transition: max-width 0.3s ease, border-color 0.3s ease;
+  max-width: 400px;
   width: 100%;
   overflow: hidden;
 }
 
 .search-bar.expanded {
-  max-width: 400px;
+  max-width: 100%;
 }
 
 .search-bar input {
