@@ -346,6 +346,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaUser, FaHeart, FaShoppingBag, FaSearch } from "react-icons/fa";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import CircularProgress from "@mui/material/CircularProgress";
 import { MyContext } from "@/context/ThemeContext";
 import { getProductImage } from '@/utils/imageFallback';
 import "../../app/header.css";
@@ -354,6 +355,7 @@ import "../../app/header.css";
 const Header = () => {
   const [searchInput, setSearchInput] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showNotification, setShowNotification] = useState(true);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -399,14 +401,15 @@ const Header = () => {
 
   const searchProducts = () => {
     if (searchInput.trim()) {
-      context.setIsLoading(true);
+      setIsLoading(true);
       fetch(`/api/search?q=${searchInput}`)
         .then((res) => res.json())
         .then((data) => {
           context.setSearchData(data);
-          context.setIsLoading(false);
+          setIsLoading(false);
           router.push("/search");
-        });
+        })
+        .catch(() => setIsLoading(false));
     }
   };
 
@@ -483,7 +486,7 @@ const Header = () => {
               }}
               aria-label="Search"
             >
-              <FaSearch />
+              {isLoading ? <CircularProgress size={18} /> : <FaSearch />}
             </button>
           </div>
 
@@ -651,12 +654,16 @@ const Header = () => {
             }}
             aria-label="Search products"
           />
-          <button
-            onClick={searchProducts}
-            aria-label="Search"
-          >
+        <button
+          onClick={searchProducts}
+          aria-label="Search"
+        >
+          {isLoading ? (
+            <CircularProgress size={18} />
+          ) : (
             <FaSearch onClick={() => setIsSearchOpen(!isSearchOpen)} />
-          </button>
+          )}
+        </button>
         </div>
 
       {isMobileNavOpen && (
