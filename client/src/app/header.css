@@ -256,6 +256,22 @@
   justify-content: center;
 }
 
+.icon-link {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: var(--color-accent-gold);
+  color: var(--color-primary-bg);
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 10px;
+  line-height: 1;
+}
+
 .action-icons a svg {
   font-size: 25px;
   transition: color 0.3s ease;

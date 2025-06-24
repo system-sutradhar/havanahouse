@@ -4,7 +4,7 @@ import useDebounce from "@/hooks/useDebounce";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaUser, FaHeart, FaShoppingBag, FaSearch } from "react-icons/fa";
+import { FaUser, FaHeart, FaShoppingBag, FaSearch, FaExchangeAlt } from "react-icons/fa";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import { MyContext } from "@/context/ThemeContext";
@@ -189,16 +189,22 @@ const Header = () => {
 
           {/* Icons */}
           <div className="action-icons">
-          <Link href="/signIn" aria-label="Login">
-            <FaUser />
-          </Link>
-          <Link href="/wishlist" aria-label="Wishlist">
-            <FaHeart />
-          </Link>
-          <Link href="/cart" aria-label="Cart">
-            <FaShoppingBag />
-          </Link>
-        </div>
+            <Link href="/signIn" aria-label="Login" className="icon-link">
+              <FaUser />
+            </Link>
+            <Link href="/wishlist" aria-label="Wishlist" className="icon-link">
+              <FaHeart />
+              <span className="cart-count">0</span>
+            </Link>
+            <Link href="/compare" aria-label="Compare" className="icon-link">
+              <FaExchangeAlt />
+              <span className="cart-count">0</span>
+            </Link>
+            <Link href="/cart" aria-label="Cart" className="icon-link position-relative">
+              <FaShoppingBag />
+              <span className="cart-count">{context.cartData?.length || 0}</span>
+            </Link>
+          </div>
         </div>
       </div>
       <nav className="main-nav">
