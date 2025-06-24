@@ -29,27 +29,32 @@ const UserMenu = ({ isLogin }) => {
         <FaUser />
       </button>
       {open && (
-        <ul className="user-dropdown" role="menu">
+        <div className="user-dropdown" role="menu">
+          <div className="user-dropdown-header">
+            <span>{isLogin ? "My Account" : "Sign In | Join"}</span>
+            <button className="close-btn" onClick={() => setOpen(false)} aria-label="Close menu">&times;</button>
+          </div>
+          <ul>
           {isLogin ? (
             <>
               <li>
                 <Link href="/account">
-                  <FaUser className="menu-icon" /> My Account
+                  <FaUser className="menu-icon" /> <span>My Account</span>
                 </Link>
               </li>
               <li>
                 <Link href="/account/orders">
-                  <FaBoxOpen className="menu-icon" /> My Orders
+                  <FaBoxOpen className="menu-icon" /> <span>My Orders</span>
                 </Link>
               </li>
               <li>
                 <Link href="/returns">
-                  <FaUndo className="menu-icon" /> Returns Information
+                  <FaUndo className="menu-icon" /> <span>Returns Information</span>
                 </Link>
               </li>
               <li>
                 <Link href="/account/preferences">
-                  <FaEnvelope className="menu-icon" /> Contact Preferences
+                  <FaEnvelope className="menu-icon" /> <span>Contact Preferences</span>
                 </Link>
               </li>
               <li>
@@ -60,22 +65,22 @@ const UserMenu = ({ isLogin }) => {
             <>
               <li>
                 <Link href="/signIn?redirect=account">
-                  <FaUser className="menu-icon" /> My Account
+                  <FaUser className="menu-icon" /> <span>My Account</span>
                 </Link>
               </li>
               <li>
                 <Link href="/signIn?redirect=orders">
-                  <FaBoxOpen className="menu-icon" /> My Orders
+                  <FaBoxOpen className="menu-icon" /> <span>My Orders</span>
                 </Link>
               </li>
               <li>
                 <Link href="/returns">
-                  <FaUndo className="menu-icon" /> Returns Information
+                  <FaUndo className="menu-icon" /> <span>Returns Information</span>
                 </Link>
               </li>
               <li>
                 <Link href="/signIn?redirect=preferences">
-                  <FaEnvelope className="menu-icon" /> Contact Preferences
+                  <FaEnvelope className="menu-icon" /> <span>Contact Preferences</span>
                 </Link>
               </li>
               <li>
@@ -83,7 +88,8 @@ const UserMenu = ({ isLogin }) => {
               </li>
             </>
           )}
-        </ul>
+          </ul>
+        </div>
       )}
     </div>
   );
