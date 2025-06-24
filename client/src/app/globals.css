@@ -1084,6 +1084,8 @@ footer .socials a:hover {
   z-index: 9999;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   padding: 6px 10px;
+  box-sizing: border-box;
+  width: 100%;
 }
 .pdp-tab-nav.sticky.visible {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -1278,6 +1280,8 @@ footer .socials a:hover {
   box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
   padding: 8px 10px;
   display: none;
+  box-sizing: border-box;
+  width: 100%;
 }
 @media (max-width: 768px) {
   .sticky-add-cart {
