@@ -171,7 +171,7 @@
   transition: max-width 0.3s ease, border-color 0.3s ease;
   max-width: 500px;
   width: 100%;
-  overflow: hidden;
+  overflow: visible; /* allow dropdown to show */
   height: 44px;
   position: relative; /* ensures suggestion list aligns under input */
 }
