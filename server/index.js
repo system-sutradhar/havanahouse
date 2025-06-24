@@ -54,6 +54,11 @@ app.use(`/api/my-list`, myListSchema);
 app.use(`/api/orders`, ordersSchema);
 app.use(`/api/homeBanner`, homeBannerSchema);
 app.use(`/api/search`, searchRoutes);
+// Provide a direct suggestion endpoint to avoid missing route errors
+app.get('/api/search/suggest', async (req, res, next) => {
+  // delegate to the router handler
+  return searchRoutes.handle({ ...req, url: '/suggest' }, res, next);
+});
 app.use(`/api/banners`, bannersSchema);
 app.use(`/api/homeSideBanners`, homeSideBannerSchema);
 app.use(`/api/homeBottomBanners`, homeBottomBannerSchema);
