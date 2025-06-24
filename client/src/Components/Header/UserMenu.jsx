@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { FaUser, FaBoxOpen, FaUndo, FaEnvelope } from "react-icons/fa";
 
 const UserMenu = ({ isLogin }) => {
   const [open, setOpen] = useState(false);
@@ -23,21 +24,64 @@ const UserMenu = ({ isLogin }) => {
         aria-haspopup="true"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
+        aria-label="User menu"
       >
-        My Account
+        <FaUser />
       </button>
       {open && (
         <ul className="user-dropdown" role="menu">
           {isLogin ? (
             <>
-              <li><Link href="/account">My Account</Link></li>
-              <li><Link href="/account/orders">My Orders</Link></li>
-              <li><Link href="/returns">Returns Information</Link></li>
-              <li><Link href="/account/preferences">Contact Preferences</Link></li>
-              <li><Link href="/logout">Sign Out</Link></li>
+              <li>
+                <Link href="/account">
+                  <FaUser className="menu-icon" /> My Account
+                </Link>
+              </li>
+              <li>
+                <Link href="/account/orders">
+                  <FaBoxOpen className="menu-icon" /> My Orders
+                </Link>
+              </li>
+              <li>
+                <Link href="/returns">
+                  <FaUndo className="menu-icon" /> Returns Information
+                </Link>
+              </li>
+              <li>
+                <Link href="/account/preferences">
+                  <FaEnvelope className="menu-icon" /> Contact Preferences
+                </Link>
+              </li>
+              <li>
+                <Link href="/logout">Sign Out</Link>
+              </li>
             </>
           ) : (
-            <li><Link href="/login">Sign In / Sign Up</Link></li>
+            <>
+              <li>
+                <Link href="/signIn?redirect=account">
+                  <FaUser className="menu-icon" /> My Account
+                </Link>
+              </li>
+              <li>
+                <Link href="/signIn?redirect=orders">
+                  <FaBoxOpen className="menu-icon" /> My Orders
+                </Link>
+              </li>
+              <li>
+                <Link href="/returns">
+                  <FaUndo className="menu-icon" /> Returns Information
+                </Link>
+              </li>
+              <li>
+                <Link href="/signIn?redirect=preferences">
+                  <FaEnvelope className="menu-icon" /> Contact Preferences
+                </Link>
+              </li>
+              <li>
+                <Link href="/signIn">Sign In / Sign Up</Link>
+              </li>
+            </>
           )}
         </ul>
       )}

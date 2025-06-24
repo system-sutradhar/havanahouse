@@ -187,7 +187,7 @@ const Header = () => {
           <div className="action-icons">
             <UserMenu isLogin={context.isLogin} />
             <Link
-              href={context.isLogin ? "/wishlist" : "/login?redirect=wishlist"}
+              href={context.isLogin ? "/wishlist" : "/signIn?redirect=wishlist"}
               aria-label="Wishlist"
               className="icon-link"
             >
@@ -197,7 +197,7 @@ const Header = () => {
               )}
             </Link>
             <Link
-              href={context.isLogin ? "/compare" : "/login?redirect=compare"}
+              href={context.isLogin ? "/compare" : "/signIn?redirect=compare"}
               aria-label="Compare"
               className="icon-link"
             >
@@ -443,11 +443,11 @@ const Header = () => {
                   <FaUser /> {context.user.name || context.user.email}
                 </div>
               )}
-              <Link href={context.isLogin ? "/account" : "/login"}>My Account</Link>
-              <Link href={context.isLogin ? "/account/orders" : "/login?redirect=orders"}>My Orders</Link>
+              <Link href={context.isLogin ? "/account" : "/signIn?redirect=account"}>My Account</Link>
+              <Link href={context.isLogin ? "/account/orders" : "/signIn?redirect=orders"}>My Orders</Link>
               <Link href="/returns">Returns</Link>
               <Link href="/account/preferences">Preferences</Link>
-              <Link href={context.isLogin ? "/logout" : "/login"}>{context.isLogin ? "Sign Out" : "Sign In"}</Link>
+              <Link href={context.isLogin ? "/logout" : "/signIn"}>{context.isLogin ? "Sign Out" : "Sign In"}</Link>
             </div>
 
             {/* 🔸 Social Icons */}

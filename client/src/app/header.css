@@ -315,6 +315,10 @@
 .user-dropdown li {
   list-style: none;
 }
+.user-dropdown .menu-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
 
 .user-dropdown a {
   display: block;
