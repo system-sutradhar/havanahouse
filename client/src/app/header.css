@@ -2,21 +2,12 @@
   width: 100%;
   font-family: var(--font-body);
   color: var(--color-primary-text);
-  position: sticky;
-  top: 0;
-  z-index: 999;
   background-color: var(--color-header-bg);
 }
 
+/* fixed state removed to disable sticky behaviour */
 .hh-header.fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   background: var(--color-header-bg);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  padding: 6px 10px;
-  z-index: 9999;
 }
 
 .container-1366 {
@@ -542,7 +533,7 @@
 ================================= */
 
 .main-nav {
-  background-color: var(--color-light-bg);
+  background-color: #fff;
   position: relative;
 }
 

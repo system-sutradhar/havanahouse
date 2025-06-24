@@ -45,15 +45,6 @@ const Header = () => {
     };
   }, [isMobileNavOpen]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (headerRef.current) {
-        headerRef.current.classList.toggle("fixed", window.scrollY > 100);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/notification`)
