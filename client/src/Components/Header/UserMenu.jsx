@@ -19,19 +19,30 @@ const UserMenu = ({ isLogin }) => {
 
   return (
     <div className="user-menu" ref={menuRef}>
-      <button
+      <a
+        href="#"
         className="icon-link"
+        role="button"
         aria-haspopup="true"
         aria-expanded={open}
-        onClick={() => setOpen(!open)}
+        onClick={(e) => {
+          e.preventDefault();
+          setOpen(!open);
+        }}
         aria-label="User menu"
       >
         <FaUser />
-      </button>
+      </a>
       {open && (
         <div className="user-dropdown" role="menu">
           <div className="user-dropdown-header">
-            <span>{isLogin ? "My Account" : "Sign In | Join"}</span>
+            {isLogin ? (
+              <span>My Account</span>
+            ) : (
+              <span className="signin-links">
+                <Link href="/signIn">Sign In</Link> | <Link href="/join">Join</Link>
+              </span>
+            )}
             <button className="close-btn" onClick={() => setOpen(false)} aria-label="Close menu">&times;</button>
           </div>
           <ul>
@@ -82,9 +93,6 @@ const UserMenu = ({ isLogin }) => {
                 <Link href="/signIn?redirect=preferences">
                   <FaEnvelope className="menu-icon" /> <span>Contact Preferences</span>
                 </Link>
-              </li>
-              <li>
-                <Link href="/signIn">Sign In / Sign Up</Link>
               </li>
             </>
           )}
