@@ -1,7 +1,7 @@
 .hh-header {
   width: 100%;
   font-family: var(--font-body);
-  color: var(--color-primary-text);
+  color: var(--color-dark-text);
   background-color: var(--color-header-bg);
 }
 
@@ -567,7 +567,7 @@
   background-color: var(--color-highlight);
   font-weight: bold;
   border-radius: 4px;
-  color: var(--color-primary-text);
+  color: var(--color-dark-text);
 }
 
 .nav-item:hover .mega-menu {
