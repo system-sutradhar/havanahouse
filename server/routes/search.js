@@ -48,15 +48,15 @@ router.get("/suggest", async (req, res) => {
 
     let items = await Product.find(
       { $text: { $search: q } },
-      { name: 1, images: 1, score: { $meta: "textScore" } }
+      { name: 1, brand: 1, images: 1, score: { $meta: "textScore" } }
     )
       .sort({ score: { $meta: "textScore" } })
       .limit(5)
       .lean();
 
     if (items.length < 5) {
-      const allProducts = await Product.find({}, "name images").lean();
-      const fuse = new Fuse(allProducts, { keys: ["name"], threshold: 0.4 });
+      const allProducts = await Product.find({}, "name brand images").lean();
+      const fuse = new Fuse(allProducts, { keys: ["name", "brand"], threshold: 0.4 });
       items = fuse.search(q).map((r) => r.item).slice(0, 5);
     }
 
