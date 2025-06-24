@@ -173,6 +173,7 @@
   width: 100%;
   overflow: hidden;
   height: 44px;
+  position: relative; /* ensures suggestion list aligns under input */
 }
 .suggestion-list {
   position: absolute;
@@ -287,6 +288,7 @@
   max-width: 500px;
   transition: all 0.3s ease;
   height: 44px;
+  position: relative; /* keep suggestions anchored */
 }
 
 .mobile-search-bar .search-input {
