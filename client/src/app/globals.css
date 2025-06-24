@@ -52,16 +52,17 @@ body {
 
 .container {
   width: 100%;
-  max-width: var(--container-max-width);
+  max-width: 100%;
   margin: 0 auto;
-  padding-left: var(--container-side-padding);
-  padding-right: var(--container-side-padding);
+  padding-left: var(--container-side-padding-mobile);
+  padding-right: var(--container-side-padding-mobile);
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .container {
-    padding-left: var(--container-side-padding-mobile);
-    padding-right: var(--container-side-padding-mobile);
+    max-width: var(--container-max-width);
+    padding-left: var(--container-side-padding);
+    padding-right: var(--container-side-padding);
   }
 }
 

@@ -3,11 +3,7 @@
   /* body{padding-bottom: 45px !important;} */
   .res-hide{display: none !important;}
 
-  .container{
-    max-width: 100% !important;
-    padding-left: var(--container-side-padding-mobile) !important;
-    padding-right: var(--container-side-padding-mobile) !important;
-  }
+
 
   .res-full{width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important;}
 

@@ -12,10 +12,18 @@
 
 .container-1366 {
   width: 100%;
-  max-width: var(--container-max-width);
+  max-width: 100%;
   margin: 0 auto;
-  padding-left: var(--header-footer-padding);
-  padding-right: var(--header-footer-padding);
+  padding-left: var(--container-side-padding-mobile);
+  padding-right: var(--container-side-padding-mobile);
+}
+
+@media (min-width: 768px) {
+  .container-1366 {
+    max-width: var(--container-max-width);
+    padding-left: var(--header-footer-padding);
+    padding-right: var(--header-footer-padding);
+  }
 }
 
 /* Notifcation section */
