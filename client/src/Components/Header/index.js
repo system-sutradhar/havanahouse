@@ -502,8 +502,9 @@ const Header = () => {
             {suggestions.length > 0 && (
               <ul className="suggestion-list">
                 {suggestions.map((s, i) => (
-                  <li key={i} onClick={() => { setSearchInput(s); setSuggestions([]); }}>
-                    {s}
+                  <li key={i} onClick={() => { setSearchInput(s.name); setSuggestions([]); }}>
+                    <img src={s.images?.[0]} alt={s.name} width="40" height="40" />
+                    <span dangerouslySetInnerHTML={{__html: s.highlight || s.name}} />
                   </li>
                 ))}
               </ul>
@@ -689,8 +690,9 @@ const Header = () => {
         {suggestions.length > 0 && (
           <ul className="suggestion-list">
             {suggestions.map((s, i) => (
-              <li key={i} onClick={() => { setSearchInput(s); setSuggestions([]); }}>
-                {s}
+              <li key={i} onClick={() => { setSearchInput(s.name); setSuggestions([]); }}>
+                <img src={s.images?.[0]} alt={s.name} width="40" height="40" />
+                <span dangerouslySetInnerHTML={{__html: s.highlight || s.name}} />
               </li>
             ))}
           </ul>

@@ -190,8 +190,21 @@
   z-index: 20;
 }
 .suggestion-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 6px 12px;
   cursor: pointer;
+}
+.suggestion-list img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.suggestion-list mark {
+  background: var(--color-accent-gold);
+  color: var(--color-primary-bg);
 }
 .suggestion-list li:hover {
   background: var(--color-accent-gold);

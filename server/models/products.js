@@ -46,9 +46,9 @@ const productSchema = new mongoose.Schema({
 productSchema.index({
   name: "text",
   brand: "text",
-  description: "text",
-  catName: "text",
-  subCatName: "text",
+  flavorNotes: "text",
+  origin: "text",
+  wrapperType: "text",
 });
 
 productSchema.virtual("id").get(function () {
