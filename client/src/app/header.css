@@ -296,6 +296,38 @@
   color: var(--color-accent-gold);
 }
 
+.user-menu {
+  position: relative;
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: var(--color-primary-bg);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  padding: 8px 0;
+  z-index: 9999;
+  width: 180px;
+}
+
+.user-dropdown li {
+  list-style: none;
+}
+
+.user-dropdown a {
+  display: block;
+  padding: 8px 16px;
+  color: var(--color-primary-text);
+  text-decoration: none;
+}
+
+.user-dropdown a:hover {
+  background: var(--color-hover-bg);
+  color: var(--color-accent-gold);
+}
+
 .mobile-hamburger {
   display: none;
   flex-direction: column;
@@ -496,6 +528,14 @@
   }
   
   .mobile-help-info a:hover {
+    color: var(--color-accent-gold);
+  }
+
+  .mobile-help-info .user-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
     color: var(--color-accent-gold);
   }
   

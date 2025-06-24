@@ -4,6 +4,8 @@ import "./responsive.css";
 
 import dynamic from "next/dynamic";
 import ThemeProvider from "@/context/ThemeProvider";
+import WishlistProvider from "@/context/WishlistContext";
+import CompareProvider from "@/context/CompareContext";
 
 const Header = dynamic(() => import("@/Components/Header"));
 const Footer = dynamic(() => import("@/Components/Footer"));
@@ -24,11 +26,15 @@ export default function RootLayout({ children }) {
       </head>
 
       <body>
-        <ThemeProvider>
-          <Header />
-          {children}
-          <Footer />
-        </ThemeProvider>
+        <WishlistProvider>
+          <CompareProvider>
+            <ThemeProvider>
+              <Header />
+              {children}
+              <Footer />
+            </ThemeProvider>
+          </CompareProvider>
+        </WishlistProvider>
       </body>
     </html>
   );

@@ -8,9 +8,12 @@ import { FaUser, FaHeart, FaShoppingBag, FaSearch, FaExchangeAlt } from "react-i
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import { MyContext } from "@/context/ThemeContext";
+import { WishlistContext } from "@/context/WishlistContext";
+import { CompareContext } from "@/context/CompareContext";
 import { getProductImage } from '@/utils/imageFallback';
 import { fetchDataFromApi } from "@/utils/api";
 import "../../app/header.css";
+import UserMenu from "./UserMenu";
 
 
 const Header = () => {
@@ -25,6 +28,8 @@ const Header = () => {
   const headerRef = useRef();
   const sidebarRef = useRef();
   const context = useContext(MyContext);
+  const { wishlist } = useContext(WishlistContext);
+  const { compareItems } = useContext(CompareContext);
   const router = useRouter();
 
   useEffect(() => {
@@ -180,16 +185,26 @@ const Header = () => {
 
           {/* Icons */}
           <div className="action-icons">
-            <Link href="/signIn" aria-label="Login" className="icon-link">
-              <FaUser />
-            </Link>
-            <Link href="/wishlist" aria-label="Wishlist" className="icon-link">
+            <UserMenu isLogin={context.isLogin} />
+            <Link
+              href={context.isLogin ? "/wishlist" : "/login?redirect=wishlist"}
+              aria-label="Wishlist"
+              className="icon-link"
+            >
               <FaHeart />
-              <span className="cart-count">0</span>
+              {wishlist.length > 0 && (
+                <span className="cart-count">{wishlist.length}</span>
+              )}
             </Link>
-            <Link href="/compare" aria-label="Compare" className="icon-link">
+            <Link
+              href={context.isLogin ? "/compare" : "/login?redirect=compare"}
+              aria-label="Compare"
+              className="icon-link"
+            >
               <FaExchangeAlt />
-              <span className="cart-count">0</span>
+              {compareItems.length > 0 && (
+                <span className="cart-count">{compareItems.length}</span>
+              )}
             </Link>
             <Link href="/cart" aria-label="Cart" className="icon-link position-relative">
               <FaShoppingBag />
@@ -423,10 +438,16 @@ const Header = () => {
 
             {/* 🔸 Help & Info Section */}
             <div className="mobile-help-info">
-              <Link href="/login">My Account</Link>
-              <Link href="/orders">My Orders</Link>
-              <Link href="/returns">Returns Information</Link>
-              <Link href="/contact">Contact Preferences</Link>
+              {context.isLogin && (
+                <div className="user-info">
+                  <FaUser /> {context.user.name || context.user.email}
+                </div>
+              )}
+              <Link href={context.isLogin ? "/account" : "/login"}>My Account</Link>
+              <Link href={context.isLogin ? "/account/orders" : "/login?redirect=orders"}>My Orders</Link>
+              <Link href="/returns">Returns</Link>
+              <Link href="/account/preferences">Preferences</Link>
+              <Link href={context.isLogin ? "/logout" : "/login"}>{context.isLogin ? "Sign Out" : "Sign In"}</Link>
             </div>
 
             {/* 🔸 Social Icons */}
