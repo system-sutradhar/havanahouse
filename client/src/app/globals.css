@@ -916,8 +916,7 @@ footer .socials a:hover {
   color: var(--color-black);
 }
 
-
-@media
+@media (max-width: 768px) {
   footer .topInfo .col {
     flex-direction: column;
     text-align: center;
