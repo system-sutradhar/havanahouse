@@ -12,7 +12,8 @@
     --color-mega-text: #000;
     --color-mega-hover: var(--color-highlight);
 
-    --font-body: 'Arial', sans-serif;
+    --font-body: 'Lato', sans-serif;
+    --font-heading: 'Lato', sans-serif;
     --container-max-width: 1366px;
     --container-side-padding: 32px;
     --container-side-padding-mobile: 16px;

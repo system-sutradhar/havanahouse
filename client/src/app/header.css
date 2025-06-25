@@ -172,7 +172,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  background: #fff;
+  background: var(--color-white);
   list-style: none;
   padding: 4px 0;
   margin: 0;
@@ -484,7 +484,7 @@
     width: 82%;
     max-width: 320px;
     height: 100%;
-    background-color: #fff;
+    background-color: var(--color-white);
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1001;
     overflow-y: auto;
@@ -497,7 +497,7 @@
     background: none;
     border: none;
     font-size: 28px;
-    color: #000;
+    color: var(--color-black);
     align-self: flex-end;
     cursor: pointer;
   }
@@ -516,7 +516,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f9f9f9;
+    background: var(--color-light-gray);
     border-radius: 8px;
     padding: 10px;
     transition: background 0.3s ease;
@@ -629,7 +629,7 @@
 ================================= */
 
 .main-nav {
-  background-color: #fff;
+  background-color: var(--color-white);
   position: relative;
 }
 
@@ -742,7 +742,7 @@
   object-fit: contain;
   border-radius: 50%;
   border: 2px solid var(--color-highlight);
-  background-color: #fff;
+  background-color: var(--color-white);
   padding: 6px;
   transition: transform 0.3s ease;
 }
