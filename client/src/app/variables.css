@@ -37,8 +37,8 @@
     --color-dark-text: #1c1c1c;
     --color-footer-bg: #F4F6FA;
     --color-primary-green: #3bb77e;
-    --color-primary: #6d4aae;
-    --color-primary-dark: #53348c;
+    --color-primary: #5a3e2b;
+    --color-primary-dark: #43301f;
     --color-success-bg: #e5f8ed;
     --color-success-text: #16b858;
     --color-gray-e7: #e7e7e7;
@@ -46,6 +46,6 @@
     --color-gray-f1: #f1f1f1;
     --color-cart-red: #ea2b0f;
     --color-cart-bg: #fff1ee;
-    --color-purple: #7a55c1;
+    --color-purple: var(--color-accent-gold);
     --color-blue-light: #2bbef9;
   }
