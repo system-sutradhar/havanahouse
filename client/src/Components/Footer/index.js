@@ -56,29 +56,44 @@ const Footer = () => {
             {
                 context.isHeaderFooterShow === true &&
                 <>
-                    <section className="newsLetterSection mt-3 mb-3 d-flex align-items-center">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <p className="text-white mb-1">5% discount for your first order</p>
-                                    <h3 className="text-white">Join our newsletter and get...</h3>
-                                    <p className="text-light">Join our email subscription now to get updates on<br /> promotions and coupons.</p>
-
-
-                                    <form className="mt-4">
-                                        <IoMailOutline />
-                                        <input type="text" placeholder="Your Email Address" />
-                                        <Button>Subscribe</Button>
-                                    </form>
-
-                                </div>
-
-                                <div className="col-md-6">
-                                    <Image src={newsLetterImg} alt="image" />
-                                </div>
+                    <div className="footer__top footer__wrap">
+                        <div class="footer__subscription">
+                            <div class="subscription subscription--horizontal">
+                                <h3 class="subscription__title">Subscribe!</h3>
+                                <span class="subscription__subtitle">Be the first to know about new promotions</span>
+                                <form class="a-form subscription__form" noValidate>
+                                    <div class="subscription__input a-input">
+                                        <div class="a-input__container">
+                                            <input type="email" placeholder="E-mail" class="a-input__field base-input" />
+                                            <label class="a-input__label base-label">Email</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="a-button a-button--primary subscription__button"><span class="a-button__text">Subscribe</span></button>
+                                </form>
                             </div>
                         </div>
-                    </section>
+                        <div class="social-list footer__social-list">
+                            <h3 class="social-list__title">Join us!</h3>
+                            <span class="social-list__subtitle">HELLO in social networks</span>
+                            <div class="social-list__content">
+                                <a href="https://www.facebook.com/allo" target="_blank" rel="noopener" aria-label="facebook" class="social-list__link"><FaFacebookF /></a>
+                                <a href="https://www.instagram.com/allo/" target="_blank" rel="noopener" aria-label="instagram" class="social-list__link"><FaInstagram /></a>
+                                <a href="https://t.me/allonews" target="_blank" rel="noopener" aria-label="telegram" class="social-list__link"><FaTwitter /></a>
+                            </div>
+                        </div>
+                        <div class="footer-apps footer__apps">
+                            <figure class="footer-apps__logo">
+                                <Image src="https://i.allo.ua/media/app/logo/ic_Logo_1_.svg" alt="logo" width={96} height={96} />
+                            </figure>
+                            <div class="footer-apps__content">
+                                <h3 class="footer-apps__title">Install the ALLO app!</h3>
+                                <span class="footer-apps__subtitle">Buy faster, pay less</span>
+                                <div class="footer-apps__list">
+                                    <a href="https://itunes.apple.com/ru/app/id1185517833" target="_blank" rel="noopener" class="footer-apps__link">App Store</a>
+                                    <a href="https://play.google.com/store/apps/details?id=allo.ua" target="_blank" rel="noopener" class="footer-apps__link">Google Play</a>
+                                </div>
+                            </div>
+                        </div></div>
                     <footer>
                         <div className="container">
                             <div className="topInfo row">
