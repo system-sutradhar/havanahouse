@@ -351,7 +351,7 @@ const Dashboard = () => {
                 },
               ]}
               rows={productList?.products || []}
-              onEdit={(row) => (window.location.href = `/product/edit/${row.id}`)}
+              onEdit={(row) => (window.location.href = `/product/edit/${row.id || row._id}`)}
               onDelete={(row) => { setDeleteId(row.id); setConfirmOpen(true); }}
             />
 
