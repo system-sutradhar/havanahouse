@@ -1,191 +1,121 @@
-"use client"
-import React,{useState, useEffect} from 'react';
-import { LuShirt } from "react-icons/lu";
-import { TbTruckDelivery } from "react-icons/tb";
-import { RiDiscountPercentLine } from "react-icons/ri";
-import { CiBadgeDollar } from "react-icons/ci";
-import Link from "next/link";
-import { FaFacebookF } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
-import newsLetterImg from '../../assets/images/newsletter.png';
-import Button from '@mui/material/Button';
-import { IoMailOutline } from "react-icons/io5";
-import Image from "next/image";
-
-import { MyContext } from "@/context/ThemeContext";
-import { useContext } from "react";
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import ProductModal from "../ProductModal";
-import { fetchDataFromApi } from "@/utils/api";
-
+import React from 'react';
+import Link from 'next/link';
+// Using react-icons for all icons
+import { FaFacebook, FaInstagram, FaYoutube, FaPhoneAlt, FaWhatsapp, FaCcVisa, FaCcMastercard, FaCcPaypal } from 'react-icons/fa';
+import { FaXTwitter } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
+import './footer.css';
 
 const Footer = () => {
- 
-    const context = useContext(MyContext);
+  // Array of stores to make it easier to manage
+  const stores = [
+    { name: 'Bath', href: '/stores/bath' },
+    { name: 'Birmingham', href: '/stores/birmingham' },
+    { name: 'Cardiff', href: '/stores/cardiff' },
+    { name: 'Hove', href: '/stores/hove' },
+    { name: 'Oxford', href: '/stores/oxford' },
+    { name: 'Reading', href: '/stores/reading' },
+    { name: 'Southampton', href: '/stores/southampton' },
+    { name: 'Stratford-upon-Avon', href: '/stores/stratford' },
+    { name: 'Windsor', href: '/stores/windsor' },
+    { name: 'Windsor Lounge', href: '/stores/windsor-lounge' },
+  ];
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
+  // Split stores into two columns for a balanced layout
+  const halfwayPoint = Math.ceil(stores.length / 2);
+  const storesColumn1 = stores.slice(0, halfwayPoint);
+  const storesColumn2 = stores.slice(halfwayPoint);
 
-        context.setAlertBox({
-            open: false
-        });
-    };
+  return (
+    <footer className="footer">
+      <div className="footer-container">
+        {/* --- Subscription Section --- */}
+        <div className="subscription-section">
+          <div className="subscription-content">
+            <h3 className="subscription-heading">Stay up to date with the latest Havana House news</h3>
+            <p className="subscription-subheading">Sign up for discounts, news, and more!</p>
+          </div>
+          <form className="subscription-form">
+            <input type="email" placeholder="Your email address" className="subscription-input" />
+            <button type="submit" className="subscription-button">Sign Up</button>
+          </form>
+        </div>
 
+        <div className="footer-body">
+          {/* --- Main Link Columns (now 4 columns) --- */}
+          <div className="footer-links-main">
+            <div className="footer-column">
+              <h3 className="footer-heading">Useful Information</h3>
+              <ul className="footer-links">
+                <li><Link href="/faq">FAQ’s</Link></li>
+                <li><Link href="/jobs">Job vacancies</Link></li>
+                <li><Link href="/blog">Blog</Link></li>
+                <li><Link href="/delivery">Delivery information</Link></li>
+                <li><Link href="/returns">Return & refunds</Link></li>
+              </ul>
+            </div>
 
-    return (
-        <>
+            {/* --- Stores Column 1 --- */}
+            <div className="footer-column">
+              <h3 className="footer-heading">Our Stores</h3>
+              <ul className="footer-links">
+                {storesColumn1.map(store => (
+                  <li key={store.name}><Link href={store.href}>{store.name}</Link></li>
+                ))}
+              </ul>
+            </div>
 
-            <Snackbar open={context.alertBox.open} autoHideDuration={6000} onClose={handleClose} className="snackbar">
-                <Alert
-                    onClose={handleClose}
-                    autoHideDuration={6000}
-                    severity={context.alertBox.error === false ? "success" : 'error'}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {context.alertBox.msg}
-                </Alert>
-            </Snackbar>
+            {/* --- Stores Column 2 (no heading for visual continuation) --- */}
+            <div className="footer-column">
+              <h3 className="footer-heading">&nbsp;</h3> {/* Empty heading for alignment */}
+              <ul className="footer-links">
+                {storesColumn2.map(store => (
+                  <li key={store.name}><Link href={store.href}>{store.name}</Link></li>
+                ))}
+              </ul>
+            </div>
 
+            <div className="footer-column">
+              <h3 className="footer-heading">My Account</h3>
+              <ul className="footer-links">
+                <li><Link href="/myAccount">My account</Link></li>
+                <li><Link href="/orders">Order help</Link></li>
+                <li><Link href="/rewards">Reward points</Link></li>
+                <li><Link href="/policy/privacy">Privacy policy</Link></li>
+                <li><Link href="/policy/terms">Terms & conditions</Link></li>
+              </ul>
+            </div>
+          </div>
 
+          {/* --- Contact Sidebar --- */}
+          <div className="footer-contact-side">
+            <h3 className="footer-heading">Contact Center</h3>
+            <ul className="footer-links contact-details">
+              <li><a href="tel:01753867453"><FaPhoneAlt /> 01753 867453</a></li>
+              <li><a href="https://wa.me/447903638256"><FaWhatsapp /> +44 7903 638256</a></li>
+              <li><a href="mailto:info@havanahouse.co.uk"><MdEmail /> info@havanahouse.co.uk</a></li>
+            </ul>
+            <div className="social-icons">
+              <a href="https://facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
+              <a href="https://x.com" aria-label="X" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
+              <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+              <a href="https://youtube.com" aria-label="Youtube" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
+            </div>
+          </div>
+        </div>
 
-            {
-                context.isHeaderFooterShow === true &&
-                <>
-                    <section className="newsLetterSection mt-3 mb-3 d-flex align-items-center">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <p className="text-white mb-1">5% discount for your first order</p>
-                                    <h3 className="text-white">Join our newsletter and get...</h3>
-                                    <p className="text-light">Join our email subscription now to get updates on<br /> promotions and coupons.</p>
-
-
-                                    <form className="mt-4">
-                                        <IoMailOutline />
-                                        <input type="text" placeholder="Your Email Address" />
-                                        <Button>Subscribe</Button>
-                                    </form>
-
-                                </div>
-
-                                <div className="col-md-6">
-                                    <Image src={newsLetterImg} alt="image" />
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <footer>
-                        <div className="container">
-                            <div className="topInfo row">
-                            
-                                <div className="col d-flex align-items-center">
-                                    <span><TbTruckDelivery /></span>
-                                    <span className="ml-2">Free delivery for order over £50</span>
-                                </div>
-
-                                <div className="col d-flex align-items-center">
-                                    <span><RiDiscountPercentLine /></span>
-                                    <span className="ml-2">Daily Mega Discounts</span>
-                                </div>
-
-
-                                <div className="col d-flex align-items-center">
-                                    <span><CiBadgeDollar /></span>
-                                    <span className="ml-2">Best price on the market</span>
-                                </div>
-
-
-                            </div>
-
-
-
-                            <div className="row mt-5 linksWrap">
-                                <div className="col">
-                                    <h5>Useful Information</h5>
-                                    <ul>
-                                        <li><Link href="/">FAQs</Link></li>
-                                        <li><Link href="/">Job Vacancies</Link></li>
-                                        <li><Link href="/">Reward Points</Link></li>
-                                        <li><Link href="/">My Account</Link></li>
-                                        <li><Link href="/">Blog</Link></li>
-                                    </ul>
-                                </div>
-
-                                <div className="col">
-                                    <h5>Order Help</h5>
-                                    <ul>
-                                        <li><Link href="/">Delivery Information</Link></li>
-                                        <li><Link href="/">Privacy Policy</Link></li>
-                                        <li><Link href="/">Return & Refunds</Link></li>
-                                        <li><Link href="/">Terms & Conditions</Link></li>
-                                    </ul>
-                                </div>
-
-                                <div className="col">
-                                    <h5>Our Stores</h5>
-                                    <ul>
-                                        <li><Link href="/">Bath</Link></li>
-                                        <li><Link href="/">Birmingham</Link></li>
-                                        <li><Link href="/">Cardiff</Link></li>
-                                        <li><Link href="/">Hove</Link></li>
-                                        <li><Link href="/">Oxford</Link></li>
-                                        <li><Link href="/">Reading</Link></li>
-                                        <li><Link href="/">Southampton</Link></li>
-                                    </ul>
-                                </div>
-
-                                <div className="col">
-                                    <h5>Contact Us</h5>
-                                    <ul>
-                                        <li><span>📞</span><Link href="/">0203 884 0006</Link></li>
-                                        <li><span>📱</span><Link href="/">+44 7903 638256</Link></li>
-                                        <li><span>📧</span><Link href="/">info@havanahouse.co.uk</Link></li>
-                                        <li><span>📧</span><Link href="/">More ways to contact us</Link></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-
-
-                            <div className="copyright mt-3 pt-3 pb-3 d-flex justify-content-between">
-                                <p className="mb-0">Copyright {new Date().getFullYear()} Havana House. All rights reserved</p>
-                                <ul className="list list-inline ml-auto mb-0 socials">
-                                    <li className="list-inline-item">
-                                        <Link href="/"><FaFacebookF /></Link>
-                                    </li>
-
-                                    <li className="list-inline-item">
-                                        <Link href="/"><FaTwitter /></Link>
-                                    </li>
-
-                                    <li className="list-inline-item">
-                                        <Link href="/"><FaInstagram /></Link>
-                                    </li>
-                                </ul>
-                            </div>
-
-
-
-                        </div>
-                        
-                    </footer>
-                </>
-            }
-
-
-
-
-            {
-                context.isOpenProductModal === true && <ProductModal data={context.productData} />
-            }
-
-        </>
-    )
+        {/* --- Bottom Bar --- */}
+        <div className="footer-bottom">
+          <p className="copyright">© {new Date().getFullYear()} Havana House. All Rights Reserved.</p>
+          <div className="payment-methods">
+              <FaCcVisa />
+              <FaCcMastercard />
+              <FaCcPaypal />
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }
 
 export default Footer;

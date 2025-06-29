@@ -74,7 +74,7 @@ const AppSettings = () => {
       breadcrumbPath={[{ label: 'Dashboard', href: '/' }]}
       actions={<AddButton onClick={() => setOpenForm(true)} label="Add Setting" />}
     >
-      <Paper className="card shadow border-0 p-3">
+      <Paper className="card shadow border-0 p-3 mt-4">
         {loading ? (
           <Skeleton variant="rectangular" width="100%" height={200} />
         ) : (

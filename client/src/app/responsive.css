@@ -3,7 +3,7 @@
   /* body{padding-bottom: 45px !important;} */
   .res-hide{display: none !important;}
 
-  .container{max-width: 100% !important ;}
+
 
   .res-full{width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important;}
 
@@ -14,7 +14,7 @@
 
   .headerWrapperFixed.fixed{top: 0px !important;}
   
-  .headerSearchWrapper{position: fixed; top: 0px; left: 0px; width: 100% !important; height: 100vh; background: #fff; z-index: 1000; padding: 15px !important; margin: 0px !important; opacity: 0; visibility: hidden; transition: all 0.3s;}
+  .headerSearchWrapper{position: fixed; top: 0px; left: 0px; width: 100% !important; height: 100vh; background: var(--color-white); z-index: 1000; padding: 15px !important; margin: 0px !important; opacity: 0; visibility: hidden; transition: all 0.3s;}
 
   .headerSearchWrapper.open{opacity: 1; visibility: inherit;}
 
@@ -23,7 +23,7 @@
 
   .headerSearchWrapper .headerSearch{width: 100% !important; pad: 0px !important; margin: 0px !important;}
 
-  .res-nav{position: fixed; bottom: -100%; right:0%; width: 100%; height: 100vh; background: #fff; z-index: 101; padding: 20px 0px; transition: all 0.2s ease-in-out; opacity: 0;
+  .res-nav{position: fixed; bottom: -100%; right:0%; width: 100%; height: 100vh; background: var(--color-white); z-index: 101; padding: 20px 0px; transition: all 0.2s ease-in-out; opacity: 0;
   max-height: 80vh; overflow-y: scroll;}
 
   .res-nav .btn-blue{border-radius: 5px !important; text-align: center !important; justify-content: center !important;}
@@ -46,7 +46,7 @@
     position: absolute; top: 7px; right: 20px; z-index: 100; transition: all 0.3s ease-in-out;
     width: 30px;
     height: 30px;
-    background: #f1f1f1;
+    background: var(--color-gray-f1);
     border-radius: 100%;}
     nav .navPart2 ul li .arrow.rotate{transform: rotate(180deg);}
 
@@ -104,14 +104,14 @@
   .productScroller .productItem{width: 170px !important; float: none !important; display: inline-block !important; vertical-align: top; margin-right: 10px !important; padding: 0px !important;}
 
   .product_Listing_Page{padding-top: 15px !important;}
-  .product_Listing_Page .productListing .sidebar{position: fixed; top: 0px !important; right: -100%; width: 100%; height: 100%; max-height: 100vh; overflow-y: scroll; z-index: 10000; background: #fff; flex: 0 0 100% !important; padding: 25px; transition: all 0.3s ease-in-out; opacity: 0;}
+  .product_Listing_Page .productListing .sidebar{position: fixed; top: 0px !important; right: -100%; width: 100%; height: 100%; max-height: 100vh; overflow-y: scroll; z-index: 10000; background: var(--color-white); flex: 0 0 100% !important; padding: 25px; transition: all 0.3s ease-in-out; opacity: 0;}
   .product_Listing_Page .productListing .sidebar.open{right: 0px !important; opacity: 1 !important;}
   .product_Listing_Page .productListing .sidebar img{display: none !important;}
 
   .product_Listing_Page .productListing .content_right{width: 100% !important; flex:0 0 100% !important; padding-left: 0px;}
 
   .fixedBtn{position: fixed; bottom: 0px; left: 0px; width: 100%; height: auto; padding: 15px;
-  z-index: 10000; background: #fff; margin: auto !important;}
+  z-index: 10000; background: var(--color-white); margin: auto !important;}
   .fixedBtn .col button{width: 100% !important;}
 
   .productDetails .part1{padding-left: 15px !important;}

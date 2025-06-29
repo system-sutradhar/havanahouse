@@ -210,7 +210,6 @@ border-radius: 100%; position: absolute; top: -20px; right: -20px; opacity: 0.5;
 .main .content{width: 80%; flex: 0 0 80%; transition: all 0.3s ;}
 .main .content.toggle{width: 100%; flex: 0 0 100%;}
 
-.right-content{padding: 15px 30px 10px;}
 
 .dashboard_Box{justify-content: space-between;}
 .dashboard_Box .dashboardBox{width: 23% !important;}
@@ -670,8 +669,7 @@ body.dark .headerSearch button svg{color: #000 !important;}
 
 .addBtn{min-width: 30px !important; height: 30px !important;}
 
-.rti--container{background: #2b3c5f !important; border: 0px !important;}
-.rti--tag{background: #364e7d !important;}
+.rti--tag{background: #a49567 !important;}
 .rti--tag button{color: #fff !important;}
 
 

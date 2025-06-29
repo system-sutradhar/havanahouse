@@ -1,0 +1,21 @@
+/* client/src/app/product-new/[...slug]/pdp.css */
+
+.pdp-page {
+  padding: 40px 20px;
+}
+
+.pdp-layout-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to a single column on mobile */
+  gap: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* --- Desktop Two-Column Layout --- */
+@media (min-width: 768px) {
+  .pdp-layout-container {
+    /* The core of the layout: 1fr for the image, 1fr for the info */
+    grid-template-columns: 1fr 1fr;
+  }
+}

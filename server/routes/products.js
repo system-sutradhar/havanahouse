@@ -9,6 +9,7 @@ const { ImageUpload } = require("../models/imageUpload.js");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const slugify = require("slugify");
 const fs = require("fs");
 const mongoose = require("mongoose");
 
@@ -383,6 +384,7 @@ router.post(`/recentlyViewd`, async (req, res) => {
     product = new RecentlyViewd({
       prodId: req.body.id,
       name: req.body.name,
+      slug: slugify(req.body.slug || req.body.name, { lower: true }),
       description: req.body.description,
       images: req.body.images,
       brand: req.body.brand,
@@ -431,6 +433,7 @@ router.post(`/create`, async (req, res) => {
 
   product = new Product({
     name: req.body.name,
+    slug: slugify(req.body.slug || req.body.name, { lower: true }),
     description: req.body.description,
     images: images_Array,
     brand: req.body.brand,
@@ -449,6 +452,20 @@ router.post(`/create`, async (req, res) => {
     productRam: req.body.productRam,
     size: req.body.size,
     productWeight: req.body.productWeight,
+    ringGauge: req.body.ringGauge,
+    lengthInInches: req.body.lengthInInches,
+    binder: req.body.binder,
+    filler: req.body.filler,
+    origin: req.body.origin,
+    wrapperType: req.body.wrapperType,
+    strength: req.body.strength,
+    flavorNotes: req.body.flavorNotes,
+    tastingNotes: req.body.tastingNotes,
+    pairingSuggestions: req.body.pairingSuggestions,
+    boxType: req.body.boxType,
+    badgeIcons: req.body.badgeIcons,
+    trustLabels: req.body.trustLabels,
+    complianceNotes: req.body.complianceNotes,
     location: req.body.location !== "" ? req.body.location : "All",
   });
 
@@ -464,16 +481,37 @@ router.post(`/create`, async (req, res) => {
   res.status(201).json(product);
 });
 
-router.get("/:id", async (req, res) => {
-
-  const product = await Product.findById(req.params.id).populate("category");
-
-  if (!product) {
-    res
-      .status(500)
-      .json({ message: "The product with the given ID was not found." });
+router.get('/slug/:slug', async (req, res) => {
+  let product = await Product.findOne({ slug: req.params.slug }).populate('category');
+  if (!product && mongoose.isValidObjectId(req.params.slug)) {
+    product = await Product.findById(req.params.slug).populate('category');
   }
-  return res.status(200).send(product);
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+  res.status(200).json(product);
+});
+
+// @route   GET /api/products/:id
+// @desc    Get a single product by its ID
+router.get('/:id', async (req, res) => {
+    try {
+        // First, check if the provided ID is a valid MongoDB ObjectId format
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ msg: 'Invalid Product ID format' });
+        }
+
+        const product = await Product.findById(req.params.id);
+
+        if (!product) {
+            return res.status(404).json({ msg: 'Product not found' });
+        }
+
+        res.json(product);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 });
 
 router.delete("/deleteImage", async (req, res) => {
@@ -545,6 +583,7 @@ router.put("/:id", async (req, res) => {
     req.params.id,
     {
       name: req.body.name,
+      slug: slugify(req.body.slug || req.body.name, { lower: true }),
       subCat: req.body.subCat,
       description: req.body.description,
       images: req.body.images,
@@ -564,6 +603,20 @@ router.put("/:id", async (req, res) => {
       productRam: req.body.productRam,
       size: req.body.size,
       productWeight: req.body.productWeight,
+      ringGauge: req.body.ringGauge,
+      lengthInInches: req.body.lengthInInches,
+      binder: req.body.binder,
+      filler: req.body.filler,
+      origin: req.body.origin,
+      wrapperType: req.body.wrapperType,
+      strength: req.body.strength,
+      flavorNotes: req.body.flavorNotes,
+      tastingNotes: req.body.tastingNotes,
+      pairingSuggestions: req.body.pairingSuggestions,
+      boxType: req.body.boxType,
+      badgeIcons: req.body.badgeIcons,
+      trustLabels: req.body.trustLabels,
+      complianceNotes: req.body.complianceNotes,
       location: req.body.location,
     },
     { new: true }

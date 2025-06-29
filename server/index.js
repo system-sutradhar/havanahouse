@@ -28,6 +28,8 @@ const myListSchema = require('./routes/myList.js');
 const ordersSchema = require('./routes/orders.js');
 const homeBannerSchema = require('./routes/homeBanner.js');
 const searchRoutes = require('./routes/search.js');
+const cigarMetaRoutes = require('./routes/cigarMeta');
+const attributesRoutes = require('./routes/attributes');
 const bannersSchema = require('./routes/banners.js');
 const homeSideBannerSchema = require('./routes/homeSideBanner.js');
 const homeBottomBannerSchema = require('./routes/homeBottomBanner.js');
@@ -46,10 +48,17 @@ app.use(`/api/productRAMS`, productRAMSRoutes);
 app.use(`/api/productSIZE`, productSIZESRoutes);
 app.use(`/api/productReviews`, productReviews);
 app.use(`/api/cart`, cartSchema);
+app.use('/api/cigar-meta', cigarMetaRoutes);
+app.use('/api/attributes', attributesRoutes);
 app.use(`/api/my-list`, myListSchema);
 app.use(`/api/orders`, ordersSchema);
 app.use(`/api/homeBanner`, homeBannerSchema);
 app.use(`/api/search`, searchRoutes);
+// Provide a direct suggestion endpoint to avoid missing route errors
+app.get('/api/search/suggest', async (req, res, next) => {
+  // delegate to the router handler
+  return searchRoutes.handle({ ...req, url: '/suggest' }, res, next);
+});
 app.use(`/api/banners`, bannersSchema);
 app.use(`/api/homeSideBanners`, homeSideBannerSchema);
 app.use(`/api/homeBottomBanners`, homeBottomBannerSchema);

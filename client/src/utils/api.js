@@ -3,7 +3,8 @@ import axios from "axios";
 
 export const fetchDataFromApi = async (url) => {
     try {
-        const { data } = await axios.get(process.env.NEXT_PUBLIC_APP_API_URL + url)
+        const base = process.env.NEXT_PUBLIC_APP_API_URL || "";
+        const { data } = await axios.get(base + url);
         return data;
     } catch (error) {
         console.log(error);
@@ -16,7 +17,8 @@ export const fetchDataFromApi = async (url) => {
 
 export const postData = async (url, formData) => {
     try {
-        const response = await fetch(process.env.NEXT_PUBLIC_APP_API_URL + url, {
+        const base = process.env.NEXT_PUBLIC_APP_API_URL || "";
+        const response = await fetch(base + url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -43,24 +45,27 @@ export const postData = async (url, formData) => {
 
 
 export const editData = async (url, updatedData ) => {
-    const { res } = await axios.put(`${process.env.NEXT_PUBLIC_APP_API_URL}${url}`,updatedData)
+    const base = process.env.NEXT_PUBLIC_APP_API_URL || "";
+    const { res } = await axios.put(`${base}${url}`,updatedData)
     return res;
 }
 
 export const deleteData = async (url ) => {
-    const { res } = await axios.delete(`${process.env.NEXT_PUBLIC_APP_API_URL}${url}`)
+    const base = process.env.NEXT_PUBLIC_APP_API_URL || "";
+    const { res } = await axios.delete(`${base}${url}`)
     return res;
 }
 
 
 export const uploadImage = async (url, formData) => {
-
-    const { res } = await axios.post(process.env.NEXT_PUBLIC_APP_API_URL + url , formData)
+    const base = process.env.NEXT_PUBLIC_APP_API_URL || "";
+    const { res } = await axios.post(base + url , formData)
     return res;
 }
 
 
 export const deleteImages = async (url,image ) => {
-    const { res } = await axios.delete(`${process.env.NEXT_PUBLIC_APP_API_URL}${url}`,image);
+    const base = process.env.NEXT_PUBLIC_APP_API_URL || "";
+    const { res } = await axios.delete(`${base}${url}`,image);
     return res;
 }

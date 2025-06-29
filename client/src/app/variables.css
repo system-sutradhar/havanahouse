@@ -1,34 +1,61 @@
 :root {
-    --color-primary-bg: #1b1a19;
-    --color-primary-text: #fff;
-    --color-secondary-bg: #2c2b2a;
-    --color-secondary-border: #4a4948;
-    --color-highlight: #d9982a;
-    --color-hover-bg: rgba(255, 255, 255, 0.08);
-    --color-icon-hover: #e2b67a;
-    --color-accent-gold: #d4af37;
-    --color-mega-bg: #f8f8f8;
+    /* Brand theme - UK cigar merchant */
+    --color-primary-bg: #1a1a1a;
+    --color-primary-text: #f5f5f5;
+    --color-secondary-bg: #2b2b2b;
+    --color-secondary-border: #454545;
+    --color-highlight: #c49e37;
+    --color-hover-bg: rgba(255,255,255,0.08);
+    --color-icon-hover: #d1b46b;
+    --color-accent-gold: #c49e37;
+    --color-light-bg: #ffffff;
+    --color-mega-bg: #f5f5f5;
     --color-mega-text: #000;
     --color-mega-hover: var(--color-highlight);
 
-    --font-body: 'Arial', sans-serif;
+    --font-body: 'Lato', sans-serif;
+    --font-heading: 'Lato', sans-serif;
     --container-max-width: 1366px;
+    --container-side-padding: 32px;
+    --container-side-padding-mobile: 16px;
+    --header-footer-padding: 32px;
 
     /* Common Colors */
-    --color-black: #000;
-    --color-white: #fff;
-    --color-header-bg: #262626;
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-header-bg: #31261d;
     --color-header-dark: #4c4c4c;
     --color-sale-red: #c1002b;
     --color-light-gray: #f9f9f9;
     --color-dark-gray: #333;
     --color-gray-light: #eee;
-    --color-brown: #924f12;
-    --color-brown-light: #b76e20;
-    --color-gold-dark: #b58d1f;
+    --color-brown: #5a3e2b;
+    --color-brown-light: #7f5d3c;
+    --color-gold-dark: #b0862c;
     --color-header-medium: #514f4f;
     --color-brand-red: #c62828;
     --color-dark-text: #1c1c1c;
     --color-footer-bg: #F4F6FA;
     --color-primary-green: #3bb77e;
+    --color-primary: #5a3e2b;
+    --color-primary-dark: #43301f;
+    --color-success-bg: #e5f8ed;
+    --color-success-text: #16b858;
+    --color-gray-e7: #e7e7e7;
+    --color-text-light: #8b8b8b;
+    --color-gray-f1: #f1f1f1;
+    --color-cart-red: #ea2b0f;
+    --color-cart-bg: #fff1ee;
+    --color-purple: var(--color-accent-gold);
+    --color-blue-light: #2bbef9;
+
+    /* client/src/app/variables.css */
+
+
+  --primary-color: #1a1a1a; /* Dark background for the header */
+  --secondary-color: #f1f1f1; /* Light background for navigation */
+  --text-color: #ffffff;      /* Main text color on dark backgrounds */
+  --text-color-dark: #333333; /* Main text color on light backgrounds */
+  --accent-color: #c8a45e;   /* Gold/amber accent for links, buttons, highlights */
+  --border-color: #333333;    /* Subtle borders */
   }

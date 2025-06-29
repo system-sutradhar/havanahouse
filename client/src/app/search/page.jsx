@@ -9,7 +9,7 @@ import { FaAngleDown } from "react-icons/fa6";
 import Head from "next/head";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import ProductItem from '@/Components/ProductItem';
 import Pagination from '@mui/material/Pagination';
 
@@ -17,6 +17,7 @@ import { fetchDataFromApi } from '@/utils/api';
 import CircularProgress from '@mui/material/CircularProgress';
 import { FaFilter } from "react-icons/fa";
 import { MyContext } from '@/context/ThemeContext';
+import { useSearchParams } from "next/navigation";
 
 const SearchPage = () => {
 
@@ -27,8 +28,11 @@ const SearchPage = () => {
     const openDropdown = Boolean(anchorEl);
     const [isOpenFilter, setIsOpenFilter] = useState(false);
     const [subCat, setSubCat] = useState("");
+    const lastQueryRef = useRef("");
 
     const context = useContext(MyContext);
+    const searchParams = useSearchParams();
+    const query = searchParams.get("q") || "";
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -40,12 +44,16 @@ const SearchPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        if (!query || query === lastQueryRef.current) return;
+        lastQueryRef.current = query;
         setisLoading(true);
-        setTimeout(() => {
-            setProductData(context.searchData)
+        fetchDataFromApi(`/api/search?q=${encodeURIComponent(query)}`)
+          .then((res) => {
+            setProductData(res);
             setisLoading(false);
-        }, 3000);
-    }, [context.searchData]);
+          })
+          .catch(() => setisLoading(false));
+    }, [query]);
 
 
     const filterData = (subCatId) => {

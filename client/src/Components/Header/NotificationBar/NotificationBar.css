@@ -1,17 +1,38 @@
+/* client/src/Components/Header/NotificationBar/NotificationBar.css */
+
 .notification-bar {
-    background-color: var(--color-black);
-    color: var(--color-white);
-    padding: 8px 0;
-    font-size: 13px;
-    font-weight: 500;
-    text-align: center;
-    width: 100%;
+  background-color: #303030; /* A slightly different dark grey for contrast */
+  color: var(--text-color);
+  font-size: 13px; /* Slightly smaller font for a more refined look */
+  font-weight: 500;
+  display: none;
+  height: 36px; /* A fixed, slim height */
+  width: 100%;
+}
+
+.notification-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 25px; /* Consistent padding */
+}
+
+/* Other styles remain the same */
+.notification-message { text-align: left; }
+.notification-bar a {
+  color: #dcdcdc; text-decoration: none; transition: color 0.3s ease;
+  display: inline-flex; align-items: center;
+}
+.notification-bar a:hover { color: var(--text-color); text-decoration: underline; text-underline-offset: 4px; }
+.notification-user-action a { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.user-icon { font-size: 1rem; }
+
+@media (min-width: 992px) {
+  .notification-bar {
+    display: flex;
   }
-  
-  @media (max-width: 768px) {
-    .notification-bar {
-      font-size: 12px;
-      padding: 6px 10px;
-    }
-  }
-  
+}
