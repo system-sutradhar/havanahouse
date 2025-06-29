@@ -4,7 +4,7 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 
 import InnerImageZoom from 'react-inner-image-zoom';
-import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
+import 'react-inner-image-zoom/lib/styles.min.css';
 import { useRef, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';

@@ -1,13 +1,29 @@
-.logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  
-  @media (max-width: 768px) {
-    .logo-container {
-      justify-content: center;
-      padding: 10px 0;
-    }
-  }
-  
+/* Styles for the final stacked wordmark logo */
+.logo-svg.modern-wordmark-stacked {
+  height: 70px; /* Increased height for better proportions */
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+.logo-svg.modern-wordmark-stacked:hover {
+  transform: scale(1.03);
+}
+
+.logo-main-text,
+.logo-sub-text {
+  font-family: 'Garamond', 'Times New Roman', serif;
+  font-size: 32px;
+  font-weight: 700;
+  fill: var(--text-color);
+  letter-spacing: 1.5px;
+}
+
+/* --- Final Enhanced Tagline Styling --- */
+.logo-tagline-text {
+  font-family: 'Lato', 'Helvetica Neue', sans-serif;
+  font-size: 12px; /* Increased from 11px for better visibility */
+  font-weight: 500;
+  fill: var(--accent-color);
+  letter-spacing: 3.5px; /* Adjusted for new font size */
+  text-transform: uppercase;
+}

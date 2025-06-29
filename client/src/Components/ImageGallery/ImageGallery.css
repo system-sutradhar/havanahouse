@@ -1,0 +1,69 @@
+/* client/src/Components/ImageGallery/ImageGallery.css */
+
+.image-gallery-container {
+  width: 100%;
+}
+
+.main-image-wrapper {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  position: relative; /* For positioning the hint */
+  cursor: pointer;
+}
+
+.main-image-wrapper img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 550px;
+  object-fit: contain;
+}
+
+.zoom-hint {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.main-image-wrapper:hover .zoom-hint {
+  opacity: 1;
+}
+
+.thumbnail-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.thumbnail-item {
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.thumbnail-item.active,
+.thumbnail-item:hover {
+  border-color: var(--accent-color);
+}
+
+.thumbnail-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Styles for the lightbox backdrop */
+:root {
+    --yarl__color_backdrop: rgba(0, 0, 0, .8);
+}

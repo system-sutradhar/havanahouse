@@ -1,5 +1,34 @@
-.bannerSection{padding: 25px 0px; padding-bottom: 0px; display: grid; gap: 15px;}
-.bannerSection .col_{width: 100%;}
-.bannerSection .box{overflow: hidden; border-radius: 15px; cursor: pointer; display: block;}
-.bannerSection .box img{height: auto !important; transition:all 0.3s;}
-.bannerSection .box:hover img{transform: scale(1.1); }
+/* client/src/Components/Banner/banner.css */
+
+.banner-container {
+  width: 100%; /* Ensure the container is always full-width */
+  height: 85vh; /* Set height relative to the viewport height */
+  max-height: 800px; /* Prevent it from being too tall on long screens */
+  background-color: #000; /* Fallback color while images load */
+}
+
+.banner-container .swiper-slide {
+  width: 100%;
+  height: 100%;
+}
+
+/* This is the most important part for responsive images */
+.banner-container .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Fill the container without stretching */
+  object-position: center; /* Keep the image centered */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .banner-container {
+    height: 50vh; /* Shorter height on mobile for better balance */
+  }
+}
+
+@media (min-width: 1600px) {
+  .banner-container {
+    height: 70vh; /* Adjust for very large screens */
+  }
+}

@@ -1,89 +1,83 @@
-"use client";
-import { useEffect, useState, useRef } from 'react';
-import { useParams } from 'next/navigation';
-import BreadcrumbNav from '@/Components/pdp/Breadcrumbs';
-import ProductHeaderInfo from '@/Components/pdp/ProductHeaderInfo';
-import ProductTabNav from '@/Components/pdp/ProductTabNav';
-import ProductImageGallery from '@/Components/pdp/ProductImageGallery';
-import ProductInfoSection from '@/Components/pdp/ProductInfoSection';
-import StickyAddToCart from '@/Components/pdp/StickyAddToCart';
-import Skeleton from '@mui/material/Skeleton';
-import { fetchDataFromApi } from '@/utils/api';
+'use client';
+import React, { useState, useEffect, Suspense } from 'react';
+import axios from 'axios';
+import ImageGallery from '@/Components/ImageGallery';
+import './pdp.css';
 
-export default function ProductNewPage() {
-  const { slug } = useParams();
-  const [product, setProduct] = useState(null);
-  const [tab, setTab] = useState(0);
-  const [showStickyTabs, setShowStickyTabs] = useState(false);
-  const headerRef = useRef(null);
+const ProductPageContent = ({ params }) => {
+  const [productData, setProductData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!slug) return;
-    fetchDataFromApi(`/api/products/slug/${slug}`).then((res) => setProduct(res));
-  }, [slug]);
+    // 1. Correctly get the slug from the params array.
+    const slug = params.slug;
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (window.innerWidth >= 992) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setShowStickyTabs(!entry.isIntersecting),
-      { threshold: 0 }
-    );
-    if (headerRef.current) observer.observe(headerRef.current);
-    return () => observer.disconnect();
-  }, []);
+    // 2. If there's no slug, stop and show an error.
+    if (!slug) {
+      setLoading(false);
+      setError("Product ID not found in the URL.");
+      return;
+    }
+    
+    // 3. Fetch the data using the correct API endpoint structure.
+    setLoading(true);
+    axios.get(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/products/${slug}`)
+      .then(response => {
+        // The API returns the product directly, not nested under a 'product' key.
+        setProductData(response.data);
+      })
+      .catch(err => {
+        console.error('Error fetching product data:', err);
+        setError('Failed to load product. It may not exist or there was a server error.');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+      
+  }, [params.slug]);
 
-  if (!product) {
-    return (
-      <div className="container py-5">
-        <Skeleton width="40%" height={30} />
-        <Skeleton width="60%" height={20} className="mt-2" />
-        <Skeleton width="100%" height={40} className="mt-3" />
-      </div>
-    );
+  if (loading) {
+    return <div className="pdp-message">Loading Product...</div>;
   }
 
-  const breadcrumbItems = [
-    { label: 'Home', href: '/' },
-    product.catName ? { label: product.catName, href: `/category/${product.catId}` } : null,
-    product.subCatName ? { label: product.subCatName, href: `/subcategory/${product.subCatId}` } : null,
-    { label: product.name }
-  ].filter(Boolean);
+  if (error) {
+    return <div className="pdp-message pdp-error">{error}</div>;
+  }
+  
+  if (!productData) {
+    return <div className="pdp-message pdp-error">Product could not be found.</div>;
+  }
 
   return (
-    <div className="container py-3">
-      <BreadcrumbNav items={breadcrumbItems} />
-      <div ref={headerRef} className="product-title-section">
-        <ProductHeaderInfo
-          title={product.name}
-          rating={product.rating}
-          reviews={product.reviews?.length || 0}
-          code={product.id}
-        />
-      </div>
-      <ProductTabNav
-        value={tab}
-        onChange={setTab}
-        tabs={[
-          'About the product',
-          'Characteristics',
-          'Reviews',
-          'Delivery Info',
-        ]}
-        sticky={showStickyTabs}
-      />
-
-      {tab === 0 && (
-        <div className="row mt-4 tab-panel">
-          <div className="col-md-6">
-            <ProductImageGallery images={product.images} name={product.name} />
-          </div>
-          <div className="col-md-6">
-            <ProductInfoSection product={product} />
-          </div>
+    <div className="pdp-page">
+      <div className="pdp-layout-container">
+        <div className="pdp-left-column">
+          <ImageGallery images={productData.images} />
         </div>
-      )}
-      <StickyAddToCart product={product} />
+        <div className="pdp-right-column">
+          <h1 className="pdp-product-name">{productData.name}</h1>
+          {productData.price && (
+            <p className="pdp-product-price">£{productData.price.toFixed(2)}</p>
+          )}
+          <div 
+            className="pdp-product-description" 
+            dangerouslySetInnerHTML={{ __html: productData.description }} 
+          />
+          {/* We will build out the rest of this column next */}
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+// Next.js Suspense wrapper for pages using dynamic params
+const Page = ({ params }) => {
+    return (
+        <Suspense fallback={<div className="pdp-loading">Loading Page...</div>}>
+            <ProductPageContent params={params} />
+        </Suspense>
+    );
+};
+
+export default Page;

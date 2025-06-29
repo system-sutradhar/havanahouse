@@ -48,4 +48,14 @@
     --color-cart-bg: #fff1ee;
     --color-purple: var(--color-accent-gold);
     --color-blue-light: #2bbef9;
+
+    /* client/src/app/variables.css */
+
+
+  --primary-color: #1a1a1a; /* Dark background for the header */
+  --secondary-color: #f1f1f1; /* Light background for navigation */
+  --text-color: #ffffff;      /* Main text color on dark backgrounds */
+  --text-color-dark: #333333; /* Main text color on light backgrounds */
+  --accent-color: #c8a45e;   /* Gold/amber accent for links, buttons, highlights */
+  --border-color: #333333;    /* Subtle borders */
   }

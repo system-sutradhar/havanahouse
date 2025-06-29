@@ -1,0 +1,107 @@
+.product-info-container {
+  display: flex;
+  flex-direction: column;
+}
+.pdp-brand {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+.pdp-name {
+  font-family: 'Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 15px;
+}
+.pdp-reviews {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.star-rating {
+  color: #f9a825; /* Gold/Yellow color for stars */
+}
+.reviews-link {
+  font-size: 0.9rem;
+  color: #555;
+  text-decoration: none;
+}
+.reviews-link:hover {
+  text-decoration: underline;
+}
+.pdp-price {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 25px;
+}
+.pdp-actions {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.quantity-selector {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.quantity-selector button {
+  background-color: #f5f5f5;
+  border: none;
+  width: 45px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.quantity-selector input {
+  width: 100%;
+  text-align: center;
+  border: none;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.add-to-basket-btn-pdp {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.add-to-basket-btn-pdp:hover {
+  background-color: #d4a75a;
+}
+.at-a-glance {
+  border-top: 1px solid #eee;
+  padding-top: 25px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.glance-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.glance-icon {
+  font-size: 2rem;
+  color: var(--accent-color);
+}
+.glance-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #777;
+}
+.glance-value {
+  font-weight: 600;
+}
