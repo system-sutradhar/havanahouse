@@ -1,0 +1,31 @@
+.price-block {
+  margin-bottom: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 15px;
+}
+.price-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.current-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1;
+}
+.old-price {
+  font-size: 1.5rem;
+  color: #888;
+  text-decoration: line-through;
+}
+.savings-badge {
+  background-color: #e31837; /* A red color for savings */
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}

@@ -1,0 +1,89 @@
+.sticky-purchase-bar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* Softer shadow */
+  z-index: 995;
+  transform: translateY(-100%);
+  animation: slideDown 0.3s ease-out forwards;
+  /* Removed the bottom border */
+}
+
+@keyframes slideDown {
+  to { transform: translateY(0); }
+}
+
+.sticky-purchase-bar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sticky-left-content,
+.sticky-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.sticky-product-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.sticky-title-and-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sticky-product-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.sticky-page-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.sticky-page-nav a {
+  font-weight: 500;
+  color: #555;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.sticky-page-nav a:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.sticky-product-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.sticky-add-to-basket {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.sticky-add-to-basket.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

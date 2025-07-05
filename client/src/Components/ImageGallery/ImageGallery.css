@@ -1,23 +1,54 @@
-/* client/src/Components/ImageGallery/ImageGallery.css */
-
-.image-gallery-container {
-  width: 100%;
+.vertical-image-gallery {
+  display: grid;
+  grid-template-columns: 80px 1fr; /* 80px for thumbnails, rest for the main image */
+  gap: 15px;
+  height: 500px; /* A fixed height is often best for gallery alignment */
 }
 
-.main-image-wrapper {
+/* THUMBNAILS - LEFT COLUMN */
+.thumbnails-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto; /* Allows scrolling if there are many thumbnails */
+  /* Custom scrollbar for a cleaner look */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f1f1f1;
+}
+
+.thumbnail-item-vertical {
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 5px;
+  transition: border-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.thumbnail-item-vertical.active {
+  border-color: var(--accent-color);
+}
+
+.thumbnail-item-vertical img {
+  width: 100%;
+  display: block;
+}
+
+/* MAIN IMAGE - RIGHT COLUMN */
+.main-image-column {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 15px;
-  position: relative; /* For positioning the hint */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  position: relative; /* For the zoom hint */
   cursor: pointer;
 }
 
-.main-image-wrapper img {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 550px;
+.main-image-column img {
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
 }
 
@@ -31,39 +62,10 @@
   border-radius: 4px;
   font-size: 0.8rem;
   opacity: 0;
+  pointer-events: none; /* Prevents it from interfering with clicks */
   transition: opacity 0.3s ease;
 }
 
-.main-image-wrapper:hover .zoom-hint {
+.main-image-column:hover .zoom-hint {
   opacity: 1;
-}
-
-.thumbnail-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 10px;
-}
-
-.thumbnail-item {
-  border: 2px solid #e0e0e0;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 5px;
-  transition: border-color 0.3s ease;
-}
-
-.thumbnail-item.active,
-.thumbnail-item:hover {
-  border-color: var(--accent-color);
-}
-
-.thumbnail-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-/* Styles for the lightbox backdrop */
-:root {
-    --yarl__color_backdrop: rgba(0, 0, 0, .8);
 }

@@ -1,83 +1,105 @@
 'use client';
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import axios from 'axios';
 import ImageGallery from '@/Components/ImageGallery';
+import ProductInfo from '@/Components/ProductInfo';
+import Breadcrumbs from '@/Components/Breadcrumbs';
+import StickyPurchaseBar from '@/Components/StickyPurchaseBar';
+import PDPSkeleton from '@/Components/PDPSkeleton';
+import ProductPageNav from '@/Components/ProductPageNav';
 import './pdp.css';
 
 const ProductPageContent = ({ params }) => {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isStickyVisible, setIsStickyVisible] = useState(false);
+  
+  // This ref is now attached to the wrapper around the static nav
+  const navObserverRef = useRef(null);
 
   useEffect(() => {
-    // 1. Correctly get the slug from the params array.
     const slug = params.slug;
-
-    // 2. If there's no slug, stop and show an error.
     if (!slug) {
       setLoading(false);
-      setError("Product ID not found in the URL.");
+      setError("Product ID not found.");
       return;
     }
-    
-    // 3. Fetch the data using the correct API endpoint structure.
     setLoading(true);
     axios.get(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/products/${slug}`)
-      .then(response => {
-        // The API returns the product directly, not nested under a 'product' key.
-        setProductData(response.data);
-      })
-      .catch(err => {
-        console.error('Error fetching product data:', err);
-        setError('Failed to load product. It may not exist or there was a server error.');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-      
+      .then(res => setProductData(res.data))
+      .catch(err => setError("Failed to load product."))
+      .finally(() => setLoading(false));
   }, [params.slug]);
 
-  if (loading) {
-    return <div className="pdp-message">Loading Product...</div>;
-  }
+  // This effect correctly toggles the sticky bar's visibility
+  useEffect(() => {
+    if (!productData) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsStickyVisible(!entry.isIntersecting),
+      { rootMargin: "-80px 0px 0px 0px" } // Offset for main header
+    );
+    
+    const navEl = navObserverRef.current;
+    if (navEl) observer.observe(navEl);
+    return () => {
+      if (navEl) observer.unobserve(navEl);
+    };
+  }, [productData]);
 
-  if (error) {
-    return <div className="pdp-message pdp-error">{error}</div>;
-  }
-  
-  if (!productData) {
-    return <div className="pdp-message pdp-error">Product could not be found.</div>;
-  }
+  if (loading) return <PDPSkeleton />;
+  if (error || !productData) return <div className="pdp-message pdp-error">{error || "Product not found."}</div>;
 
   return (
-    <div className="pdp-page">
-      <div className="pdp-layout-container">
-        <div className="pdp-left-column">
-          <ImageGallery images={productData.images} />
+    <div className="pdp-page-wrapper">
+      <StickyPurchaseBar product={productData} isVisible={isStickyVisible} />
+      
+      <div className="pdp-main-container">
+        <Breadcrumbs product={productData} />
+        <h1 className="pdp-main-title">{productData.name}</h1>
+      </div>
+
+      {/* --- THIS IS THE FIX --- */}
+      {/* This wrapper is observed, and is hidden when the sticky bar is visible */}
+      <div 
+        ref={navObserverRef} 
+        className={`static-nav-wrapper ${isStickyVisible ? 'hidden' : ''}`}
+      >
+        <ProductPageNav />
+      </div>
+
+      <div className="pdp-main-container">
+        <div className="pdp-layout-grid">
+          <div className="pdp-left-column">
+            <ImageGallery images={productData.images} />
+          </div>
+          <div className="pdp-right-column">
+            <ProductInfo product={productData} />
+          </div>
         </div>
-        <div className="pdp-right-column">
-          <h1 className="pdp-product-name">{productData.name}</h1>
-          {productData.price && (
-            <p className="pdp-product-price">£{productData.price.toFixed(2)}</p>
-          )}
-          <div 
-            className="pdp-product-description" 
-            dangerouslySetInnerHTML={{ __html: productData.description }} 
-          />
-          {/* We will build out the rest of this column next */}
-        </div>
+        
+        {/* Content Sections */}
+        <section id="about-product" className="pdp-section">
+          <h2>About The Product</h2>
+          <div className="pdp-section-content" dangerouslySetInnerHTML={{ __html: productData.description }} />
+        </section>
+        <section id="characteristics" className="pdp-section">
+          <h2>Characteristics</h2>
+          <p className="pdp-section-content">Placeholder for product specifications.</p>
+        </section>
+        <section id="reviews" className="pdp-section">
+          <h2>Reviews and Questions</h2>
+          <p className="pdp-section-content">Placeholder for customer reviews.</p>
+        </section>
       </div>
     </div>
   );
 };
 
-// Next.js Suspense wrapper for pages using dynamic params
-const Page = ({ params }) => {
-    return (
-        <Suspense fallback={<div className="pdp-loading">Loading Page...</div>}>
-            <ProductPageContent params={params} />
-        </Suspense>
-    );
-};
+const Page = ({ params }) => (
+    <Suspense fallback={<PDPSkeleton />}>
+        <ProductPageContent params={params} />
+    </Suspense>
+);
 
 export default Page;

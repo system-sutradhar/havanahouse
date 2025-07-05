@@ -14,6 +14,7 @@
 @keyframes slideIn { to { transform: translateX(0); } }
 
 .drawer-header {
+  background-color: #303030;
   padding: 15px 20px; display: flex; align-items: center;
   justify-content: space-between; border-bottom: 1px solid #eee;
 }

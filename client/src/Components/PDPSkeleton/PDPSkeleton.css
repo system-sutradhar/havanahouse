@@ -1,0 +1,70 @@
+/* --- Base Skeleton Styles --- */
+.skeleton-box {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #e0e0e0;
+  }
+  50% {
+    background-color: #f0f0f0;
+  }
+  100% {
+    background-color: #e0e0e0;
+  }
+}
+
+/* --- Skeleton Layout Specifics --- */
+.skeleton-container {
+  opacity: 0.7;
+}
+
+.skeleton-box.main-image {
+  width: 100%;
+  height: 450px;
+  margin-bottom: 15px;
+}
+
+.skeleton-box.thumbnail {
+  width: 100%;
+  height: 80px;
+}
+
+.skeleton-box.text {
+  width: 100%;
+  height: 20px;
+  margin-bottom: 15px;
+}
+
+.skeleton-box.text.short {
+  width: 40%;
+}
+
+.skeleton-box.text.long {
+  width: 90%;
+  height: 40px; /* For the main title */
+  margin-bottom: 20px;
+}
+
+.skeleton-box.text.medium {
+  width: 70%;
+}
+
+.skeleton-box.price {
+  width: 50%;
+  height: 35px;
+  margin-bottom: 25px;
+}
+
+.skeleton-box.quantity {
+  width: 140px;
+  height: 48px;
+}
+
+.skeleton-box.button {
+  width: 100%;
+  height: 48px;
+}

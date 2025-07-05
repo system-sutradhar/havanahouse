@@ -1,21 +1,60 @@
-/* client/src/app/product-new/[...slug]/pdp.css */
+/* client/src/app/product-new/[slug]/pdp.css */
 
-.pdp-page {
-  padding: 40px 20px;
+.pdp-page-wrapper {
+  padding-bottom: 40px;
 }
-
-.pdp-layout-container {
-  display: grid;
-  grid-template-columns: 1fr; /* Default to a single column on mobile */
-  gap: 40px;
+.pdp-main-container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 20px;
+}
+.pdp-main-title {
+  font-family: 'Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--color-black) !important
+}
+.pdp-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  padding-bottom: 40px;
 }
 
-/* --- Desktop Two-Column Layout --- */
-@media (min-width: 768px) {
-  .pdp-layout-container {
-    /* The core of the layout: 1fr for the image, 1fr for the info */
-    grid-template-columns: 1fr 1fr;
+.pdp-section {
+  padding-top: 80px; /* Creates space for the sticky nav to not cover the title */
+  margin-top: -40px; /* Pulls the section up to align the padding correctly */
+  border-bottom: 1px solid #eee;
+}
+.pdp-section:last-of-type {
+  border-bottom: none;
+}
+.pdp-section h2 {
+  font-size: 2rem;
+  font-family: 'Garamond', serif;
+  margin-bottom: 20px;
+}
+.pdp-section-content {
+  line-height: 1.6;
+}
+
+.pdp-message {
+  padding: 80px 20px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+.pdp-error {
+  color: #c0392b;
+}
+
+@media (min-width: 992px) {
+  .pdp-layout-grid {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 50px;
+    padding: 10px 0;
   }
+}
+
+.static-nav-wrapper.hidden {
+  visibility: hidden;
 }

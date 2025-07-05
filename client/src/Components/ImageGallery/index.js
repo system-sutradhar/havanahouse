@@ -16,45 +16,51 @@ const ImageGallery = ({ images }) => {
   }, [images]);
 
   if (!images || images.length === 0) {
-    const defaultImage = '/images/default-cigar-placeholder.png';
+    const defaultImage = '/images/default-cigar-placeholder.png'; // Your fallback image
     return (
-      <div className="image-gallery-container">
-        <div className="main-image-wrapper">
-          <img src={defaultImage} alt="Default Product Image" />
+      <div className="vertical-image-gallery">
+        <div className="main-image-column">
+          <img src={defaultImage} alt="Default Product" />
         </div>
       </div>
     );
   }
 
-  // Create an array of slides for the lightbox
   const slides = images.map(src => ({ src }));
+  const selectedIndex = images.indexOf(selectedImage);
 
   return (
-    <div className="image-gallery-container">
-      <div className="main-image-wrapper" onClick={() => setIsOpen(true)}>
-        <img src={selectedImage} alt="Main product view" />
-        <div className="zoom-hint">Click to zoom</div>
-      </div>
-      
-      <div className="thumbnail-wrapper">
-        {images.map((image, index) => (
-          <div 
-            key={index}
-            className={`thumbnail-item ${selectedImage === image ? 'active' : ''}`}
-            onClick={() => setSelectedImage(image)}
-          >
-            <img src={image} alt={`Product thumbnail ${index + 1}`} />
-          </div>
-        ))}
+    <>
+      <div className="vertical-image-gallery">
+        {/* Thumbnails Column (Left) */}
+        <div className="thumbnails-column">
+          {images.map((image, index) => (
+            <div 
+              key={index}
+              className={`thumbnail-item-vertical ${selectedImage === image ? 'active' : ''}`}
+              onMouseOver={() => setSelectedImage(image)} // Change image on hover for a smoother experience
+            >
+              <img src={image} alt={`Product thumbnail ${index + 1}`} />
+            </div>
+          ))}
+        </div>
+        
+        {/* Main Image Column (Right) */}
+        <div className="main-image-column" onClick={() => setIsOpen(true)}>
+          <img src={selectedImage} alt="Main product view" />
+          <div className="zoom-hint">Click to enlarge</div>
+        </div>
       </div>
 
       <Lightbox
         open={isOpen}
         close={() => setIsOpen(false)}
         slides={slides}
+        index={selectedIndex}
         plugins={[Zoom]}
+        styles={{ container: { backgroundColor: "rgba(0, 0, 0, .8)" } }}
       />
-    </div>
+    </>
   );
 };
 

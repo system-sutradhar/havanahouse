@@ -1,0 +1,19 @@
+.breadcrumbs {
+  padding: 15px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+.breadcrumbs a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+.breadcrumbs .separator {
+  margin: 0 10px;
+  color: #ccc;
+}
+.breadcrumbs .current {
+  color: #777;
+}
