@@ -1,17 +1,17 @@
 /* client/src/Components/Footer/footer.css */
 
 .footer {
-  background-color: var(--primary-color, #1d1d1d);
-  color: var(--secondary-color, #a0a0a0);
+  background-color: var(--color-primary, #1d1d1d);
+  color: var(--color-secondary, #a0a0a0);
   padding: 40px 20px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
 }
 
 .footer-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  transition: max-width 0.3s ease, font-size 0.3s ease;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
 }
 
 /* --- Subscription Section --- */
@@ -38,7 +38,7 @@
 }
 
 .subscription-subheading {
-  color: var(--secondary-color, #a0a0a0);
+  color: var(--color-secondary, #a0a0a0);
   margin: 0;
   font-size: 0.9em;
 }
@@ -63,7 +63,7 @@
   padding: 14px 22px;
   border: none;
   border-radius: 0 4px 4px 0;
-  background-color: var(--accent-color, #c8a45e);
+  background-color: var(--color-accent, #c8a45e);
   color: #fff;
   font-weight: bold;
   cursor: pointer;
@@ -120,7 +120,7 @@
 }
 
 .footer-links a {
-  color: var(--secondary-color, #a0a0a0);
+  color: var(--color-secondary, #a0a0a0);
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -140,7 +140,7 @@
 }
 
 .contact-details svg {
-  color: var(--accent-color, #c8a45e);
+  color: var(--color-accent, #c8a45e);
   font-size: 1.2em;
 }
 

@@ -6,7 +6,7 @@
   font-size: 0.9rem; font-weight: 600; color: #888; text-transform: uppercase;
   letter-spacing: 1px; text-decoration: none; margin-bottom: 8px;
 }
-.pdp-brand:hover { color: var(--accent-color); }
+.pdp-brand:hover { color: var(--color-accent); }
 .pdp-reviews { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
 .star-rating { color: #f9a825; display: flex; gap: 2px; }
 .reviews-link { font-size: 0.9rem; color: #555; text-decoration: none; }
@@ -25,7 +25,7 @@
   border-left: 1px solid #ccc; border-right: 1px solid #ccc; font-size: 1.1rem; font-weight: 600;
 }
 .add-to-basket-btn-pdp {
-  background-color: var(--accent-color); color: #fff; border: none; border-radius: 4px;
+  background-color: var(--color-accent); color: #fff; border: none; border-radius: 4px;
   font-weight: 700; font-size: 1rem; letter-spacing: 1px; cursor: pointer;
 }
 .key-characteristics { font-size: 0.95rem; }
@@ -36,7 +36,7 @@
 /* ... all previous styles ... */
 
 .add-to-basket-btn-pdp {
-  background-color: var(--accent-color);
+  background-color: var(--color-accent);
   color: #fff;
   border: none;
   border-radius: 4px;

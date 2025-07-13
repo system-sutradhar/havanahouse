@@ -19,7 +19,7 @@
   justify-content: space-between; border-bottom: 1px solid #eee;
 }
 .drawer-close-button {
-  font-size: 1.5rem; color: var(--text-color-dark);
+  font-size: 1.5rem; color: var(--color-text-dark);
   background: none; border: none; cursor: pointer; order: 2; /* Puts it on the right */
 }
 .drawer-header .logo-wrapper { order: 1; }
@@ -29,7 +29,7 @@
 .drawer-section { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid #eee; }
 .drawer-section > li, .drawer-sub-menu a {
   padding: 18px 20px; display: flex; justify-content: space-between;
-  align-items: center; color: var(--text-color-dark); text-decoration: none;
+  align-items: center; color: var(--color-text-dark); text-decoration: none;
   font-weight: 500; border-bottom: 1px solid #f5f5f5;
 }
 .drawer-section > li:last-child { border-bottom: none; }
@@ -39,7 +39,7 @@
 .expandable .svg-inline--fa { transition: transform 0.2s ease-in-out; }
 .expandable .expanded { transform: rotate(90deg); }
 .drawer-footer { padding: 20px; border-top: 1px solid #eee; }
-.contact-phone { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; color: var(--text-color-dark); text-decoration: none; margin-bottom: 20px; }
+.contact-phone { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; color: var(--color-text-dark); text-decoration: none; margin-bottom: 20px; }
 .drawer-socials { display: flex; gap: 25px; font-size: 1.5rem; }
 .drawer-socials a { color: #555; }
 
@@ -47,15 +47,15 @@
 /* --- Desktop Navigation Bar Styles --- */
 .desktop-nav-bar {
   display: none; /* Hidden on mobile */
-  background-color: var(--secondary-color);
+  background-color: var(--color-secondary);
   height: 50px;
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #e0e0e0;
 }
 .desktop-nav-container { display: flex; justify-content: center; gap: 40px; }
-.desktop-nav-container a { text-decoration: none; color: var(--text-color-dark); font-weight: 500; padding: 10px 0; position: relative; }
-.desktop-nav-container a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: var(--accent-color); transition: width 0.3s ease; }
+.desktop-nav-container a { text-decoration: none; color: var(--color-text-dark); font-weight: 500; padding: 10px 0; position: relative; }
+.desktop-nav-container a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: var(--color-accent); transition: width 0.3s ease; }
 .desktop-nav-container a:hover::after { width: 100%; }
 
 /* --- Final Media Query to control visibility --- */

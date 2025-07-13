@@ -1,37 +1,40 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FaUser, FaHeart, FaShoppingBag, FaSearch, FaBars } from 'react-icons/fa';
+import { FaUser, FaHeart, FaShoppingBag, FaSearch, FaBars, FaExchangeAlt } from 'react-icons/fa';
 import { BsGrid3X3Gap } from "react-icons/bs";
+
 import Logo from '../Logo';
+import { CartContext } from '@/context/CartContext';
+import { AppContext } from '@/context/AppContext';
+import { fetchDataFromApi } from '@/utils/api';
+import defaultProductImg from "@/assets/images/pdp_default.png";
 import './HeaderMiddle.css';
 
-const HeaderMiddle = ({ isMenuOpen, toggleMenu, toggleSearch }) => {
+const HeaderMiddle = ({ toggleMenu, toggleSearch, toggleSignIn }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const router = useRouter();
+  const { getCartCount } = useContext(CartContext);
+  const { toggleSignInPopup } = useContext(AppContext);
   const searchContainerRef = useRef(null);
   const debounceTimeout = useRef(null);
 
   // Debounced API call logic
   useEffect(() => {
-    // Clear any existing timer
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
-
     if (searchQuery.length < 3) {
       setSuggestions([]);
       setShowSuggestions(false);
       return;
     }
-
-    // Set a new timer
     debounceTimeout.current = setTimeout(() => {
-      fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/search/suggest?q=${encodeURIComponent(searchQuery)}`)
-        .then((res) => res.json())
+      // Corrected the API call to directly use the response
+      fetchDataFromApi(`/api/search/suggest?q=${encodeURIComponent(searchQuery)}`)
         .then((data) => {
           if (Array.isArray(data)) {
             setSuggestions(data.slice(0, 10));
@@ -42,9 +45,7 @@ const HeaderMiddle = ({ isMenuOpen, toggleMenu, toggleSearch }) => {
           setSuggestions([]);
           setShowSuggestions(false);
         });
-    }, 300); // 300ms delay
-
-    // Cleanup on component unmount
+    }, 300);
     return () => clearTimeout(debounceTimeout.current);
   }, [searchQuery]);
 
@@ -74,8 +75,7 @@ const HeaderMiddle = ({ isMenuOpen, toggleMenu, toggleSearch }) => {
 
   return (
     <div className="header-middle">
-      <div className="header-middle-container">
-        {/* --- LEFT, CENTER, AND RIGHT COLUMNS --- */}
+      <div className="container header-middle-container">
         <div className="header-left">
           <button className="menu-toggle icon-button" onClick={toggleMenu} aria-label="Toggle menu"><FaBars /></button>
           <div className="desktop-logo-catalog-wrapper">
@@ -100,45 +100,56 @@ const HeaderMiddle = ({ isMenuOpen, toggleMenu, toggleSearch }) => {
             />
             <button type="submit" className="desktop-search-button" aria-label="Search"><FaSearch /></button>
           </form>
-
           {showSuggestions && suggestions.length > 0 && (
             <div className="search-suggestions-drawer">
               <ul className="suggestions-list">
-                {suggestions.map(product => (
-                  <li key={product._id}>
-                    {/* --- THIS IS THE FIX --- */}
-                    {/* The link now uses the correct product._id */}
-                    <Link href={`/product/${product._id}`} className="suggestion-item" onClick={handleSuggestionClick}>
-                      <img 
-                        src={(product.images && product.images.length > 0) ? product.images[0] : '/images/default-cigar-placeholder.png'} 
-                        alt={product.name || 'Product Image'} 
-                        className="suggestion-image"
-                      />
-                      <span className="suggestion-name">{product.name}</span>
-                      {product.price && typeof product.price === 'number' && (
-                        <span className="suggestion-price">£{product.price.toFixed(2)}</span>
-                      )}
-                    </Link>
+                {suggestions.map(item => (
+                  <li key={`${item.type}-${item._id}`}>
+                    {item.type === 'product' ? (
+                      <Link href={`/product-new/${item._id}`} className="suggestion-item product" onClick={handleSuggestionClick}>
+                        <img 
+                          src={(item.images?.[0] && item.images[0] !== 'https://via.placeholder.com/150') ? item.images[0] : defaultProductImg.src} 
+                          alt={item.name} 
+                          className="suggestion-image"
+                        />
+                        <span className="suggestion-name">{item.name}</span>
+                        {item.price && (
+                          <span className="suggestion-price">£{item.price.toFixed(2)}</span>
+                        )}
+                      </Link>
+                    ) : (
+                      <Link href={`/category/${item._id}`} className="suggestion-item category" onClick={handleSuggestionClick}>
+                        <span className="suggestion-name category-name">Search in: {item.name}</span>
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
               <Link href={`/search?q=${encodeURIComponent(searchQuery)}`} className="view-all-results-button" onClick={handleSuggestionClick}>
-                View all results
+                View all results for "{searchQuery}"
               </Link>
             </div>
           )}
-
           <div className="logo-mobile-container"><Logo /></div>
         </div>
         
         <div className="header-right">
-          <button className="action-icon icon-button mobile-search-toggle" onClick={toggleSearch} aria-label="Search"><FaSearch /></button>
-          <Link href="/signIn" className="action-icon" aria-label="Sign In"><FaUser /></Link>
-          <div className="icon-separator"></div>
-          <Link href="/wishlist" className="action-icon" aria-label="Wishlist"><FaHeart /></Link>
-          <div className="icon-separator"></div>
+          <button className="action-icon icon-button mobile-search-toggle" onClick={toggleSearch}>
+            <FaSearch />
+          </button>
+          <button className="action-icon icon-button" aria-label="Sign In" onClick={toggleSignIn}>
+            <FaUser />
+          </button>
+          <div className="icon-separator desktop-only"></div>
+          <Link href="/compare" className="action-icon desktop-only" aria-label="Compare Products"><FaExchangeAlt /></Link>
+          <div className="icon-separator desktop-only"></div>
+          <Link href="/wishlist" className="action-icon desktop-only" aria-label="Wishlist"><FaHeart /></Link>
+          <div className="icon-separator desktop-only"></div>
           <Link href="/cart" className="action-icon" aria-label="Shopping Bag">
-            <FaShoppingBag /><span className="cart-count">0</span>
+            <FaShoppingBag />
+            {getCartCount() > 0 && (
+              <span className="cart-count">{getCartCount()}</span>
+            )}
           </Link>
         </div>
       </div>

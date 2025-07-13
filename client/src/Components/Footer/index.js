@@ -28,7 +28,7 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      <div className="footer-container">
+      <div className="container footer-container">
         {/* --- Subscription Section --- */}
         <div className="subscription-section">
           <div className="subscription-content">

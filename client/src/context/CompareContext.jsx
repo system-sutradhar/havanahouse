@@ -1,36 +1,42 @@
-"use client";
-import { createContext, useState, useEffect } from "react";
+'use client';
+import { createContext, useState, useEffect } from 'react';
 
 export const CompareContext = createContext();
 
-const CompareProvider = ({ children }) => {
-  const [compareItems, setCompareItems] = useState([]);
+// This line is the fix. We are using a named export.
+export const CompareProvider = ({ children }) => {
+    const [compareList, setCompareList] = useState([]);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("compare");
-    if (stored) setCompareItems(JSON.parse(stored));
-  }, []);
+    useEffect(() => {
+        const savedCompare = localStorage.getItem('compareList');
+        if (savedCompare) {
+            setCompareList(JSON.parse(savedCompare));
+        }
+    }, []);
 
-  useEffect(() => {
-    localStorage.setItem("compare", JSON.stringify(compareItems));
-  }, [compareItems]);
+    const addToCompare = (product) => {
+        if (compareList.length >= 4) {
+            alert("You can only compare up to 4 products.");
+            return;
+        }
+        const updatedList = [...compareList, product];
+        setCompareList(updatedList);
+        localStorage.setItem('compareList', JSON.stringify(updatedList));
+    };
 
-  const addToCompare = (product) => {
-    setCompareItems((prev) => {
-      if (prev.find((p) => p._id === product._id)) return prev;
-      return [...prev, product];
-    });
-  };
+    const removeFromCompare = (productId) => {
+        const updatedList = compareList.filter(item => item._id !== productId);
+        setCompareList(updatedList);
+        localStorage.setItem('compareList', JSON.stringify(updatedList));
+    };
 
-  const removeCompare = (id) => {
-    setCompareItems((prev) => prev.filter((p) => p._id !== id));
-  };
+    const isInCompare = (productId) => {
+        return compareList.some(item => item._id === productId);
+    };
 
-  return (
-    <CompareContext.Provider value={{ compareItems, addToCompare, removeCompare }}>
-      {children}
-    </CompareContext.Provider>
-  );
+    return (
+        <CompareContext.Provider value={{ compareList, addToCompare, removeFromCompare, isInCompare }}>
+            {children}
+        </CompareContext.Provider>
+    );
 };
-
-export default CompareProvider;

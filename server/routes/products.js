@@ -636,4 +636,68 @@ router.put("/:id", async (req, res) => {
 
 });
 
+router.post('/filter-search', async (req, res) => {
+  try {
+    const {
+      query,
+      filters = {},
+      sortBy = 'popularity',
+      page = 1,
+      limit = 24
+    } = req.body;
+
+    let findQuery = {};
+
+    // Text Search
+    if (query) {
+      findQuery.$text = { $search: query };
+    }
+
+    // Attribute Filters (e.g., brand, strength)
+    for (const key in filters) {
+      if (filters[key] && filters[key].length > 0) {
+        if (key === 'price') {
+          findQuery.price = {};
+          if (filters.price.min) findQuery.price.$gte = filters.price.min;
+          if (filters.price.max) findQuery.price.$lte = filters.price.max;
+        } else {
+          findQuery[key] = { $in: filters[key] };
+        }
+      }
+    }
+
+    // Sorting Logic
+    let sortQuery = {};
+    switch (sortBy) {
+      case 'price-asc': sortQuery.price = 1; break;
+      case 'price-desc': sortQuery.price = -1; break;
+      case 'newest': sortQuery.createdAt = -1; break;
+      default:
+        if (query) sortQuery.score = { $meta: "textScore" };
+        else sortQuery.createdAt = -1;
+        break;
+    }
+    
+    const skip = (page - 1) * limit;
+
+    const products = await Product.find(findQuery)
+      .sort(sortQuery)
+      .skip(skip)
+      .limit(limit);
+
+    const totalProducts = await Product.countDocuments(findQuery);
+    
+    res.json({
+      products,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / limit),
+      totalProducts,
+    });
+
+  } catch (err) {
+    console.error('Filter search error:', err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;

@@ -1,49 +1,38 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import NotificationBar from './NotificationBar';
-import HeaderMiddle from './HeaderMiddle';
-import Navigation from './Navigation';
-import SearchBox from './SearchBox'; // For the mobile search overlay
+"use client";
+import React, { useState } from "react";
+import HeaderMiddle from "./HeaderMiddle";
+import Navigation from "./Navigation";
+import NotificationBar from "./NotificationBar";
+import SearchOverlay from "../SearchOverlay";
+import SignInPopup from "../SignInPopup"; 
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSearchOverlayVisible, setIsSearchOverlayVisible] = useState(false);
+  // --- THIS IS THE FIX: State is now managed here ---
+  const [isSignInPopupVisible, setIsSignInPopupVisible] = useState(false);
 
-  useEffect(() => {
-    const body = document.body;
-    if (isMenuOpen || isSearchOpen) {
-      body.style.overflow = 'hidden';
-    } else {
-      body.style.overflow = 'auto';
-    }
-  }, [isMenuOpen, isSearchOpen]);
-
-  const closeAllOverlays = () => {
-    setIsMenuOpen(false);
-    setIsSearchOpen(false);
-  };
-
-  const toggleMenu = () => {
-    setIsSearchOpen(false);
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleSearch = () => {
-    setIsMenuOpen(false);
-    setIsSearchOpen(!isSearchOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleSearch = () => setIsSearchOverlayVisible(!isSearchOverlayVisible);
+  // This function will now be passed directly as a prop
+  const toggleSignInPopup = () => setIsSignInPopupVisible(!isSignInPopupVisible);
 
   return (
-    <header className="header-main-wrapper">
-      <NotificationBar />
-      <HeaderMiddle
-        isMenuOpen={isMenuOpen}
-        toggleMenu={toggleMenu}
-        toggleSearch={toggleSearch} // This will now be for mobile only
-      />
-      <Navigation isMenuOpen={isMenuOpen} closeMenu={closeAllOverlays} />
-      {isSearchOpen && <SearchBox closeSearch={closeAllOverlays} />}
-    </header>
+    <>
+      <header className="header">
+        <NotificationBar />
+        {/* Pass the toggle function down to HeaderMiddle */}
+        <HeaderMiddle 
+          toggleMenu={toggleMenu} 
+          toggleSearch={toggleSearch} 
+          toggleSignIn={toggleSignInPopup} 
+        />
+      </header>
+      <Navigation isMenuOpen={isMenuOpen} closeMenu={toggleMenu} />
+      <SearchOverlay isVisible={isSearchOverlayVisible} onClose={toggleSearch} />
+      {/* The popup receives its state and close function as props */}
+      <SignInPopup isVisible={isSignInPopupVisible} onClose={toggleSignInPopup} />
+    </>
   );
 };
 

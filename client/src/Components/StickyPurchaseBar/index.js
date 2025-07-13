@@ -21,7 +21,7 @@ const StickyPurchaseBar = ({ product, isVisible }) => {
     }
   };
   
-  const isInStock = product.stock > 0;
+  const isInStock = product.countInStock > 0;
   const buttonText = isInStock ? "ADD TO BASKET" : "OUT OF STOCK";
   const buttonClass = isInStock ? "sticky-add-to-basket" : "sticky-add-to-basket disabled";
 

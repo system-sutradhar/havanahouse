@@ -29,9 +29,15 @@ const productSchema = new mongoose.Schema({
   lengthInInches: { type: Number },
   binder: { type: String, default: "" },
   filler: { type: String, default: "" },
-  origin: { type: String, default: "" },
-  wrapperType: { type: String, default: "" },
-  strength: { type: String, default: "" },
+  origin: { type: String, default: "", trim: true },
+  wrapperType: { type: String, default: "", trim: true },
+  strength: { 
+    type: String,
+    enum: ['Mild', 'Mild to Medium', 'Medium', 'Medium to Full', 'Full', 'Varies'],
+    default: "Medium"
+  },
+  ringGauge: { type: Number },
+  tags: [String],
   flavorNotes: [{ type: String, default: null }],
   tastingNotes: [{ type: String, default: null }],
   pairingSuggestions: [{ type: String, default: null }],

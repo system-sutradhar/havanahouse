@@ -9,26 +9,33 @@ import "swiper/css/navigation";
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 
-const fallbackImg = "http://localhost:3000/_next/static/media/pdp_default.56352841.png";
+// Import the default image correctly
+import defaultProductImg from "@/assets/images/pdp_default.png";
 
+// Helper component for thumbnails with skeleton loading and error handling
 const ImageWithSkeleton = ({ src, alt, onClick, className }) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
+
+  // Determine the final image source. If an error occurs or if the src is the placeholder, use the default image.
+  const imageSrc = error || src === 'https://via.placeholder.com/150' ? defaultProductImg.src : src;
+
   return (
     <>
-      {!loaded && (
+      {/* Show skeleton only if the image hasn't loaded and there isn't an error */}
+      {!loaded && !error && (
         <Skeleton
           variant="rectangular"
           width="100%"
-          height={400}
+          height="100%" // Thumbnails should take the height of their container
           sx={{ bgcolor: "#eee" }}
         />
       )}
       <img
-        src={error ? fallbackImg : src}
+        src={imageSrc}
         alt={alt}
         className={className}
-        style={{ display: loaded ? "block" : "none" }}
+        style={{ display: loaded || error ? "block" : "none" }} // Show image if loaded or if there's an error (to show fallback)
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         onClick={onClick}
@@ -47,9 +54,13 @@ const ProductImageGallery = ({ images = [], name = "" }) => {
     if (thumbs.current?.swiper) thumbs.current.swiper.slideTo(idx);
     if (big.current?.swiper) big.current.swiper.slideTo(idx);
   };
+  
+  // Create a clean array of images to display, handling an empty or non-existent array.
+  const displayImages = images && images.length > 0 ? images : [defaultProductImg.src];
 
   return (
     <div className="product-gallery d-flex">
+      {/* Thumbnail Column */}
       <div className="thumbnail-column d-none d-md-block">
         <Swiper
           direction="vertical"
@@ -60,7 +71,7 @@ const ProductImageGallery = ({ images = [], name = "" }) => {
           navigation
           ref={thumbs}
         >
-          {images.map((img, idx) => (
+          {displayImages.map((img, idx) => (
             <SwiperSlide key={idx}>
               <div
                 className={`thumb-item ${idx === active ? "selected" : ""}`}
@@ -77,6 +88,8 @@ const ProductImageGallery = ({ images = [], name = "" }) => {
           ))}
         </Swiper>
       </div>
+
+      {/* Main Image Column */}
       <div className="main-image flex-fill position-relative">
         <Swiper
           slidesPerView={1}
@@ -85,24 +98,31 @@ const ProductImageGallery = ({ images = [], name = "" }) => {
           modules={[Navigation]}
           navigation
           ref={big}
+          onSlideChange={(swiper) => setActive(swiper.activeIndex)} // Sync active state on slide change
         >
-          {images.map((img, idx) => (
-            <SwiperSlide key={idx}>
-              <div className="zoom-wrap">
-                <InnerImageZoom
-                  src={img}
-                  zoomSrc={img}
-                  alt={`${name} image ${idx + 1}`}
-                  zoomType="hover"
-                  zoomScale={1}
-                  zoomPreload={true}
-                />
-                <span className="zoom-icon">
-                  <FaMagnifyingGlassPlus />
-                </span>
-              </div>
-            </SwiperSlide>
-          ))}
+          {displayImages.map((img, idx) => {
+            // --- THIS IS THE FIX ---
+            // The same fallback logic is now applied to the main image viewer.
+            const finalImageSrc = img === 'https://via.placeholder.com/150' ? defaultProductImg.src : img;
+
+            return (
+              <SwiperSlide key={idx}>
+                <div className="zoom-wrap">
+                  <InnerImageZoom
+                    src={finalImageSrc}
+                    zoomSrc={finalImageSrc}
+                    alt={`${name} image ${idx + 1}`}
+                    zoomType="hover"
+                    zoomScale={1}
+                    zoomPreload={true}
+                  />
+                  <span className="zoom-icon">
+                    <FaMagnifyingGlassPlus />
+                  </span>
+                </div>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </div>

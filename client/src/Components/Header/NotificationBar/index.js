@@ -25,7 +25,7 @@ const NotificationBar = () => {
 
   return (
     <div className="notification-bar">
-      <div className="notification-bar-container">
+      <div className="container">
         {/* Div for the left-aligned message */}
         <div className="notification-message">
           {notification && (

@@ -2,7 +2,7 @@
 
 .notification-bar {
   background-color: #303030; /* A slightly different dark grey for contrast */
-  color: var(--text-color);
+  color: var(--color-text-on-dark);
   font-size: 13px; /* Slightly smaller font for a more refined look */
   font-weight: 500;
   display: none;
@@ -10,7 +10,7 @@
   width: 100%;
 }
 
-.notification-bar-container {
+.notification-bar .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,7 +27,7 @@
   color: #dcdcdc; text-decoration: none; transition: color 0.3s ease;
   display: inline-flex; align-items: center;
 }
-.notification-bar a:hover { color: var(--text-color); text-decoration: underline; text-underline-offset: 4px; }
+.notification-bar a:hover { color: var(--color-text-on-dark); text-decoration: underline; text-underline-offset: 4px; }
 .notification-user-action a { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 .user-icon { font-size: 1rem; }
 

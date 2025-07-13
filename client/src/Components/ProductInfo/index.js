@@ -16,7 +16,7 @@ const ProductInfo = ({ product }) => {
   };
   
   // Logic for dynamic button
-  const isInStock = product.stock > 0;
+  const isInStock = product.countInStock > 0;
   const buttonText = isInStock ? "ADD TO BASKET" : "OUT OF STOCK";
   const buttonClass = isInStock ? "add-to-basket-btn-pdp" : "add-to-basket-btn-pdp disabled";
 

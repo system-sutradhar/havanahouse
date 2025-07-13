@@ -2,13 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import { FaShoppingBag } from 'react-icons/fa';
 import './ProductCard.css';
+import defaultProductImg from "@/assets/images/pdp_default.png";
 
 const ProductCard = ({ product }) => {
   return (
     <div className="product-card">
       <Link href={`/product/${product.slug}`} className="product-image-link">
         <img 
-          src={product.images[0]} 
+          src={(product.images && product.images.length > 0 && product.images[0] !== 'https://via.placeholder.com/150') ? product.images[0] : defaultProductImg.src}
           alt={product.name} 
           className="product-image"
         />

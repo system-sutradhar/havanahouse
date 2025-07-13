@@ -1,73 +1,52 @@
-.asos-header {
-  width: 100%;
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-gray-light);
-  padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
 
-.asos-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1280px;
-  margin: 0 auto;
-}
+/* ==========================================================================
+   THEME & DESIGN SYSTEM
+   This is the single source of truth for all design tokens.
+   ========================================================================== */
 
-.asos-logo img {
-  height: 40px;
-  object-fit: contain;
-}
+:root {
+  /* COLORS
+     -------------------------------------------------- */
+  /* Core Brand Colors */
+  --color-primary: #1a1a1a;       /* Primary Dark Background (Header/Footer) */
+  --color-accent: #c8a45e;        /* Main Gold/Tan Accent */
+  --color-accent-hover: #dbae68;  /* Lighter Accent for Hover States */
+  --color-secondary-bg: #f7f7f7;  /* Light Background for Main Content */
 
-.asos-nav {
-  display: flex;
-  gap: 20px;
-  flex: 1;
-  justify-content: center;
-}
+  /* Text Colors */
+  --color-text-on-dark: #ffffff;  /* Text for dark backgrounds */
+  --color-text-on-light: #212529; /* Text for light backgrounds */
+  --color-text-muted: #6c757d;    /* Muted text for less important info */
 
-.asos-nav a {
-  text-decoration: none;
-  color: var(--color-dark-text);
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 14px;
-  transition: color 0.3s;
-}
+  /* Functional Colors */
+  --color-border: #e0e0e0;         /* Default border color */
+  --color-danger: #dc3545;         /* For errors and warnings */
+  --color-sale: #c1002b;           /* For sale badges */
+  
+  /* TYPOGRAPHY
+     -------------------------------------------------- */
+  --font-family-primary: 'Inter', 'Lato', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-family-serif: 'Garamond', 'Times New Roman', serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.6;
 
-.asos-nav a:hover {
-  color: var(--color-brand-red);
-}
+  /* SPACING & SIZING
+     -------------------------------------------------- */
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
 
-.asos-icons {
-  display: flex;
-  gap: 15px;
-  font-size: 18px;
-}
+  /* LAYOUT
+     -------------------------------------------------- */
+  --container-max-width: 1600px;
+  --container-padding: 24px;
+  --header-height: 80px;
 
-.asos-icons a {
-  color: var(--color-dark-text);
-  text-decoration: none;
-  transition: color 0.2s;
-}
+  /* BORDERS & SHADOWS
+     -------------------------------------------------- */
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-.asos-icons a:hover {
-  color: var(--color-brand-red);
-}
-
-/* Responsive (optional) */
-@media (max-width: 768px) {
-  .asos-nav {
-    display: none; /* Or convert to hamburger later */
-  }
-
-  .asos-icons {
-    gap: 10px;
-  }
-
-  .asos-logo img {
-    height: 35px;
-  }
+  --border-color: #333333;
 }

@@ -47,12 +47,12 @@
 }
 
 .product-name a {
-  color: var(--text-color-dark);
+  color: var(--color-text-dark);
   text-decoration: none;
 }
 
 .product-name a:hover {
-  color: var(--accent-color);
+  color: var(--color-accent);
 }
 
 .product-price-action {
@@ -65,11 +65,11 @@
 .product-price {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: var(--color-primary);
 }
 
 .add-to-cart-btn {
-  background-color: var(--accent-color);
+  background-color: var(--color-accent);
   color: #fff;
   border: none;
   border-radius: 50%;

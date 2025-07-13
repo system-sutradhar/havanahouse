@@ -26,7 +26,7 @@
 }
 
 .thumbnail-item-vertical.active {
-  border-color: var(--accent-color);
+  border-color: var(--color-accent);
 }
 
 .thumbnail-item-vertical img {

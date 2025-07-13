@@ -5,40 +5,39 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import './ImageGallery.css';
 
-const ImageGallery = ({ images }) => {
-  const [selectedImage, setSelectedImage] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+// Define the default image path
+import defaultImage from "@/assets/images/pdp_default.png";
+const placeholderUrl = 'https://via.placeholder.com/150';
 
-  useEffect(() => {
-    if (images && images.length > 0) {
-      setSelectedImage(images[0]);
-    }
+const ImageGallery = ({ images = [] }) => {
+  const [selectedImage, setSelectedImage] = useState(defaultImage.src);
+  const [isOpen, setIsOpen] = useState(false);
+  
+  // Create a memoized list of valid images to display
+  const validImages = React.useMemo(() => {
+    const filtered = images?.filter(img => img && img !== placeholderUrl) || [];
+    return filtered.length > 0 ? filtered : [defaultImage.src];
   }, [images]);
 
-  if (!images || images.length === 0) {
-    const defaultImage = '/images/default-cigar-placeholder.png'; // Your fallback image
-    return (
-      <div className="vertical-image-gallery">
-        <div className="main-image-column">
-          <img src={defaultImage} alt="Default Product" />
-        </div>
-      </div>
-    );
-  }
+  // Set the first valid image as the selected one when the component loads
+  useEffect(() => {
+    setSelectedImage(validImages[0]);
+  }, [validImages]);
 
-  const slides = images.map(src => ({ src }));
-  const selectedIndex = images.indexOf(selectedImage);
+  // Create an array of slides for the lightbox from valid images
+  const slides = validImages.map(src => ({ src }));
+  const selectedIndex = validImages.indexOf(selectedImage);
 
   return (
     <>
       <div className="vertical-image-gallery">
         {/* Thumbnails Column (Left) */}
         <div className="thumbnails-column">
-          {images.map((image, index) => (
+          {validImages.map((image, index) => (
             <div 
               key={index}
               className={`thumbnail-item-vertical ${selectedImage === image ? 'active' : ''}`}
-              onMouseOver={() => setSelectedImage(image)} // Change image on hover for a smoother experience
+              onMouseOver={() => setSelectedImage(image)}
             >
               <img src={image} alt={`Product thumbnail ${index + 1}`} />
             </div>

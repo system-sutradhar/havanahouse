@@ -26,6 +26,6 @@
 
 .product-page-nav a:hover,
 .product-page-nav a.active { /* A class for active link (can be implemented with JS later) */
-  color: var(--accent-color);
-  border-bottom-color: var(--accent-color);
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
 }

@@ -14,7 +14,7 @@
   font-family: 'Garamond', 'Times New Roman', serif;
   font-size: 32px;
   font-weight: 700;
-  fill: var(--text-color);
+  fill: var(--color-text-on-dark);
   letter-spacing: 1.5px;
 }
 
@@ -23,7 +23,7 @@
   font-family: 'Lato', 'Helvetica Neue', sans-serif;
   font-size: 12px; /* Increased from 11px for better visibility */
   font-weight: 500;
-  fill: var(--accent-color);
+  fill: var(--color-accent);
   letter-spacing: 3.5px; /* Adjusted for new font size */
   text-transform: uppercase;
 }

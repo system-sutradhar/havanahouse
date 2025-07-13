@@ -1,36 +1,38 @@
-"use client";
+'use client';
 import { createContext, useState, useEffect } from "react";
 
 export const WishlistContext = createContext();
 
-const WishlistProvider = ({ children }) => {
-  const [wishlist, setWishlist] = useState([]);
+// This line is the fix. We are using a named export.
+export const WishlistProvider = ({ children }) => {
+    const [wishlist, setWishlist] = useState([]);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("wishlist");
-    if (stored) setWishlist(JSON.parse(stored));
-  }, []);
+    useEffect(() => {
+        const savedWishlist = localStorage.getItem("wishlist");
+        if (savedWishlist) {
+            setWishlist(JSON.parse(savedWishlist));
+        }
+    }, []);
 
-  useEffect(() => {
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  }, [wishlist]);
+    const addToWishlist = (product) => {
+        const updatedWishlist = [...wishlist, product];
+        setWishlist(updatedWishlist);
+        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+    };
 
-  const addWishlist = (product) => {
-    setWishlist((prev) => {
-      if (prev.find((p) => p._id === product._id)) return prev;
-      return [...prev, product];
-    });
-  };
+    const removeFromWishlist = (productId) => {
+        const updatedWishlist = wishlist.filter((item) => item._id !== productId);
+        setWishlist(updatedWishlist);
+        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+    };
 
-  const removeWishlist = (id) => {
-    setWishlist((prev) => prev.filter((p) => p._id !== id));
-  };
+    const isInWishlist = (productId) => {
+        return wishlist.some((item) => item._id === productId);
+    };
 
-  return (
-    <WishlistContext.Provider value={{ wishlist, addWishlist, removeWishlist }}>
-      {children}
-    </WishlistContext.Provider>
-  );
+    return (
+        <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, isInWishlist }}>
+            {children}
+        </WishlistContext.Provider>
+    );
 };
-
-export default WishlistProvider;

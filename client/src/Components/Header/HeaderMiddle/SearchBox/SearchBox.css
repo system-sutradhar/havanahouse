@@ -24,7 +24,7 @@
   top: 30px;
   right: 30px;
   font-size: 2em;
-  color: var(--text-color);
+  color: var(--color-text-on-dark);
   background: none;
   border: none;
   cursor: pointer;
@@ -39,7 +39,7 @@
   display: flex;
   width: 90%;
   max-width: 700px;
-  border-bottom: 2px solid var(--text-color);
+  border-bottom: 2px solid var(--color-text-on-dark);
 }
 
 .search-overlay-form input {
@@ -48,7 +48,7 @@
   background: none;
   padding: 15px 0;
   font-size: 2em;
-  color: var(--text-color);
+  color: var(--color-text-on-dark);
   outline: none;
 }
 
@@ -60,6 +60,6 @@
   background: none;
   border: none;
   font-size: 2em;
-  color: var(--text-color);
+  color: var(--color-text-on-dark);
   padding-left: 20px;
 }

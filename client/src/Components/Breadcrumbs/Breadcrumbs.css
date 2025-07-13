@@ -4,7 +4,7 @@
   color: #555;
 }
 .breadcrumbs a {
-  color: var(--accent-color);
+  color: var(--color-accent);
   text-decoration: none;
 }
 .breadcrumbs a:hover {

@@ -46,6 +46,8 @@ const Navigation = ({ isMenuOpen, closeMenu }) => {
                 <li><Link href="/accessories" onClick={closeMenu}>Accessories</Link></li>
                 <li><Link href="/about" onClick={closeMenu}>About Us</Link></li>
                 <li><Link href="/stores" onClick={closeMenu}>Our Stores</Link></li>
+                <li><Link href="/wishlist" onClick={closeMenu}>My Wishlist</Link></li>
+                <li><Link href="/compare" onClick={closeMenu}>Compare Products</Link></li>
               </ul>
               <ul className="drawer-section">
                 <li className='drawer-list-item expandable' onClick={() => setShowHelp(!showHelp)}>
